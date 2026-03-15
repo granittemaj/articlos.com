@@ -1,22 +1,20 @@
-# Articlos Marketing Site
+# Articlos Vercel-Style Static Site
 
-Static HTML/CSS website ready to deploy.
-
-## Files
+Files:
 - index.html
 - styles.css
 - README.md
 
 ## Deploy on GitHub Pages
-1. Upload the files to the root of your repository.
-2. Open Settings → Pages
-3. Set:
+1. Upload all files to the root of your repository
+2. Go to Settings → Pages
+3. Choose:
    - Source: Deploy from a branch
    - Branch: main
    - Folder: / (root)
-4. Save.
+4. Save
 
 ## Notes
-- No screenshots included
-- Copy reflects MVP with one website integration
-- CTA points to https://articlos.app
+- Static HTML/CSS only
+- Responsive layout tuned for mobile, tablet, and desktop
+- Copy reflects MVP scope: one website integration
