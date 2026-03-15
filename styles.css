@@ -1,15 +1,22 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;background:#ffffff;color:#0a0a0a;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.menu-open{overflow:hidden}
 a{text-decoration:none;color:inherit}
 .container{width:100%;max-width:1200px;margin-inline:auto;padding-inline:24px}
 .narrow{max-width:920px}
 .site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.06)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px}
-.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700;letter-spacing:-.03em}
+.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700;letter-spacing:-.03em;position:relative;z-index:60}
 .brand-mark{width:36px;height:36px;border-radius:12px;background:#0a0a0a;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.12)}
 .brand-name{line-height:1}
 .nav-links{display:flex;align-items:center;gap:28px;font-size:14px;color:#444}
 .nav-links a:hover,.site-footer a:hover{color:#000}
 .nav-actions{display:flex;align-items:center;gap:12px}
+.menu-toggle{display:none;width:44px;height:44px;border:1px solid rgba(0,0,0,.08);background:#fff;border-radius:999px;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:0;cursor:pointer;position:relative;z-index:60}
+.menu-toggle span{display:block;width:16px;height:2px;background:#0a0a0a;border-radius:999px;transition:transform .18s ease, opacity .18s ease}
+.menu-toggle.is-open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.menu-toggle.is-open span:nth-child(2){opacity:0}
+.menu-toggle.is-open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mobile-menu{display:none}
 .button{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;line-height:1;transition:all .16s ease;border:1px solid transparent;white-space:nowrap}
 .button-large{padding:15px 22px}
 .button-primary{background:#0a0a0a;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.10)}
@@ -86,7 +93,15 @@ a{text-decoration:none;color:inherit}
   .hero-grid,.workflow-grid,.dark-panel,.cta-card{grid-template-columns:1fr}
 }
 @media (max-width:980px){
-  .nav-links{display:none}
+  .nav-links,.nav-actions{display:none}
+  .menu-toggle{display:flex}
+  .mobile-menu{display:block;position:absolute;top:100%;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.08);max-height:0;overflow:hidden;transition:max-height .22s ease}
+  .mobile-menu.is-open{max-height:420px}
+  .mobile-menu-inner{display:flex;flex-direction:column;gap:4px;padding-top:12px;padding-bottom:20px}
+  .mobile-menu-inner a{padding:14px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:15px;color:#222}
+  .mobile-menu-inner a:last-child{border-bottom:none}
+  .mobile-menu-login{font-weight:600}
+  .mobile-menu-cta{margin-top:10px;width:100%}
   .feature-grid,.use-case-grid,.comparison-grid{grid-template-columns:1fr}
   .draft-tags{grid-template-columns:1fr}
 }
@@ -94,7 +109,6 @@ a{text-decoration:none;color:inherit}
   .section{padding:56px 0}
   .hero{padding:44px 0 20px}
   .container{padding-inline:16px}
-  .nav-actions .button-secondary{display:none}
   .feature-card,.use-case-card,.faq-card,.workflow-panel,.cta-card,.surface,.mini-surface{padding:24px}
   .brand-name{font-size:17px}
 }

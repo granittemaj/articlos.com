@@ -5,6 +5,9 @@ Files:
 - styles.css
 - README.md
 
+## Update included
+- Mobile hamburger menu added and working
+
 ## Deploy on GitHub Pages
 1. Upload all files to the root of your repository
 2. Go to Settings → Pages
@@ -13,8 +16,3 @@ Files:
    - Branch: main
    - Folder: / (root)
 4. Save
-
-## Notes
-- Static HTML/CSS only
-- Responsive layout tuned for mobile, tablet, and desktop
-- Copy reflects MVP scope: one website integration
