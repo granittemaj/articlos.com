@@ -1,4 +1,4 @@
-# Articlos Final Static Site
+# Articlos Pixel-Perfect Static Site
 
 Files:
 - index.html
@@ -6,15 +6,15 @@ Files:
 - README.md
 
 ## Included
-- responsive desktop / tablet / mobile layout
-- working mobile hamburger menu
+- rebuilt responsive layout
+- working hamburger menu
 - no screenshots
 - MVP note: one website integration
 
 ## Deploy on GitHub Pages
 1. Upload all files to the root of your repository
-2. Go to Settings → Pages
-3. Choose:
+2. Open Settings → Pages
+3. Set:
    - Source: Deploy from a branch
    - Branch: main
    - Folder: / (root)
