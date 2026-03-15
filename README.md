@@ -1,12 +1,15 @@
-# Articlos Vercel-Style Static Site
+# Articlos Final Static Site
 
 Files:
 - index.html
 - styles.css
 - README.md
 
-## Update included
-- Mobile hamburger menu added and working
+## Included
+- responsive desktop / tablet / mobile layout
+- working mobile hamburger menu
+- no screenshots
+- MVP note: one website integration
 
 ## Deploy on GitHub Pages
 1. Upload all files to the root of your repository
