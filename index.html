@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Articlos — From Brief to Published in Under 60 Seconds</title>
-  <meta name="description" content="AI-powered content creation for WordPress publishers. Multi-model generation, SEO intelligence, and native WordPress integration in one team-ready workspace." />
+  <title>Articlos — From topic to published article in minutes</title>
+  <meta name="description" content="Generate, rewrite, and optimize article drafts with a focused AI workflow built for writers, marketers, and content teams that publish to WordPress." />
+  <meta property="og:title" content="Articlos — From topic to published article in minutes" />
+  <meta property="og:description" content="AI article workflow for WordPress publishers. Multi-model generation, SEO intelligence, one-click publishing." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- ── NAV ── -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
@@ -21,49 +25,52 @@
       </a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#workflow">Workflow</a></li>
+        <li><a href="#use-cases">Use cases</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-right">
-        <a href="https://articlos.app" class="btn-ghost-sm">Sign in</a>
-        <a href="https://articlos.app" class="btn-dark">Get started free</a>
+        <a href="https://articlos.app" class="btn-ghost-sm">Log in</a>
+        <a href="https://articlos.app" class="btn-dark">Start writing</a>
       </div>
-      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span>
       </button>
     </div>
   </nav>
 
-  <!-- MOBILE NAV -->
+  <!-- ── MOBILE NAV ── -->
   <div class="mobile-nav" id="mobileNav">
-    <a href="#features" class="mobile-nav-link">Features</a>
-    <a href="#how" class="mobile-nav-link">How it works</a>
-    <a href="#pricing" class="mobile-nav-link">Pricing</a>
-    <a href="https://articlos.app" class="btn-dark mobile-cta">Get started free</a>
+    <a href="#features"  class="mobile-nav-link">Features</a>
+    <a href="#workflow"  class="mobile-nav-link">Workflow</a>
+    <a href="#use-cases" class="mobile-nav-link">Use cases</a>
+    <a href="#faq"       class="mobile-nav-link">FAQ</a>
+    <a href="https://articlos.app" class="mobile-nav-link">Log in</a>
+    <a href="https://articlos.app" class="btn-dark mobile-cta">Start writing</a>
   </div>
 
-  <!-- HERO -->
+  <!-- ── HERO ── -->
   <section class="hero" id="hero">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      Now with Gemini 2.5 Flash & GPT-4o
+      AI article workflow &middot; Gemini 2.5 Flash &amp; GPT-4o
     </div>
     <h1 class="hero-h1">
-      From brief to<br />
-      <span class="hero-accent">published</span><br />
-      in 60 seconds.
+      From topic to<br />
+      <span class="hero-accent">article draft</span><br />
+      in minutes.
     </h1>
     <p class="hero-sub">
-      AI-powered articles for WordPress teams. Multi-model generation,<br class="desktop-br" />
-      built-in SEO intelligence, and one-click publishing.
+      Generate, rewrite, and optimize article drafts with a focused AI workflow
+      built for writers, marketers, and content teams that publish to WordPress.
     </p>
     <div class="hero-actions">
-      <a href="https://articlos.app" class="btn-dark btn-lg">Start writing for free</a>
-      <a href="#how" class="btn-outline btn-lg">See how it works</a>
+      <a href="https://articlos.app" class="btn-dark btn-lg">Open the app</a>
+      <a href="#workflow" class="btn-outline btn-lg">See how it works</a>
     </div>
-    <p class="hero-fine">No credit card required · Free plan available</p>
+    <p class="hero-fine">No credit card required &middot; Free plan available</p>
 
-    <!-- UI PREVIEW -->
+    <!-- ── APP PREVIEW ── -->
     <div class="hero-preview-wrap">
       <div class="preview-chrome">
         <div class="chrome-bar">
@@ -73,7 +80,6 @@
           <span class="chrome-url">articlos.app</span>
         </div>
         <div class="preview-ui">
-          <!-- Sidebar -->
           <aside class="ui-sidebar">
             <div class="ui-brand">
               <span class="logo-icon sm">a</span>
@@ -97,7 +103,6 @@
               </div>
             </div>
           </aside>
-          <!-- Main -->
           <main class="ui-main">
             <div class="ui-header">
               <h2>Article Generator</h2>
@@ -111,7 +116,7 @@
               <div class="ui-field-group">
                 <label>Topic</label>
                 <div class="ui-input-row">
-                  <div class="ui-input-fake typing-text">Hidden Gems: 7 Breathtaking Kosovo Hiking Trails That Most Tourists Never Discover<span class="cursor">|</span></div>
+                  <div class="ui-input-fake">Hidden Gems: 7 Breathtaking Kosovo Hiking Trails That Most Tourists Never Discover<span class="cursor">|</span></div>
                   <button class="ui-btn-sm">Suggest</button>
                 </div>
               </div>
@@ -164,7 +169,6 @@
           </main>
         </div>
       </div>
-      <!-- Floating badges -->
       <div class="float-badge badge-1">
         <span class="badge-check">✓</span>
         <div>
@@ -182,9 +186,9 @@
     </div>
   </section>
 
-  <!-- LOGOS -->
-  <section class="logos-bar">
-    <p class="logos-label">Trusted by content teams publishing on</p>
+  <!-- ── LOGOS ── -->
+  <div class="logos-bar">
+    <p class="logos-label">Built for teams publishing on</p>
     <div class="logos-row">
       <span class="logo-pill">WordPress.com</span>
       <span class="logo-pill">WooCommerce</span>
@@ -193,23 +197,24 @@
       <span class="logo-pill">Rank Math</span>
       <span class="logo-pill">Cloudflare</span>
     </div>
-  </section>
+  </div>
 
-  <!-- FEATURES -->
+  <!-- ── FEATURES ── -->
   <section class="features" id="features">
     <div class="section-header">
       <span class="section-tag">Features</span>
-      <h2>Everything you need to publish faster</h2>
-      <p>One workspace combining AI generation, SEO research, and WordPress publishing.</p>
+      <h2>Built for the full article workflow.</h2>
+      <p>Most AI tools stop at raw output. Articlos is designed around the actual work: turning an idea into a better article draft, faster.</p>
     </div>
 
     <div class="features-grid">
+
       <div class="feature-card feat-large">
         <div class="feat-icon-wrap teal">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <h3>Multi-model AI generation</h3>
-        <p>Choose between Gemini 2.5 Flash for speed or GPT-4o for depth. Both models perform live web research so every article is grounded in fresh, accurate data.</p>
+        <h3>Generate optimized article drafts</h3>
+        <p>Start with a topic, keyword, or rough idea. Choose Gemini 2.5 Flash for speed or GPT-4o for depth — both perform live web research so every draft is grounded in fresh, accurate data.</p>
         <div class="feat-visual models-visual">
           <div class="model-pill active">
             <span class="model-gem">◆</span> Gemini 2.5 Flash
@@ -224,15 +229,15 @@
 
       <div class="feature-card">
         <div class="feat-icon-wrap green">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <h3>SEO intelligence built in</h3>
-        <p>Focus keyword optimization, SEO score with actionable tips, internal link suggestions — all generated in context, not bolted on after.</p>
+        <p>Focus keyword optimization, a real-time SEO score with actionable tips, and internal link suggestions — generated in context, not bolted on after.</p>
         <div class="feat-visual seo-visual">
           <div class="seo-score-ring">
             <svg viewBox="0 0 80 80" width="72" height="72">
-              <circle cx="40" cy="40" r="32" fill="none" stroke="#e5e5e5" stroke-width="7"/>
-              <circle cx="40" cy="40" r="32" fill="none" stroke="#10a37f" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="20" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="7"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent)" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="20" stroke-linecap="round" transform="rotate(-90 40 40)"/>
             </svg>
             <span class="seo-num">94</span>
           </div>
@@ -246,23 +251,23 @@
 
       <div class="feature-card">
         <div class="feat-icon-wrap blue">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><path d="M7 8h10M7 12h6"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2H3v16h5l3 3 3-3h7V2z"/><path d="M7 8h10M7 12h6"/></svg>
         </div>
-        <h3>One-click WordPress publishing</h3>
-        <p>Connect unlimited WordPress sites. AI suggests tags, category, and meta — then sends the draft directly into your WP editor, ready to review and publish.</p>
+        <h3>Rewrite and improve existing articles</h3>
+        <p>Paste text or a URL and generate a clearer, stronger, better-structured version of your content. Great for refreshing old posts or rewriting client copy.</p>
       </div>
 
       <div class="feature-card">
         <div class="feat-icon-wrap purple">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <h3>Built for teams</h3>
-        <p>Organizations with role-based access, shared article queues, and usage tracking across your whole content team — from day one.</p>
+        <h3>One-click WordPress publishing</h3>
+        <p>Connect your WordPress site and send drafts directly into the editor — with AI-suggested tags, category, and meta description pre-filled and ready to review.</p>
       </div>
 
       <div class="feature-card feat-large feat-dark">
         <div class="feat-icon-wrap white">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <h3>Analytics-informed topic ideas</h3>
         <p>Upload your Google Search Console and GA4 CSVs. Articlos analyzes real performance data, identifies content gaps, and surfaces high-opportunity topics — with 📊 badges showing exactly why they'll rank.</p>
@@ -270,52 +275,54 @@
           <div class="topic-item">
             <span class="topic-badge">📊</span>
             <span>10 Best WordPress Plugins for SEO</span>
-            <span class="topic-score high">+High</span>
+            <span class="topic-score high">High</span>
           </div>
           <div class="topic-item">
             <span class="topic-badge">📊</span>
             <span>How to Speed Up WordPress in 2025</span>
-            <span class="topic-score med">+Med</span>
+            <span class="topic-score med">Med</span>
           </div>
           <div class="topic-item">
             <span class="topic-badge">💡</span>
             <span>WooCommerce vs Shopify: Full Comparison</span>
-            <span class="topic-score high">+High</span>
+            <span class="topic-score high">High</span>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how" id="how">
+  <!-- ── WORKFLOW ── -->
+  <section class="how" id="workflow">
     <div class="section-header">
-      <span class="section-tag">How it works</span>
-      <h2>Blank page to published draft in 4 steps</h2>
+      <span class="section-tag">Workflow</span>
+      <h2>A focused system that removes friction.</h2>
+      <p>Start with a topic or existing article, generate a brief or draft, improve it, then export or publish when it's ready.</p>
     </div>
     <div class="steps-grid">
       <div class="step">
         <div class="step-num">01</div>
-        <h3>Enter your topic</h3>
-        <p>Type a headline, keyword, or rough idea. Or use Topic Ideas powered by your own analytics data to find what will rank.</p>
+        <h3>Enter a topic or URL</h3>
+        <p>Type a headline, keyword, or rough idea — or paste an existing URL to rewrite. Use Topic Ideas to surface what will rank from your own analytics data.</p>
       </div>
       <div class="step-connector"></div>
       <div class="step">
         <div class="step-num">02</div>
-        <h3>Choose your model &amp; settings</h3>
-        <p>Pick Gemini or GPT-4o, set tone, word count, article type, and optional add-ons like FAQs, key takeaways, or SEO meta.</p>
+        <h3>Choose model &amp; settings</h3>
+        <p>Pick Gemini or GPT-4o. Set tone, word count, and article type. Add optional sections: FAQs, key takeaways, SEO meta, or custom sections.</p>
       </div>
       <div class="step-connector"></div>
       <div class="step">
         <div class="step-num">03</div>
         <h3>Generate &amp; refine</h3>
-        <p>Your article streams in real-time. Review the SEO score, add internal links, and use Rewrite to polish any section.</p>
+        <p>Your article streams in real-time. Review the SEO score, add internal links, and use Rewrite to polish any section before publishing.</p>
       </div>
       <div class="step-connector"></div>
       <div class="step">
         <div class="step-num">04</div>
-        <h3>Publish to WordPress</h3>
-        <p>One click sends the draft to your WordPress site with AI-suggested tags, category, and meta description pre-filled.</p>
+        <h3>Review, export, or publish</h3>
+        <p>One click sends the draft to WordPress with AI-suggested tags and meta. Or export and edit elsewhere — the content is always yours.</p>
       </div>
     </div>
     <div class="how-cta">
@@ -323,80 +330,111 @@
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section class="pricing" id="pricing">
+  <!-- ── USE CASES ── -->
+  <section class="use-cases" id="use-cases">
     <div class="section-header">
-      <span class="section-tag">Pricing</span>
-      <h2>Simple, transparent pricing</h2>
-      <p>Start free. Scale when you need to.</p>
+      <span class="section-tag">Use cases</span>
+      <h2>Made for people who need content output,<br class="desktop-br" /> not content chaos.</h2>
     </div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="plan-header">
-          <span class="plan-name">Starter</span>
-          <div class="plan-price"><span class="price-currency">€</span>0<span class="price-period">/mo</span></div>
-          <p class="plan-desc">Perfect for solo bloggers getting started.</p>
-        </div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 5 articles per month</li>
-          <li><span class="check">✓</span> Gemini 2.5 Flash</li>
-          <li><span class="check">✓</span> 1 WordPress site</li>
-          <li><span class="check">✓</span> SEO score</li>
-          <li><span class="check muted">–</span> GPT-4o access</li>
-          <li><span class="check muted">–</span> Topic Ideas from analytics</li>
-          <li><span class="check muted">–</span> Team access</li>
-        </ul>
-        <a href="https://articlos.app" class="btn-outline btn-block">Get started free</a>
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-num">01</div>
+        <h3>Bloggers</h3>
+        <p>Turn rough ideas into structured article drafts without losing your own voice. Spend more time editing and less time staring at a blank page.</p>
       </div>
-
-      <div class="pricing-card featured">
-        <div class="plan-badge">Most popular</div>
-        <div class="plan-header">
-          <span class="plan-name">Pro</span>
-          <div class="plan-price"><span class="price-currency">€</span>29<span class="price-period">/mo</span></div>
-          <p class="plan-desc">For serious content creators and small teams.</p>
-        </div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 60 articles per month</li>
-          <li><span class="check">✓</span> Gemini 2.5 Flash + GPT-4o</li>
-          <li><span class="check">✓</span> Unlimited WordPress sites</li>
-          <li><span class="check">✓</span> SEO score + suggestions</li>
-          <li><span class="check">✓</span> Topic Ideas from analytics</li>
-          <li><span class="check">✓</span> Article queue</li>
-          <li><span class="check muted">–</span> Team access</li>
-        </ul>
-        <a href="https://articlos.app" class="btn-dark btn-block">Start Pro trial</a>
+      <div class="use-card">
+        <div class="use-num">02</div>
+        <h3>Agencies</h3>
+        <p>Speed up draft creation, rewriting, and first-pass optimization across multiple client sites — without adding headcount to do it.</p>
       </div>
-
-      <div class="pricing-card">
-        <div class="plan-header">
-          <span class="plan-name">Team</span>
-          <div class="plan-price"><span class="price-currency">€</span>79<span class="price-period">/mo</span></div>
-          <p class="plan-desc">For content teams that publish at scale.</p>
-        </div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 200 articles per month</li>
-          <li><span class="check">✓</span> All AI models</li>
-          <li><span class="check">✓</span> Unlimited WordPress sites</li>
-          <li><span class="check">✓</span> Full SEO suite</li>
-          <li><span class="check">✓</span> Topic Ideas from analytics</li>
-          <li><span class="check">✓</span> Article queue + Rewrite</li>
-          <li><span class="check">✓</span> Team roles &amp; permissions</li>
-        </ul>
-        <a href="https://articlos.app" class="btn-outline btn-block">Start Team trial</a>
+      <div class="use-card">
+        <div class="use-num">03</div>
+        <h3>Content teams</h3>
+        <p>Reduce the time from brief to editable draft. Keep editorial control with role-based access, shared queues, and direct WordPress publishing.</p>
       </div>
     </div>
   </section>
 
-  <!-- FINAL CTA -->
+  <!-- ── COMPARISON ── -->
+  <section class="comparison" id="comparison">
+    <div class="comparison-inner">
+      <div class="comparison-copy">
+        <span class="section-tag section-tag-dark">Why Articlos</span>
+        <h2>More focused than generic AI writing tools.</h2>
+        <p>Articlos is built for one clear job: help you move from topic to structured article draft faster, with less friction. Everything else is noise.</p>
+      </div>
+      <div class="comparison-table">
+        <div class="comp-col comp-col-muted">
+          <div class="comp-header">Generic AI writers</div>
+          <ul>
+            <li><span class="comp-x">✕</span> Blank-page feeling</li>
+            <li><span class="comp-x">✕</span> Too many unrelated use cases</li>
+            <li><span class="comp-x">✕</span> No structured draft workflow</li>
+            <li><span class="comp-x">✕</span> SEO is an afterthought</li>
+            <li><span class="comp-x">✕</span> No WordPress integration</li>
+            <li><span class="comp-x">✕</span> No analytics-based topic ideas</li>
+          </ul>
+        </div>
+        <div class="comp-col comp-col-strong">
+          <div class="comp-header comp-header-brand">
+            <span class="logo-icon sm">a</span> Articlos
+          </div>
+          <ul>
+            <li><span class="comp-check">✓</span> Topic-to-draft workflow</li>
+            <li><span class="comp-check">✓</span> Rewriting built in</li>
+            <li><span class="comp-check">✓</span> Clear, structured article output</li>
+            <li><span class="comp-check">✓</span> Real-time SEO scoring</li>
+            <li><span class="comp-check">✓</span> One-click WordPress publishing</li>
+            <li><span class="comp-check">✓</span> GSC + GA4 topic intelligence</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="faq-section" id="faq">
+    <div class="section-header">
+      <span class="section-tag">FAQ</span>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-card">
+        <h3>Who is Articlos for?</h3>
+        <p>Articlos is built for bloggers, agencies, and content teams that publish to WordPress and want to generate and improve article drafts faster — without sacrificing editorial control.</p>
+      </div>
+      <div class="faq-card">
+        <h3>Does Articlos replace human editing?</h3>
+        <p>No. It dramatically speeds up the first-draft stage, but final editing and editorial decisions stay with you. Think of it as a very fast first draft, not a finished article.</p>
+      </div>
+      <div class="faq-card">
+        <h3>Can I connect multiple WordPress sites?</h3>
+        <p>The current version supports one connected WordPress site. Multi-site support for teams and agencies is on the roadmap.</p>
+      </div>
+      <div class="faq-card">
+        <h3>What AI models does it use?</h3>
+        <p>You choose between Gemini 2.5 Flash (fast, great for high-volume) and GPT-4o (deeper reasoning, better for complex topics). Both support live web research during generation.</p>
+      </div>
+      <div class="faq-card">
+        <h3>What makes it different from ChatGPT or Claude?</h3>
+        <p>Articlos focuses on the full article workflow — ideation, brief, draft, rewrite, SEO scoring, and publishing — in one place. Generic AI tools are powerful but require you to manage the whole workflow yourself.</p>
+      </div>
+      <div class="faq-card">
+        <h3>Is there a free plan?</h3>
+        <p>Yes. You can get started for free with no credit card required. Paid plans unlock more articles per month, access to both AI models, and advanced SEO features.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FINAL CTA ── -->
   <section class="final-cta">
-    <h2>Start publishing smarter today.</h2>
-    <p>Join content teams that ship more articles in less time — without sacrificing quality or SEO.</p>
-    <a href="https://articlos.app" class="btn-dark btn-lg">Get started — it's free</a>
-    <p class="fine">No credit card · Free plan available · Cancel anytime</p>
+    <h2>Start generating better article drafts today.</h2>
+    <p>Articlos shortens the distance between an idea and a structured, optimized article draft — ready for your WordPress editor in minutes.</p>
+    <a href="https://articlos.app" class="btn-dark btn-lg">Open the app — it's free</a>
+    <p class="fine">No credit card &middot; Free plan available &middot; Cancel anytime</p>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ── FOOTER ── -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
@@ -404,20 +442,21 @@
           <span class="logo-icon">a</span>
           <span class="logo-text">articlos</span>
         </a>
-        <p>AI-powered content creation for WordPress publishers.</p>
+        <p>AI-powered article workflow for WordPress publishers.</p>
+        <p class="footer-built">Built by PAPINGU L.L.C.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
           <span class="footer-heading">Product</span>
           <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#how">How it works</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#use-cases">Use cases</a>
+          <a href="#faq">FAQ</a>
         </div>
         <div class="footer-col">
           <span class="footer-heading">Company</span>
-          <a href="https://articlos.app">App</a>
-          <a href="#">Blog</a>
-          <a href="#">Contact</a>
+          <a href="https://articlos.app">Launch app</a>
+          <a href="mailto:hello@articlos.com">Contact</a>
         </div>
         <div class="footer-col">
           <span class="footer-heading">Legal</span>
@@ -427,7 +466,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Articlos. All rights reserved.</p>
+      <span>© 2026 Articlos &middot; PAPINGU L.L.C.</span>
+      <a href="mailto:hello@articlos.com">hello@articlos.com</a>
     </div>
   </footer>
 
