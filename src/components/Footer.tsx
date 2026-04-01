@@ -138,6 +138,7 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'About', href: '/about' },
+                { label: 'FAQ', href: '/faq' },
                 { label: 'Terms', href: '/terms' },
                 { label: 'Privacy', href: '/privacy' },
                 { label: 'Contact', href: 'mailto:hello@articlos.com' },
