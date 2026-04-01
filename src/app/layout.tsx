@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import ConsentBanner from '@/components/ConsentBanner'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -89,6 +90,7 @@ export default function RootLayout({
           `}
         </Script>
         <Analytics />
+        <ConsentBanner />
       </body>
     </html>
   )

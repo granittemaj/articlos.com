@@ -50,8 +50,32 @@ If you contact us via email or in-app chat, we retain records of those communica
 We do not sell your personal information to third parties. We do not use your content to train our AI models without explicit consent.`,
   },
   {
+    id: 'google-user-data',
+    title: '4. Use of Google User Data',
+    body: `Articlos accesses data from Google Search Console (GSC) and Google Analytics 4 (GA4) via Google OAuth Services. This section explains exactly what data we access, why, and how it is handled.
+
+**What data we access**
+• Google Search Console: search queries, impressions, clicks, average position, and page-level performance data for websites you connect to your articlos account.
+• Google Analytics 4: traffic metrics, session data, page views, and audience behavior for connected properties.
+
+**Why we access it**
+We use this data exclusively to power articlos features — specifically, to surface keyword opportunities, identify content gaps, and generate data-driven content briefs for your account. We do not access your Google data for any purpose unrelated to delivering the Service to you.
+
+**How we handle it**
+• Your Google data is processed in real time or cached temporarily to reduce API calls. It is never stored permanently in a form that identifies individual users of your website.
+• Your Google data is never sold, rented, transferred, or disclosed to third parties for any purpose, including advertising.
+• We never use your Google data to train or improve AI models — ours or anyone else's.
+• Access tokens are stored encrypted and are scoped to the minimum permissions required. You can revoke access at any time from your Google Account settings or from within articlos.
+
+**Retention**
+Cached Google data is purged within 24 hours of being fetched. OAuth tokens are deleted immediately upon disconnecting your Google account from articlos or deleting your articlos account.
+
+**Compliance**
+Our use of Google APIs complies with the Google API Services User Data Policy, including the Limited Use requirements.`,
+  },
+  {
     id: 'third-parties',
-    title: '4. Third-Party Services',
+    title: '5. Third-Party Services',
     body: `We share data with the following categories of service providers who help us operate the Service:
 
 **Infrastructure & Hosting:** Cloud hosting providers process and store your data. All providers are contractually bound to data protection standards.
@@ -68,14 +92,14 @@ We do not share your data with advertisers or data brokers.`,
   },
   {
     id: 'data-retention',
-    title: '5. Data Retention',
+    title: '6. Data Retention',
     body: `We retain your account information and content for as long as your account is active. After account deletion, we delete or anonymize your data within 90 days, except where we are required to retain it for legal compliance (e.g., billing records for 7 years).
 
 Generated articles stored in your account are deleted with your account. You may export your content at any time before deletion.`,
   },
   {
     id: 'security',
-    title: '6. Security',
+    title: '7. Security',
     body: `We implement industry-standard security measures including encryption in transit (TLS), encryption at rest, access controls, and regular security audits. However, no method of transmission over the internet is 100% secure.
 
 You are responsible for maintaining the security of your account credentials. We recommend using a strong, unique password and enabling two-factor authentication when available.
@@ -84,7 +108,7 @@ In the event of a data breach that affects your personal information, we will no
   },
   {
     id: 'your-rights',
-    title: '7. Your Rights',
+    title: '8. Your Rights',
     body: `Depending on your location, you may have the following rights regarding your personal data:
 
 • **Access:** Request a copy of the personal data we hold about you
@@ -100,7 +124,7 @@ If you are in the EU/EEA, you also have the right to lodge a complaint with your
   },
   {
     id: 'cookies',
-    title: '8. Cookies',
+    title: '9. Cookies',
     body: `We use cookies and similar tracking technologies to operate and improve the Service. This includes:
 
 • **Essential cookies:** Required for authentication and basic functionality
@@ -111,22 +135,22 @@ You can control cookies through your browser settings. Disabling essential cooki
   },
   {
     id: 'international',
-    title: '9. International Transfers',
+    title: '10. International Transfers',
     body: `articlos is operated from the United States. If you are accessing the Service from outside the United States, your data will be transferred to and processed in the United States. We take appropriate measures to ensure that international transfers of personal data comply with applicable data protection laws.`,
   },
   {
     id: 'children',
-    title: '10. Children\'s Privacy',
+    title: '11. Children\'s Privacy',
     body: `The Service is not directed to children under 13 years of age. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, please contact us and we will delete it promptly.`,
   },
   {
     id: 'changes',
-    title: '11. Changes to This Policy',
+    title: '12. Changes to This Policy',
     body: `We may update this Privacy Policy from time to time. We will notify you of significant changes by email or via a prominent notice in the Service. Your continued use of the Service after changes are effective constitutes acceptance of the revised policy.`,
   },
   {
     id: 'contact',
-    title: '12. Contact Us',
+    title: '13. Contact Us',
     body: `For privacy-related questions, requests, or concerns, contact us at hello@articlos.com. For data deletion requests or to exercise your rights, please include your full name, email address, and a description of your request.`,
   },
 ]
