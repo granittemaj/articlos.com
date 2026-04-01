@@ -72,6 +72,9 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
   const [saveSuccess, setSaveSuccess] = useState('')
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!postId)
   const [previewMode, setPreviewMode] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
+  const [aiKeywords, setAiKeywords] = useState('')
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -153,6 +156,43 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
     }
   }
 
+  // AI generate
+  async function handleAiGenerate() {
+    if (!form.title.trim()) {
+      setAiError('Add a title first so Gemini knows what to write.')
+      return
+    }
+    setAiLoading(true)
+    setAiError('')
+    try {
+      const res = await fetch('/api/admin/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'generate', topic: form.title, keywords: aiKeywords }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'AI generation failed')
+
+      // Fill in the generated fields
+      if (data.excerpt) updateField('excerpt', data.excerpt)
+      if (data.tags) {
+        const tags = data.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+        setTagList(tags)
+        updateField('tags', data.tags)
+      }
+      if (data.metaTitle) updateField('metaTitle', data.metaTitle)
+      if (data.metaDescription) updateField('metaDescription', data.metaDescription)
+      if (data.content && editorRef.current) {
+        editorRef.current.innerHTML = data.content
+        updateField('content', data.content)
+      }
+    } catch (e) {
+      setAiError(e instanceof Error ? e.message : 'Something went wrong')
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   // Save post
   async function handleSave(publishState?: boolean) {
     setSaveError('')
@@ -208,7 +248,7 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
       setSaveSuccess(isEditMode ? 'Post updated successfully.' : 'Post created successfully.')
 
       if (!isEditMode) {
-        router.push(`/admin/blog/${data.post.id}`)
+        router.push(`/plogin-admin/blog/${data.post.id}`)
       } else {
         // Update form with returned data
         setForm((prev) => ({
@@ -556,6 +596,54 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
               <p className="form-hint" style={{ marginTop: 4 }}>
                 Press Enter or comma to add.
               </p>
+            </div>
+
+            {/* AI Generate */}
+            <div style={{
+              background: '#0f0f0e',
+              border: '1px solid #0f0f0e',
+              borderRadius: 8, padding: 16,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+                </svg>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>Write with Gemini</h3>
+              </div>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginBottom: 10, lineHeight: 1.5 }}>
+                Generate a full article from your title. Fills content, excerpt, tags, and SEO fields.
+              </p>
+              <input
+                type="text"
+                value={aiKeywords}
+                onChange={(e) => setAiKeywords(e.target.value)}
+                placeholder="Target keyword (optional)"
+                style={{
+                  width: '100%', fontSize: 12, padding: '7px 10px',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  borderRadius: 5, background: 'rgba(255,255,255,0.07)',
+                  color: '#ffffff', outline: 'none', fontFamily: 'Geist, sans-serif',
+                  marginBottom: 8, boxSizing: 'border-box',
+                }}
+              />
+              {aiError && (
+                <p style={{ fontSize: 11, color: '#fca5a5', marginBottom: 8 }}>{aiError}</p>
+              )}
+              <button
+                onClick={handleAiGenerate}
+                disabled={aiLoading}
+                style={{
+                  width: '100%', padding: '8px 12px', borderRadius: 5,
+                  background: aiLoading ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  color: '#ffffff', fontSize: 12, fontWeight: 500,
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontFamily: 'Geist, sans-serif',
+                  transition: 'background 0.15s ease',
+                }}
+              >
+                {aiLoading ? 'Writing with Gemini…' : 'Generate article'}
+              </button>
             </div>
 
             {/* SEO */}
