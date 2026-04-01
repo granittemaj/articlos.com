@@ -5,6 +5,8 @@ import BlogCard from '@/components/BlogCard'
 import ScrollAnimations from './ScrollAnimations'
 import CountUp from '@/components/CountUp'
 
+export const dynamic = 'force-dynamic'
+
 async function getSiteContent() {
   try {
     const records = await prisma.siteContent.findMany()
