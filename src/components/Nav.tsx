@@ -1,291 +1,250 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
 
   return (
     <>
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          height: 60,
-          backgroundColor: scrolled ? 'rgba(250,250,249,0.92)' : '#fafaf9',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: '1px solid #e8e8e6',
-          transition: 'background-color 0.2s ease, backdrop-filter 0.2s ease',
-        }}
-      >
-        <div
+      {/* Win2k Taskbar-style header */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        background: 'linear-gradient(to bottom, #d4d0c8, #b8b4a8)',
+        borderTop: '2px solid #fff',
+        borderBottom: '2px solid #404040',
+        height: 30,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '0 4px',
+        userSelect: 'none',
+      }}>
+        {/* Start button */}
+        <Link
+          href="/"
           style={{
-            maxWidth: 1200,
-            margin: '0 auto',
-            padding: '0 24px',
-            height: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            gap: 4,
+            padding: '2px 8px',
+            background: 'linear-gradient(to bottom, #d4d0c8, #ece9d8)',
+            borderTop: '1px solid #fff',
+            borderLeft: '1px solid #fff',
+            borderBottom: '1px solid #404040',
+            borderRight: '1px solid #404040',
+            fontWeight: 'bold',
+            fontSize: 11,
+            color: '#000',
+            textDecoration: 'none',
+            fontFamily: 'Tahoma, sans-serif',
+            height: 22,
+            flexShrink: 0,
           }}
         >
-          {/* Logo */}
+          {/* "Windows" flag pixel icon */}
+          <span style={{
+            display: 'inline-grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 1,
+            width: 12,
+            height: 12,
+            flexShrink: 0,
+          }}>
+            <span style={{ background: '#cc0000', display: 'block' }} />
+            <span style={{ background: '#006600', display: 'block' }} />
+            <span style={{ background: '#0000cc', display: 'block' }} />
+            <span style={{ background: '#cc6600', display: 'block' }} />
+          </span>
+          articlos
+        </Link>
+
+        {/* Separator */}
+        <div style={{ width: 1, height: 20, background: '#808080', marginRight: 2 }} />
+
+        {/* Nav links as taskbar buttons */}
+        {[
+          { label: 'Features', href: '/#features' },
+          { label: 'Contact', href: '/#contact' },
+          { label: 'Blog', href: '/blog' },
+        ].map((item) => (
           <Link
-            href="/"
+            key={item.href}
+            href={item.href}
             style={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: 9,
+              padding: '2px 10px',
+              borderTop: '1px solid #fff',
+              borderLeft: '1px solid #fff',
+              borderBottom: '1px solid #404040',
+              borderRight: '1px solid #404040',
+              background: '#ece9d8',
+              fontSize: 11,
+              fontFamily: 'Tahoma, sans-serif',
+              color: '#000',
               textDecoration: 'none',
-              flexShrink: 0,
+              height: 22,
+              whiteSpace: 'nowrap',
             }}
           >
-            <div
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 7,
-                background: '#0f0f0e',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-                fontFamily: 'Geist, sans-serif',
-                letterSpacing: '-0.02em',
-                flexShrink: 0,
-              }}
-            >
-              a
-            </div>
-            <span
-              style={{
-                fontWeight: 600,
-                fontSize: 16,
-                color: '#0f0f0e',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              articlos
-            </span>
+            {item.label}
           </Link>
+        ))}
 
-          {/* Center Nav Links */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-            }}
-            className="desktop-nav"
-          >
-            {[
-              { label: 'Features', href: '/#features' },
-              { label: 'Contact', href: '/#contact' },
-              { label: 'Blog', href: '/blog' },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 14,
-                  fontWeight: 450,
-                  color: '#6b6b67',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s ease, background 0.15s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#0f0f0e'
-                  e.currentTarget.style.background = '#f0f0ee'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#6b6b67'
-                  e.currentTarget.style.background = 'transparent'
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
 
-          {/* Right CTAs */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-            }}
-            className="desktop-cta"
-          >
-            <a
-              href="https://app.articlos.com/login"
-              style={{
-                padding: '6px 14px',
-                fontSize: 14,
-                fontWeight: 450,
-                color: '#6b6b67',
-                textDecoration: 'none',
-                borderRadius: 6,
-                transition: 'color 0.15s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#0f0f0e' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#6b6b67' }}
-            >
-              Log in
-            </a>
-            <a
-              href="https://app.articlos.com/register"
-              className="btn btn-primary btn-sm"
-              style={{ fontSize: 14 }}
-            >
-              Start free →
-            </a>
-          </div>
+        {/* Right side — Log in / Start free */}
+        <a
+          href="https://app.articlos.com/login"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '2px 10px',
+            borderTop: '1px solid #fff',
+            borderLeft: '1px solid #fff',
+            borderBottom: '1px solid #404040',
+            borderRight: '1px solid #404040',
+            background: '#ece9d8',
+            fontSize: 11,
+            fontFamily: 'Tahoma, sans-serif',
+            color: '#000',
+            textDecoration: 'none',
+            height: 22,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Log in
+        </a>
+        <a
+          href="https://app.articlos.com/register"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '2px 12px',
+            borderTop: '1px solid #fff',
+            borderLeft: '1px solid #fff',
+            borderBottom: '1px solid #404040',
+            borderRight: '1px solid #404040',
+            background: '#0a246a',
+            fontSize: 11,
+            fontFamily: 'Tahoma, sans-serif',
+            fontWeight: 'bold',
+            color: '#fff',
+            textDecoration: 'none',
+            height: 22,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Start free ▶
+        </a>
 
-          {/* Hamburger */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="hamburger-btn"
-            aria-label="Toggle menu"
-            style={{
-              display: 'none',
-              flexDirection: 'column',
-              gap: 5,
-              padding: 8,
-              borderRadius: 6,
-              cursor: 'pointer',
-              background: 'transparent',
-              border: 'none',
-            }}
-          >
-            <span
-              style={{
-                display: 'block',
-                width: 20,
-                height: 1.5,
-                background: '#0f0f0e',
-                borderRadius: 2,
-                transition: 'transform 0.2s ease, opacity 0.2s ease',
-                transform: menuOpen ? 'translateY(6.5px) rotate(45deg)' : 'none',
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                width: 20,
-                height: 1.5,
-                background: '#0f0f0e',
-                borderRadius: 2,
-                opacity: menuOpen ? 0 : 1,
-                transition: 'opacity 0.2s ease',
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                width: 20,
-                height: 1.5,
-                background: '#0f0f0e',
-                borderRadius: 2,
-                transition: 'transform 0.2s ease, opacity 0.2s ease',
-                transform: menuOpen ? 'translateY(-6.5px) rotate(-45deg)' : 'none',
-              }}
-            />
-          </button>
+        {/* System clock area */}
+        <div style={{
+          borderTop: '1px solid #808080',
+          borderLeft: '1px solid #808080',
+          borderBottom: '1px solid #fff',
+          borderRight: '1px solid #fff',
+          padding: '2px 8px',
+          fontSize: 11,
+          fontFamily: 'Tahoma, sans-serif',
+          background: '#d4d0c8',
+          height: 22,
+          display: 'flex',
+          alignItems: 'center',
+          flexShrink: 0,
+        }}>
+          articlos.com
         </div>
+
+        {/* Hamburger for mobile */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="hamburger-btn"
+          aria-label="Toggle menu"
+          style={{
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 22,
+            height: 22,
+            borderTop: '1px solid #fff',
+            borderLeft: '1px solid #fff',
+            borderBottom: '1px solid #404040',
+            borderRight: '1px solid #404040',
+            background: '#ece9d8',
+            fontSize: 11,
+            cursor: 'default',
+          }}
+        >
+          ▼
+        </button>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu — Win2k context menu style */}
       {menuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99,
-            background: '#fafaf9',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '80px 24px 32px',
-          }}
-        >
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            {[
-              { label: 'Features', href: '/#features' },
-              { label: 'Contact', href: '/#contact' },
-              { label: 'Blog', href: '/blog' },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  padding: '14px 0',
-                  fontSize: 22,
-                  fontWeight: 500,
-                  color: '#0f0f0e',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid #e8e8e6',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div
-            style={{
-              marginTop: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10,
-            }}
+        <div style={{
+          position: 'fixed',
+          top: 30,
+          left: 0,
+          right: 0,
+          zIndex: 99,
+          background: '#ece9d8',
+          borderTop: '1px solid #fff',
+          borderLeft: '1px solid #fff',
+          borderBottom: '2px solid #404040',
+          borderRight: '2px solid #404040',
+          padding: '4px 0',
+          boxShadow: '3px 3px 6px rgba(0,0,0,0.3)',
+        }}>
+          {[
+            { label: 'Features', href: '/#features' },
+            { label: 'Contact', href: '/#contact' },
+            { label: 'Blog', href: '/blog' },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                display: 'block',
+                padding: '4px 20px',
+                fontSize: 11,
+                color: '#000',
+                textDecoration: 'none',
+                fontFamily: 'Tahoma, sans-serif',
+              }}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div style={{ borderTop: '1px solid #808080', borderBottom: '1px solid #fff', margin: '3px 0' }} />
+          <a
+            href="https://app.articlos.com/login"
+            style={{ display: 'block', padding: '4px 20px', fontSize: 11, color: '#000', textDecoration: 'none', fontFamily: 'Tahoma, sans-serif' }}
           >
-            <a
-              href="https://app.articlos.com/login"
-              className="btn btn-ghost"
-              style={{ justifyContent: 'center', padding: '13px' }}
-            >
-              Log in
-            </a>
-            <a
-              href="https://app.articlos.com/register"
-              className="btn btn-primary"
-              style={{ justifyContent: 'center', padding: '13px' }}
-            >
-              Start free →
-            </a>
-          </div>
+            Log in
+          </a>
+          <a
+            href="https://app.articlos.com/register"
+            style={{ display: 'block', padding: '4px 20px', fontSize: 11, color: '#000', fontWeight: 'bold', textDecoration: 'none', fontFamily: 'Tahoma, sans-serif' }}
+          >
+            Start free
+          </a>
         </div>
       )}
 
       <style>{`
         @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .desktop-cta { display: none !important; }
+          .desktop-nav-items { display: none !important; }
+          .desktop-cta-items { display: none !important; }
           .hamburger-btn { display: flex !important; }
         }
       `}</style>

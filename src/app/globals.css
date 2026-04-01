@@ -1,23 +1,31 @@
 /* ============================================================
-   ARTICLOS MARKETING — GLOBAL STYLES
+   ARTICLOS MARKETING — WINDOWS 2000 / XP THEME
    ============================================================ */
 
 :root {
-  --bg: #fafaf9;
-  --surface: #ffffff;
-  --border: #e8e8e6;
-  --text: #0f0f0e;
-  --text-muted: #6b6b67;
-  --accent: #0f0f0e;
-  --accent-hover: #2a2a28;
-  --radius-card: 8px;
-  --radius-btn: 6px;
-  --radius-sm: 4px;
-  --font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
-  --shadow-lg: 0 16px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
-  --transition: 0.2s ease;
+  /* Classic Windows 2000 colors */
+  --bg: #d4d0c8;
+  --surface: #ece9d8;
+  --border: #fff;
+  --border-dark: #808080;
+  --border-darker: #404040;
+  --text: #000000;
+  --text-muted: #808080;
+  --accent: #0a246a;
+  --accent-hover: #0831a1;
+  --title-bar-start: #0a246a;
+  --title-bar-end: #1e52c3;
+  --button-face: #ece9d8;
+  --button-highlight: #fff;
+  --button-shadow: #808080;
+  --radius-card: 0px;
+  --radius-btn: 0px;
+  --radius-sm: 0px;
+  --font: 'Tahoma', 'MS Sans Serif', 'Trebuchet MS', sans-serif;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --transition: 0s;
   --max-width: 1200px;
 }
 
@@ -33,27 +41,32 @@ html {
 }
 
 /* Legal page TOC link hover */
-.toc-link { color: #6b6b67; text-decoration: none; font-size: 13px; line-height: 1.4; transition: color 0.15s; }
-.toc-link:hover { color: #0f0f0e; }
+.toc-link { color: #808080; text-decoration: none; font-size: 11px; line-height: 1.4; }
+.toc-link:hover { color: #000080; text-decoration: underline; }
 
 /* Offset anchor scroll for fixed header */
 [id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 60px;
 }
 
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-size: 11px;
+  line-height: 1.4;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: none;
+  cursor: default;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #551a8b;
 }
 
 img {
@@ -63,7 +76,7 @@ img {
 }
 
 button {
-  cursor: pointer;
+  cursor: default;
   font-family: var(--font);
   border: none;
   background: none;
@@ -74,82 +87,252 @@ input, textarea, select {
 }
 
 /* ============================================================
-   TYPOGRAPHY
+   WIN2K RAISED / SUNKEN BORDERS (the classic bevel)
    ============================================================ */
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+.win-raised {
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+}
+
+.win-sunken {
+  border-top: 2px solid var(--border-darker);
+  border-left: 2px solid var(--border-darker);
+  border-bottom: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-highlight);
+}
+
+.win-inset {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
+}
+
+/* ============================================================
+   WIN2K TITLE BAR
+   ============================================================ */
+.win-titlebar {
+  background: linear-gradient(to right, var(--title-bar-start), var(--title-bar-end));
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 4px 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  gap: 4px;
+}
+
+.win-titlebar-icon {
+  width: 15px;
+  height: 15px;
+  background: #1e90ff;
+  border: 1px solid #fff;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-style: italic;
+}
+
+.win-titlebar-buttons {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.win-titlebar-btn {
+  width: 16px;
+  height: 14px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ece9d8;
+  color: #000;
+  font-weight: bold;
+  cursor: default;
+  flex-shrink: 0;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #404040;
+  border-right: 1px solid #404040;
+  line-height: 1;
+}
+
+.win-titlebar-btn:hover {
+  background: #c0c0c0;
+}
+
+.win-titlebar-btn.close {
+  background: #c0504d;
+  color: #fff;
+  border-top: 1px solid #e08080;
+  border-left: 1px solid #e08080;
+}
+
+.win-titlebar-btn.close:hover {
+  background: #a00000;
+}
+
+/* ============================================================
+   WIN2K PANEL / WINDOW
+   ============================================================ */
+.win-panel {
+  background: var(--surface);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+}
+
+.win-window {
+  background: var(--surface);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+}
+
+/* ============================================================
+   WIN2K GROUP BOX
+   ============================================================ */
+.win-groupbox {
+  border: 1px solid var(--button-shadow);
+  padding: 12px 10px 10px;
+  position: relative;
+  background: var(--surface);
+}
+
+.win-groupbox-label {
+  position: absolute;
+  top: -8px;
+  left: 8px;
+  background: var(--surface);
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: bold;
   color: var(--text);
 }
 
 /* ============================================================
-   BUTTONS
+   WIN2K PROGRESS BAR
+   ============================================================ */
+.win-progress-track {
+  background: var(--surface);
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
+  height: 16px;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.win-progress-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    #0a246a 0px,
+    #0a246a 10px,
+    #1e52c3 10px,
+    #1e52c3 12px
+  );
+  transition: width 1.2s ease;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  line-height: 1.2;
+  color: var(--text);
+  font-family: var(--font);
+}
+
+/* ============================================================
+   BUTTONS — Win2000 style
    ============================================================ */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 10px 20px;
-  border-radius: var(--radius-btn);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition);
+  gap: 4px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-family: var(--font);
+  font-weight: normal;
+  cursor: default;
   white-space: nowrap;
   text-decoration: none;
-  border: 1px solid transparent;
+  background: var(--button-face);
+  color: var(--text);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  min-width: 75px;
+  min-height: 23px;
+  user-select: none;
+}
+
+.btn:active {
+  border-top: 2px solid var(--border-darker);
+  border-left: 2px solid var(--border-darker);
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background: var(--button-face);
+  color: var(--text);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  font-weight: bold;
 }
 
-.btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
+.btn-primary:hover { background: #d4d0c8; }
 
 .btn-ghost {
-  background: transparent;
+  background: var(--button-face);
   color: var(--text);
-  border-color: var(--border);
 }
 
-.btn-ghost:hover {
-  background: var(--surface);
-  border-color: #c8c8c4;
-  transform: translateY(-1px);
-}
+.btn-ghost:hover { background: #d4d0c8; }
 
 .btn-lg {
-  padding: 13px 26px;
-  font-size: 15px;
-  border-radius: var(--radius-btn);
+  padding: 4px 18px;
+  font-size: 11px;
+  min-height: 25px;
+  font-weight: bold;
 }
 
 .btn-sm {
-  padding: 7px 14px;
-  font-size: 13px;
+  padding: 2px 8px;
+  font-size: 11px;
+  min-width: 60px;
 }
 
 .btn-danger {
-  background: #dc2626;
-  color: #fff;
-  border-color: #dc2626;
+  background: var(--button-face);
+  color: #cc0000;
+  font-weight: bold;
 }
 
-.btn-danger:hover {
-  background: #b91c1c;
-  border-color: #b91c1c;
-}
+.btn-danger:hover { background: #d4d0c8; }
 
 /* ============================================================
    LAYOUT UTILITIES
@@ -162,43 +345,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section {
-  padding: 96px 0;
+  padding: 32px 24px;
 }
 
 /* ============================================================
-   SCROLL ANIMATIONS
+   SCROLL ANIMATIONS — disabled in Win2k theme
    ============================================================ */
 
-.fade-up {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+.fade-up { opacity: 1; transform: none; }
+.fade-up.visible { opacity: 1; transform: none; }
+.scale-in { opacity: 1; transform: none; }
+.scale-in.visible { opacity: 1; transform: none; }
 
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fade-up-delay-1 { transition-delay: 0.1s; }
-.fade-up-delay-2 { transition-delay: 0.2s; }
-.fade-up-delay-3 { transition-delay: 0.3s; }
-.fade-up-delay-4 { transition-delay: 0.4s; }
-.fade-up-delay-5 { transition-delay: 0.5s; }
+.fade-up-delay-1,
+.fade-up-delay-2,
+.fade-up-delay-3,
+.fade-up-delay-4,
+.fade-up-delay-5,
+.fade-up-delay-6,
+.fade-up-delay-7,
+.fade-up-delay-8 { transition-delay: 0s; }
 
 /* ============================================================
-   HERO GRADIENT ANIMATION
+   KEYFRAMES — mostly no-ops for Win2k
    ============================================================ */
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0%, 100% { background-position: 0% 50%; }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%, 100% { transform: none; }
 }
 
 @keyframes pulse-dot {
@@ -207,23 +384,44 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes counter-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-in {
+  from { opacity: 1; }
+  to   { opacity: 1; }
+}
+
+.hero-badge,
+.hero-title,
+.hero-sub,
+.hero-ctas,
+.hero-visual { animation: none; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 /* ============================================================
-   FORM ELEMENTS
+   FORM ELEMENTS — Win2k style
    ============================================================ */
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .form-label {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: normal;
   color: var(--text);
 }
 
@@ -231,21 +429,23 @@ h1, h2, h3, h4, h5, h6 {
 .form-textarea,
 .form-select {
   width: 100%;
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-btn);
-  font-size: 14px;
+  padding: 3px 4px;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
+  font-size: 11px;
   color: var(--text);
-  background: var(--surface);
-  transition: border-color var(--transition), box-shadow var(--transition);
+  background: #fff;
   outline: none;
+  font-family: var(--font);
+  border-radius: 0;
 }
 
 .form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
-  border-color: #a0a09c;
-  box-shadow: 0 0 0 3px rgba(15,15,14,0.06);
+  outline: none;
 }
 
 .form-textarea {
@@ -254,25 +454,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-hint {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
 }
 
 /* ============================================================
-   BADGE / PILL
+   BADGE / PILL — Win2k flat label
    ============================================================ */
 
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-muted);
+  gap: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  background: var(--button-face);
+  color: var(--text);
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
 }
 
 .badge-dot {
@@ -284,20 +485,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
-   CARD
+   CARD — Win2k window panel
    ============================================================ */
 
 .card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 24px;
-  transition: box-shadow var(--transition), transform var(--transition);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  padding: 8px;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  background: #f5f4ee;
 }
 
 /* ============================================================
@@ -308,26 +509,24 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
-  background: #f0f0ee;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
+  padding: 1px 6px;
+  font-size: 11px;
+  background: #d4d0c8;
+  color: var(--text);
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
 }
 
 .tag-chip-remove {
-  cursor: pointer;
+  cursor: default;
   opacity: 0.5;
-  font-size: 14px;
+  font-size: 11px;
   line-height: 1;
-  transition: opacity var(--transition);
 }
 
-.tag-chip-remove:hover {
-  opacity: 1;
-}
+.tag-chip-remove:hover { opacity: 1; }
 
 /* ============================================================
    TOGGLE SWITCH
@@ -348,11 +547,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .toggle-slider {
   position: absolute;
-  cursor: pointer;
+  cursor: default;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: #d4d4d0;
-  border-radius: 24px;
-  transition: background var(--transition);
+  background: #d4d0c8;
+  border-radius: 0;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
 }
 
 .toggle-slider::before {
@@ -362,121 +564,103 @@ h1, h2, h3, h4, h5, h6 {
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background: white;
-  border-radius: 50%;
-  transition: transform var(--transition);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background: #ece9d8;
+  border-radius: 0;
+  transition: transform 0s;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
 }
 
-.toggle-switch input:checked + .toggle-slider {
-  background: var(--accent);
-}
-
-.toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(20px);
-}
+.toggle-switch input:checked + .toggle-slider { background: #0a246a; }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
 /* ============================================================
    BLOG POST CONTENT STYLES
    ============================================================ */
 
 .post-content {
-  font-size: 17px;
-  line-height: 1.8;
+  font-size: 11px;
+  line-height: 1.5;
   color: var(--text);
+  font-family: var(--font);
 }
 
 .post-content h1,
 .post-content h2,
 .post-content h3,
-.post-content h4 {
-  margin: 2em 0 0.75em;
-}
+.post-content h4 { margin: 1.5em 0 0.5em; font-weight: bold; }
 
-.post-content h1 { font-size: 2em; }
-.post-content h2 { font-size: 1.5em; }
-.post-content h3 { font-size: 1.25em; }
+.post-content h1 { font-size: 18px; }
+.post-content h2 { font-size: 14px; }
+.post-content h3 { font-size: 12px; }
 
-.post-content p {
-  margin: 0 0 1.5em;
-}
+.post-content p { margin: 0 0 1em; }
 
 .post-content ul,
-.post-content ol {
-  margin: 0 0 1.5em;
-  padding-left: 1.75em;
-}
+.post-content ol { margin: 0 0 1em; padding-left: 1.5em; }
 
-.post-content li {
-  margin-bottom: 0.5em;
-}
+.post-content li { margin-bottom: 0.3em; }
 
 .post-content blockquote {
-  border-left: 3px solid var(--border);
-  padding-left: 20px;
+  border-left: 3px solid #808080;
+  padding-left: 16px;
   color: var(--text-muted);
   font-style: italic;
-  margin: 1.5em 0;
+  margin: 1em 0;
+  background: #f0ede8;
 }
 
 .post-content code {
-  background: #f0f0ee;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: 'Geist Mono', 'Fira Code', monospace;
+  background: #fff;
+  padding: 1px 4px;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
 }
 
 .post-content pre {
-  background: #1a1a18;
-  color: #e8e8e6;
-  padding: 20px;
-  border-radius: var(--radius-card);
+  background: #fff;
+  color: #000;
+  padding: 8px;
   overflow-x: auto;
-  margin: 1.5em 0;
+  margin: 1em 0;
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
 }
 
-.post-content pre code {
-  background: none;
-  padding: 0;
-  color: inherit;
-}
+.post-content pre code { background: none; padding: 0; border: none; }
 
-.post-content a {
-  color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
+.post-content a { color: #0000ee; text-decoration: underline; }
 
 .post-content img {
-  border-radius: var(--radius-card);
-  margin: 1.5em 0;
+  margin: 1em 0;
   width: 100%;
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
 }
 
 .post-content hr {
   border: none;
-  border-top: 1px solid var(--border);
-  margin: 2.5em 0;
-}
-
-.post-content table {
-  width: 100%;
-  border-collapse: collapse;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
   margin: 1.5em 0;
 }
 
-.post-content th,
-.post-content td {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  text-align: left;
-}
+.post-content table { width: 100%; border-collapse: collapse; margin: 1em 0; }
 
-.post-content th {
-  background: #f5f5f3;
-  font-weight: 600;
-}
+.post-content th,
+.post-content td { padding: 4px 8px; border: 1px solid #808080; text-align: left; font-size: 11px; }
+
+.post-content th { background: #d4d0c8; font-weight: bold; }
 
 /* ============================================================
    RICH TEXT EDITOR
@@ -484,57 +668,50 @@ h1, h2, h3, h4, h5, h6 {
 
 .rich-editor {
   min-height: 400px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  font-size: 15px;
-  line-height: 1.7;
+  padding: 4px;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  border-right: 1px solid #fff;
+  font-size: 11px;
+  line-height: 1.5;
   outline: none;
-  background: var(--surface);
-}
-
-.rich-editor:focus {
-  border-color: #a0a09c;
-  box-shadow: 0 0 0 3px rgba(15,15,14,0.06);
+  background: #fff;
+  font-family: var(--font);
 }
 
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
-  padding: 8px;
-  border: 1px solid var(--border);
-  border-bottom: none;
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
-  background: #f5f5f3;
-}
-
-.editor-toolbar + .rich-editor {
-  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  padding: 4px;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #808080;
+  border-right: 2px solid #808080;
+  background: #d4d0c8;
 }
 
 .toolbar-btn {
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all var(--transition);
-  background: transparent;
-  border: none;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--text);
+  cursor: default;
+  background: #ece9d8;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
   font-family: var(--font);
 }
 
-.toolbar-btn:hover {
-  background: var(--border);
-  color: var(--text);
-}
+.toolbar-btn:hover { background: #d4d0c8; }
 
 .toolbar-sep {
   width: 1px;
-  background: var(--border);
-  margin: 4px 4px;
+  background: #808080;
+  margin: 2px 3px;
 }
 
 /* ============================================================
@@ -548,10 +725,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .admin-sidebar {
-  width: 240px;
+  width: 180px;
   flex-shrink: 0;
   background: var(--surface);
-  border-right: 1px solid var(--border);
+  border-right: 2px solid #808080;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -563,7 +740,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .admin-content {
-  margin-left: 240px;
+  margin-left: 180px;
   flex: 1;
   min-height: 100vh;
 }
@@ -571,59 +748,57 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--border);
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 2px solid #808080;
+  background: linear-gradient(to right, #0a246a, #1e52c3);
 }
 
 .sidebar-logo-text {
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--text);
+  font-weight: bold;
+  font-size: 11px;
+  color: #fff;
 }
 
 .sidebar-nav {
-  padding: 12px 8px;
+  padding: 4px;
   flex: 1;
 }
 
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--text-muted);
+  gap: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text);
   text-decoration: none;
-  transition: all var(--transition);
-  cursor: pointer;
-  margin-bottom: 2px;
+  cursor: default;
+  margin-bottom: 1px;
 }
 
 .sidebar-nav-item:hover {
-  background: var(--bg);
-  color: var(--text);
+  background: #0a246a;
+  color: #fff;
 }
 
 .sidebar-nav-item.active {
-  background: var(--bg);
-  color: var(--text);
-  font-weight: 500;
+  background: #0a246a;
+  color: #fff;
+  font-weight: bold;
 }
 
 .sidebar-section-label {
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-weight: bold;
   color: var(--text-muted);
-  padding: 12px 12px 6px;
+  padding: 6px 8px 2px;
+  text-transform: uppercase;
 }
 
 .sidebar-bottom {
-  padding: 12px 8px;
-  border-top: 1px solid var(--border);
+  padding: 4px;
+  border-top: 1px solid #808080;
 }
 
 /* ============================================================
@@ -634,54 +809,51 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 32px;
-  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  border-bottom: 2px solid #808080;
   background: var(--surface);
 }
 
 .page-header-title {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .page-body {
-  padding: 32px;
+  padding: 16px;
 }
 
 /* ============================================================
-   TABLE
+   TABLE — Win2k style
    ============================================================ */
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .data-table th {
   text-align: left;
-  padding: 10px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-  background: #f8f8f7;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--text);
+  border-bottom: 2px solid #808080;
+  background: #d4d0c8;
 }
 
 .data-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
+  padding: 3px 8px;
+  border-bottom: 1px solid #d4d0c8;
   vertical-align: middle;
 }
 
-.data-table tr:last-child td {
-  border-bottom: none;
-}
+.data-table tr:last-child td { border-bottom: none; }
 
 .data-table tr:hover td {
-  background: #fafaf9;
+  background: #0a246a;
+  color: #fff;
 }
 
 /* ============================================================
@@ -691,115 +863,68 @@ h1, h2, h3, h4, h5, h6 {
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
+  gap: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  background: #d4d0c8;
+  border: 1px solid #808080;
 }
 
-.status-badge.published {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.status-badge.draft {
-  background: #f5f5f3;
-  color: var(--text-muted);
-}
+.status-badge.published { background: #c8e6c9; color: #1b5e20; }
+.status-badge.draft { background: #d4d0c8; color: var(--text-muted); }
 
 /* ============================================================
-   HOVER UTILITIES (used in server components instead of JS handlers)
+   HOVER UTILITIES
    ============================================================ */
 
-.link-muted {
-  color: #6b6b67;
-  transition: color 0.15s ease;
-}
-.link-muted:hover {
-  color: #0f0f0e;
-}
+.link-muted { color: #0000ee; text-decoration: underline; }
+.link-muted:hover { color: #000080; }
 
 .cta-white-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 13px 28px;
-  background: #ffffff;
-  color: #0f0f0e;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 15px;
+  gap: 4px;
+  padding: 4px 18px;
+  background: var(--button-face);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: bold;
   text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  font-family: var(--font);
 }
-.cta-white-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
+
+.cta-white-btn:hover { background: #d4d0c8; }
 
 /* ============================================================
    LOADING SKELETON
    ============================================================ */
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.skeleton {
+  background: linear-gradient(90deg, #d4d0c8 25%, #ece9d8 50%, #d4d0c8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }
 
 /* ============================================================
-   MARQUEE
+   BENTO DARK CARD (Improve) — re-styled as Win2k blue panel
    ============================================================ */
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+.bento-dark {
+  background: #0a246a !important;
+  border-color: transparent !important;
 }
 
 /* ============================================================
-   HERO LOAD ANIMATIONS (play immediately, no scroll needed)
+   FOCUS / ACTIVE
    ============================================================ */
 
-@keyframes hero-in {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-    filter: blur(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-.hero-badge  { animation: hero-in 0.65s 0.05s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-title  { animation: hero-in 0.75s 0.18s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-sub    { animation: hero-in 0.75s 0.34s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-ctas   { animation: hero-in 0.75s 0.48s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.hero-visual { animation: hero-in 0.90s 0.64s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-/* ============================================================
-   EXTRA DELAY CLASSES
-   ============================================================ */
-
-.fade-up-delay-6 { transition-delay: 0.6s; }
-.fade-up-delay-7 { transition-delay: 0.7s; }
-.fade-up-delay-8 { transition-delay: 0.8s; }
-
-/* ============================================================
-   BENTO / SCALE-IN VARIANT
-   ============================================================ */
-
-.scale-in {
-  opacity: 0;
-  transform: scale(0.97) translateY(16px);
-  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scale-in.visible {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+.btn-primary:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
 }
 
 /* ============================================================
@@ -807,139 +932,112 @@ h1, h2, h3, h4, h5, h6 {
    ============================================================ */
 
 .stage-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+  transform: none;
+  box-shadow: none !important;
 }
 
 /* ============================================================
-   HERO BACKGROUND GRID
+   HERO BACKGROUND — Win2k teal wallpaper vibe
    ============================================================ */
 
 .hero-grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, #d4d4d0 1px, transparent 0);
-  background-size: 28px 28px;
-  opacity: 0.45;
   pointer-events: none;
 }
 
 /* ============================================================
-   BENTO DARK CARD (Improve)
-   ============================================================ */
-
-.bento-dark {
-  background: #0f0f0e !important;
-  border-color: transparent !important;
-}
-
-/* ============================================================
-   CTA CONTACT BUTTON GLOW
-   ============================================================ */
-
-@keyframes btn-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(15,15,14,0); }
-  50%       { box-shadow: 0 0 24px 4px rgba(15,15,14,0.12); }
-}
-
-.btn-primary:focus-visible {
-  animation: btn-glow 2s infinite;
-}
-
-.skeleton {
-  background: linear-gradient(90deg, #f0f0ee 25%, #e8e8e6 50%, #f0f0ee 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-sm);
-}
-
-/* ============================================================
-   PRICING CARD
+   PRICING CARD — Win2k window
    ============================================================ */
 
 .pricing-card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 32px;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  transition: box-shadow var(--transition), transform var(--transition);
+  gap: 12px;
 }
 
-.pricing-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-3px);
-}
+.pricing-card:hover { background: #f5f4ee; }
 
 .pricing-card.featured {
-  border-color: var(--accent);
+  border: 3px solid #0a246a;
   position: relative;
 }
 
 .pricing-card.featured::before {
   content: 'Most Popular';
   position: absolute;
-  top: -12px;
+  top: -11px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--accent);
+  background: #0a246a;
   color: white;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 12px;
-  border-radius: 100px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 10px;
+  font-family: var(--font);
 }
+
+/* ============================================================
+   WIN2K TASKBAR
+   ============================================================ */
+
+.win-taskbar {
+  background: linear-gradient(to bottom, #d4d0c8, #b8b4a8);
+  border-top: 2px solid #fff;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.win-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--button-face);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid var(--border-darker);
+  border-right: 2px solid var(--border-darker);
+  font-size: 12px;
+  font-weight: bold;
+  font-family: var(--font);
+  color: var(--text);
+  cursor: default;
+  text-decoration: none;
+}
+
+.win-start-btn:hover { background: #d4d0c8; }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
+  .container { padding: 0 8px; }
+  .section { padding: 16px 8px; }
+  .admin-sidebar { display: none; }
+  .admin-content { margin-left: 0; }
+  .page-header { padding: 8px; }
+  .page-body { padding: 8px; }
 
-  .section {
-    padding: 64px 0;
-  }
-
-  .admin-sidebar {
-    display: none;
-  }
-
-  .admin-content {
-    margin-left: 0;
-  }
-
-  .page-header {
-    padding: 20px 16px;
-  }
-
-  .page-body {
-    padding: 20px 16px;
-  }
-
-  /* ── Marketing page responsive ── */
   .bento-grid { grid-template-columns: 1fr !important; }
   .bento-grid > * { grid-column: 1 !important; grid-row: auto !important; }
   .improve-inner { flex-direction: column !important; }
   .improve-card { min-width: unset !important; width: 100% !important; }
-  .steps-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .steps-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
   .steps-line { display: none !important; }
   .stats-grid { grid-template-columns: 1fr !important; }
-  .stats-grid > * { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
+  .stats-grid > * { border-right: none !important; border-bottom: 1px solid #808080 !important; }
   .stats-grid > *:last-child { border-bottom: none !important; }
   .blog-grid { grid-template-columns: 1fr !important; }
-  .stages-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
-  .stages-line { display: none !important; }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  /* ── Marketing page responsive ── */
-  .bento-grid { grid-template-columns: 1fr !important; }
-  .bento-grid > * { grid-column: 1 !important; grid-row: auto !important; }
-  .blog-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .stages-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .stages-grid { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
 }
