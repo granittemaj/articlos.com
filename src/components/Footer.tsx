@@ -99,7 +99,7 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'Features', href: '/#features' },
-                { label: 'Pricing', href: '/pricing' },
+                { label: 'Contact', href: '/#contact' },
                 { label: 'Blog', href: '/blog' },
                 { label: 'Changelog', href: 'https://app.articlos.com/changelog' },
               ].map((item) => (
