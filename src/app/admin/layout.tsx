@@ -8,11 +8,11 @@ export default async function AdminShellLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Middleware handles redirecting unauthenticated users away from admin
-  // (except /admin/login which is excluded in middleware config)
   const session = await getServerSession(authOptions)
 
-  // If no session, render children as-is (login page handles its own UI)
+  // Middleware (middleware.ts) enforces authentication for all /admin/* routes
+  // except /admin/login. When this layout renders without a session, we are on
+  // the login page — render children as-is (the login page handles its own UI).
   if (!session) {
     return <>{children}</>
   }

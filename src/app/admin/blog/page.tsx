@@ -72,9 +72,17 @@ export default function AdminBlogPage() {
     <div>
       <div className="page-header">
         <h1 className="page-header-title">Blog Posts</h1>
-        <Link href="/admin/blog/new" className="btn btn-primary btn-sm">
-          + New post
-        </Link>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Link href="/admin/blog/generate" className="btn btn-ghost btn-sm" style={{ gap: 6 }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+            </svg>
+            Generate with AI
+          </Link>
+          <Link href="/admin/blog/new" className="btn btn-primary btn-sm">
+            + New post
+          </Link>
+        </div>
       </div>
 
       <div className="page-body">

@@ -233,7 +233,7 @@ export default function Footer() {
           }}
         >
           <p style={{ fontSize: 13, color: '#a0a09c' }}>
-            Built with ❤️ for content creators
+            Built with ❤️ for content creators · © 2026 PAPINGU L.L.C.
           </p>
         </div>
       </div>
