@@ -10,6 +10,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^5",
     "@vercel/analytics": "^2.0.1",
     "bcryptjs": "^2.4.3",
