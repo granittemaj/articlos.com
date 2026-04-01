@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -87,6 +88,7 @@ export default function RootLayout({
             gtag('config', 'G-6L4N2Q05PW');
           `}
         </Script>
+        <Analytics />
       </body>
     </html>
   )
