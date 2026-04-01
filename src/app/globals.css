@@ -32,6 +32,15 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Legal page TOC link hover */
+.toc-link { color: #6b6b67; text-decoration: none; font-size: 13px; line-height: 1.4; transition: color 0.15s; }
+.toc-link:hover { color: #0f0f0e; }
+
+/* Offset anchor scroll for fixed header */
+[id] {
+  scroll-margin-top: 80px;
+}
+
 body {
   font-family: var(--font);
   background: var(--bg);
