@@ -67,6 +67,30 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
     return []
   })
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [imageUploading, setImageUploading] = useState(false)
+  const [imageError, setImageError] = useState('')
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImageUploading(true)
+    setImageError('')
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: formData })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
+      updateField('featuredImage', data.url)
+    } catch (err) {
+      setImageError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setImageUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [saveSuccess, setSaveSuccess] = useState('')
@@ -376,32 +400,102 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
 
             {/* Featured Image */}
             <div className="form-group">
-              <label className="form-label">Featured Image URL</label>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                <input
-                  type="url"
-                  className="form-input"
-                  value={form.featuredImage}
-                  onChange={(e) => updateField('featuredImage', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  style={{ flex: 1 }}
-                />
-                {form.featuredImage && (
+              <label className="form-label">Featured Image</label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleImageUpload}
+              />
+              {form.featuredImage ? (
+                <div style={{ position: 'relative' }}>
                   <img
                     src={form.featuredImage}
                     alt="Featured"
                     style={{
-                      width: 64,
-                      height: 48,
+                      width: '100%',
+                      height: 180,
                       objectFit: 'cover',
-                      borderRadius: 6,
+                      borderRadius: 8,
                       border: '1px solid #e8e8e6',
-                      flexShrink: 0,
+                      display: 'block',
                     }}
                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                   />
-                )}
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => updateField('featuredImage', '')}
+                    style={{
+                      position: 'absolute', top: 8, right: 8,
+                      width: 26, height: 26, borderRadius: '50%',
+                      background: 'rgba(0,0,0,0.55)', color: '#fff',
+                      border: 'none', cursor: 'pointer', fontSize: 15,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      lineHeight: 1,
+                    }}
+                    aria-label="Remove image"
+                  >×</button>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={imageUploading}
+                    className="btn btn-ghost btn-sm"
+                    style={{ marginTop: 8 }}
+                  >
+                    {imageUploading ? 'Uploading…' : 'Change image'}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={imageUploading}
+                  style={{
+                    width: '100%', padding: '28px 16px',
+                    border: '2px dashed #e8e8e6', borderRadius: 8,
+                    background: '#f8f8f7', cursor: imageUploading ? 'not-allowed' : 'pointer',
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', gap: 6, color: '#a0a09c',
+                    transition: 'border-color 0.15s ease, background 0.15s ease',
+                    fontFamily: 'Geist, sans-serif',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!imageUploading) {
+                      e.currentTarget.style.borderColor = '#c8c8c4'
+                      e.currentTarget.style.background = '#f0f0ee'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e8e8e6'
+                    e.currentTarget.style.background = '#f8f8f7'
+                  }}
+                >
+                  {imageUploading ? (
+                    <span style={{ fontSize: 13 }}>Uploading…</span>
+                  ) : (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                      </svg>
+                      <span style={{ fontSize: 13, fontWeight: 500 }}>Upload image</span>
+                      <span style={{ fontSize: 11 }}>PNG, JPG, WebP · max 5 MB</span>
+                    </>
+                  )}
+                </button>
+              )}
+              {imageError && <p style={{ fontSize: 11, color: '#dc2626', marginTop: 6 }}>{imageError}</p>}
+              <p className="form-hint" style={{ marginTop: 6 }}>Or paste a URL directly:</p>
+              <input
+                type="url"
+                className="form-input"
+                value={form.featuredImage}
+                onChange={(e) => updateField('featuredImage', e.target.value)}
+                placeholder="https://example.com/image.jpg"
+                style={{ marginTop: 4 }}
+              />
             </div>
 
             {/* Excerpt */}
