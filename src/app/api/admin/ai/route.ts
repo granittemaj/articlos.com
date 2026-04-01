@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const genAI = getClient()
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     if (action === 'topics') {
       const prompt = `You are an SEO content strategist. Generate 8 high-value blog post topic ideas for ${niche ? `a website in the "${niche}" niche` : 'a general SaaS/content marketing audience'}.
