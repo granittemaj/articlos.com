@@ -18,6 +18,7 @@ interface GeneratedPost {
   metaDescription: string
   tags: string
   content: string
+  featuredImage: string
 }
 
 type Step = 'topics' | 'generate' | 'review'
@@ -73,7 +74,7 @@ export default function GeneratePage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to generate post')
-      setGenerated(data)
+      setGenerated({ ...data, featuredImage: data.featuredImage || '' })
       setStep('review')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
@@ -107,12 +108,12 @@ export default function GeneratePage() {
           metaDescription: generated.metaDescription,
           published: publish,
           publishedAt: publish ? new Date().toISOString().split('T')[0] : null,
-          featuredImage: null,
+          featuredImage: generated.featuredImage || null,
         }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to save post')
-      router.push(`/admin/blog/${data.post.id}`)
+      router.push(`/plogin-admin/blog/${data.post.id}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save')
     } finally {
@@ -137,7 +138,7 @@ export default function GeneratePage() {
       <div className="page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <button
-            onClick={() => router.push('/admin/blog')}
+            onClick={() => router.push('/plogin-admin/blog')}
             className="btn btn-ghost btn-sm"
             style={{ fontSize: 12 }}
           >
@@ -388,6 +389,28 @@ export default function GeneratePage() {
                   onChange={(e) => setGenerated({ ...generated, title: e.target.value })}
                   style={{ fontSize: 18, fontWeight: 700 }}
                 />
+              </div>
+
+              <div>
+                <label className="form-label">Featured Image URL</label>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <input
+                    type="url"
+                    className="form-input"
+                    value={generated.featuredImage}
+                    onChange={(e) => setGenerated({ ...generated, featuredImage: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                    style={{ flex: 1 }}
+                  />
+                  {generated.featuredImage && (
+                    <img
+                      src={generated.featuredImage}
+                      alt="Featured"
+                      style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 6, border: '1px solid #e8e8e6', flexShrink: 0 }}
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                    />
+                  )}
+                </div>
               </div>
 
               <div>

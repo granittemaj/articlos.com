@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
     <div>
       <div className="page-header">
         <h1 className="page-header-title">Dashboard</h1>
-        <Link href="/admin/blog/new" className="btn btn-primary btn-sm">
+        <Link href="/plogin-admin/blog/new" className="btn btn-primary btn-sm">
           + New post
         </Link>
       </div>
@@ -162,7 +162,7 @@ export default async function AdminDashboard() {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <Link
-                href="/admin/blog/new"
+                href="/plogin-admin/blog/new"
                 className="btn btn-ghost btn-sm"
                 style={{ justifyContent: 'flex-start' }}
               >
@@ -173,7 +173,7 @@ export default async function AdminDashboard() {
                 Write new post
               </Link>
               <Link
-                href="/admin/blog"
+                href="/plogin-admin/blog"
                 className="btn btn-ghost btn-sm"
                 style={{ justifyContent: 'flex-start' }}
               >
@@ -184,7 +184,7 @@ export default async function AdminDashboard() {
                 Manage blog posts
               </Link>
               <Link
-                href="/admin/content"
+                href="/plogin-admin/content"
                 className="btn btn-ghost btn-sm"
                 style={{ justifyContent: 'flex-start' }}
               >
@@ -238,7 +238,7 @@ export default async function AdminDashboard() {
                 Recent posts
               </h3>
               <Link
-                href="/admin/blog"
+                href="/plogin-admin/blog"
                 style={{ fontSize: 12, color: '#6b6b67', textDecoration: 'none' }}
               >
                 View all →
@@ -250,7 +250,7 @@ export default async function AdminDashboard() {
                 {recentPosts.map((post, i) => (
                   <Link
                     key={post.id}
-                    href={`/admin/blog/${post.id}`}
+                    href={`/plogin-admin/blog/${post.id}`}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -290,7 +290,7 @@ export default async function AdminDashboard() {
               </div>
             ) : (
               <p style={{ fontSize: 14, color: '#a0a09c', textAlign: 'center', padding: '20px 0' }}>
-                No posts yet. <Link href="/admin/blog/new" style={{ color: '#0f0f0e' }}>Create your first →</Link>
+                No posts yet. <Link href="/plogin-admin/blog/new" style={{ color: '#0f0f0e' }}>Create your first →</Link>
               </p>
             )}
           </div>

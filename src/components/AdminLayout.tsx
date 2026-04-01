@@ -11,7 +11,7 @@ interface AdminLayoutProps {
 const navItems = [
   {
     label: 'Dashboard',
-    href: '/admin',
+    href: '/plogin-admin',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -23,7 +23,7 @@ const navItems = [
   },
   {
     label: 'Blog Posts',
-    href: '/admin/blog',
+    href: '/plogin-admin/blog',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -36,7 +36,7 @@ const navItems = [
   },
   {
     label: 'Site Content',
-    href: '/admin/content',
+    href: '/plogin-admin/content',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -94,8 +94,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="sidebar-section-label">Menu</div>
           {navItems.map((item) => {
             const isActive =
-              item.href === '/admin'
-                ? pathname === '/admin'
+              item.href === '/plogin-admin'
+                ? pathname === '/plogin-admin'
                 : pathname.startsWith(item.href)
             return (
               <Link
@@ -135,7 +135,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Bottom: Sign out */}
         <div className="sidebar-bottom">
           <button
-            onClick={() => signOut({ callbackUrl: '/admin/login' })}
+            onClick={() => signOut({ callbackUrl: '/plogin-admin/login' })}
             className="sidebar-nav-item"
             style={{ width: '100%', border: 'none', cursor: 'pointer' }}
           >

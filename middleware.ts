@@ -13,12 +13,12 @@ export default withAuth(
       authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: '/admin/login',
+      signIn: '/plogin-admin/login',
     },
   }
 )
 
 export const config = {
-  // Protect all /admin routes except /admin/login
-  matcher: ['/admin/((?!login).*)'],
+  // Protect all /plogin-admin routes except /plogin-admin/login
+  matcher: ['/plogin-admin/((?!login).*)'],
 }

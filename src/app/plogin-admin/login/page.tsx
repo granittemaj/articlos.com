@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
       if (result?.error) {
         setError('Invalid email or password. Please try again.')
       } else {
-        router.push('/admin')
+        router.push('/plogin-admin')
         router.refresh()
       }
     } catch {

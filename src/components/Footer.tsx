@@ -77,9 +77,6 @@ export default function Footer() {
             >
               AI-powered article generation for content teams that want to rank.
             </p>
-            <p style={{ fontSize: 12, color: '#a0a09c', marginTop: 4 }}>
-              © 2026 PAPINGU L.L.C.
-            </p>
           </div>
 
           {/* Col 2: Product */}
@@ -101,7 +98,6 @@ export default function Footer() {
                 { label: 'Features', href: '/#features' },
                 { label: 'Contact', href: '/#contact' },
                 { label: 'Blog', href: '/blog' },
-                { label: 'Changelog', href: 'https://app.articlos.com/changelog' },
               ].map((item) => (
                 <Link
                   key={item.label}
@@ -138,6 +134,7 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'About', href: '/about' },
+                { label: 'Careers', href: '/careers' },
                 { label: 'FAQ', href: '/faq' },
                 { label: 'Terms', href: '/terms' },
                 { label: 'Privacy', href: '/privacy' },
@@ -177,28 +174,7 @@ export default function Footer() {
             </h4>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <a
-                href="https://twitter.com/articlos"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: 14,
-                  color: '#6b6b67',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 7,
-                  transition: 'color 0.15s ease',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#0f0f0e' }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#6b6b67' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.733-8.835L2.25 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                Twitter / X
-              </a>
-              <a
-                href="https://linkedin.com/company/articlos"
+                href="https://www.linkedin.com/company/articlos/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

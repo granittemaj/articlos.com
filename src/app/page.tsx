@@ -126,7 +126,7 @@ export default async function HomePage() {
         </div>
 
         {/* Dashboard mockup */}
-        <div className="hero-visual" style={{
+        <div className="hero-visual hero-mockup-wrap" style={{
           width: '100%', maxWidth: 940,
           position: 'relative', zIndex: 1,
           animation: 'float 7s ease-in-out infinite',
@@ -161,7 +161,7 @@ export default async function HomePage() {
             {/* App shell */}
             <div style={{ display: 'flex', height: 380 }}>
               {/* Sidebar */}
-              <div style={{
+              <div className="mockup-sidebar" style={{
                 width: 188, flexShrink: 0, background: '#ffffff',
                 borderRight: '1px solid #e4e4e2', padding: '14px 0',
                 display: 'flex', flexDirection: 'column',
@@ -263,36 +263,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── MARQUEE ───────────────────────────────────────────────── */}
-      <section style={{
-        padding: '32px 0',
-        borderTop: '1px solid #e4e4e2', borderBottom: '1px solid #e4e4e2',
-        background: '#ffffff', overflow: 'hidden',
-      }}>
-        <div style={{
-          overflow: 'hidden',
-          maskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
-        }}>
-          <div style={{
-            display: 'flex',
-            animation: 'marquee 28s linear infinite',
-            gap: 72,
-            alignItems: 'center',
-            flexShrink: 0,
-            width: 'max-content',
-          }}>
-            {[...logoNames, ...logoNames].map((name, i) => (
-              <span key={i} style={{
-                fontSize: 14, fontWeight: 600, color: '#c4c4be',
-                letterSpacing: '-0.01em', whiteSpace: 'nowrap',
-              }}>
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── INTELLIGENCE LOOP ─────────────────────────────────────── */}
       <section style={{ padding: '96px 24px', background: '#f9f9f8' }}>
@@ -831,13 +801,10 @@ export default async function HomePage() {
               </svg>
               hello@articlos.com
             </a>
-            <a href="https://app.articlos.com/register" className="btn btn-ghost btn-lg">
-              Try free first →
+            <a href="https://app.articlos.com/login" className="btn btn-ghost btn-lg">
+              Log in
             </a>
           </div>
-          <p style={{ fontSize: 13, color: '#9b9b96', marginTop: 22 }}>
-            Free trial available · No credit card required
-          </p>
         </div>
       </section>
 
