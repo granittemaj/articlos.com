@@ -4,6 +4,8 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Blog — SEO & Content Marketing Insights',
   description:
