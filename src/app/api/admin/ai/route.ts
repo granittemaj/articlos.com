@@ -10,25 +10,27 @@ function getClient() {
 }
 
 // POST /api/admin/ai
-// body: { action: 'topics', niche?: string } | { action: 'generate', topic: string, keywords?: string }
+// body: { action: 'topics', niche?: string }
+//     | { action: 'suggest', niche?: string }
+//     | { action: 'generate', topic: string, keywords?: string }
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  let body: { action: string; niche?: string; topic?: string; keywords?: string }
+  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string }
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { action, niche, topic, keywords } = body
+  const { action, niche, topic, keywords, context } = body
 
   try {
     const genAI = getClient()
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
 
     if (action === 'topics') {
       const prompt = `You are an SEO content strategist. Generate 8 high-value blog post topic ideas for ${niche ? `a website in the "${niche}" niche` : 'a general SaaS/content marketing audience'}.
@@ -56,6 +58,28 @@ Return ONLY valid JSON in this exact format (no markdown, no code fences):
       const result = await model.generateContent(prompt)
       const text = result.response.text().trim()
       const parsed = JSON.parse(text)
+      return NextResponse.json(parsed)
+    }
+
+    if (action === 'suggest') {
+      const prompt = `You are an expert SEO content strategist. Suggest ONE high-value, specific blog post idea${niche ? ` for a website about "${niche}"` : ' for a content marketing/SaaS audience'}${context ? `. Additional context: ${context}` : ''}.
+
+Pick a topic that is highly searchable, has clear commercial or informational intent, and would rank well in Google.
+
+Return ONLY valid JSON (no markdown, no code fences):
+{
+  "title": "A specific, compelling blog post title",
+  "keyword": "exact primary keyword to target",
+  "secondaryKeywords": "keyword2, keyword3, keyword4",
+  "intent": "informational or commercial or navigational",
+  "difficulty": "low or medium or high",
+  "why": "One sentence explaining why this topic is valuable and timely"
+}`
+
+      const result = await model.generateContent(prompt)
+      const text = result.response.text().trim()
+      const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
+      const parsed = JSON.parse(cleaned)
       return NextResponse.json(parsed)
     }
 

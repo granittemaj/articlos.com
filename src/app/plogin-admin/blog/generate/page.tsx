@@ -33,6 +33,7 @@ export default function GeneratePage() {
   const [customKeywords, setCustomKeywords] = useState('')
   const [generated, setGenerated] = useState<GeneratedPost | null>(null)
   const [loading, setLoading] = useState(false)
+  const [suggesting, setSuggesting] = useState(false)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
@@ -54,6 +55,27 @@ export default function GeneratePage() {
       setError(e instanceof Error ? e.message : 'Something went wrong')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleSuggest() {
+    setSuggesting(true)
+    setError('')
+    try {
+      const res = await fetch('/api/admin/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'suggest', niche, context: customTopic }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to get suggestion')
+      setCustomTopic(data.title || '')
+      setCustomKeywords(data.keyword || '')
+      setSelectedTopic(null)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong')
+    } finally {
+      setSuggesting(false)
     }
   }
 
@@ -206,26 +228,62 @@ export default function GeneratePage() {
                 />
                 <p className="form-hint">Leave blank for general content marketing topics.</p>
               </div>
-              <button
-                onClick={handleFindTopics}
-                disabled={loading}
-                className="btn btn-primary"
-                style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}
-              >
-                {loading ? (
-                  <>
-                    <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span>
-                    Researching topics with Gemini…
-                  </>
-                ) : (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-                    </svg>
-                    Discover topics
-                  </>
-                )}
-              </button>
+              <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                <button
+                  onClick={async () => {
+                    setSuggesting(true)
+                    setError('')
+                    try {
+                      const res = await fetch('/api/admin/ai', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'suggest', niche }),
+                      })
+                      const data = await res.json()
+                      if (!res.ok) throw new Error(data.error || 'Failed to get suggestion')
+                      setCustomTopic(data.title || '')
+                      setCustomKeywords(data.keyword || '')
+                      setSelectedTopic(null)
+                      setStep('generate')
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : 'Something went wrong')
+                    } finally {
+                      setSuggesting(false)
+                    }
+                  }}
+                  disabled={suggesting || loading}
+                  className="btn btn-ghost"
+                  style={{ justifyContent: 'center', flex: 1, gap: 6 }}
+                >
+                  {suggesting ? (
+                    <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Suggesting…</>
+                  ) : (
+                    <>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+                      </svg>
+                      Suggest one topic
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleFindTopics}
+                  disabled={loading || suggesting}
+                  className="btn btn-primary"
+                  style={{ justifyContent: 'center', flex: 2 }}
+                >
+                  {loading ? (
+                    <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Researching…</>
+                  ) : (
+                    <>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                      </svg>
+                      Discover 8 topics
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -308,9 +366,30 @@ export default function GeneratePage() {
             )}
 
             <div style={{ background: '#f9f9f8', borderRadius: 8, padding: '16px', border: '1px solid #e8e8e6' }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: '#6b6b67', marginBottom: 10 }}>
-                Or enter a custom topic
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#6b6b67', margin: 0 }}>
+                  Or enter a custom topic
+                </p>
+                <button
+                  onClick={handleSuggest}
+                  disabled={suggesting}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    padding: '5px 12px', borderRadius: 6,
+                    background: '#0f0f0e', color: '#ffffff',
+                    border: 'none', fontSize: 12, fontWeight: 500,
+                    cursor: suggesting ? 'not-allowed' : 'pointer',
+                    opacity: suggesting ? 0.6 : 1,
+                    fontFamily: 'Geist, sans-serif',
+                    transition: 'opacity 0.15s ease',
+                  }}
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+                  </svg>
+                  {suggesting ? 'Suggesting…' : 'Suggest everything'}
+                </button>
+              </div>
               <div style={{ display: 'flex', gap: 10 }}>
                 <input
                   type="text"
