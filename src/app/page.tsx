@@ -863,23 +863,23 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA BANNER ────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: '#0f0f0e', textAlign: 'center' }}>
+      <section style={{ padding: '96px 24px', background: '#f9f9f8', borderTop: '1px solid #e8e8e6', textAlign: 'center' }}>
         <div style={{ maxWidth: 600, margin: '0 auto' }} className="fade-up">
           <h2 style={{
             fontSize: 'clamp(32px, 5vw, 56px)',
             fontWeight: 700, letterSpacing: '-0.045em',
-            color: '#ffffff', marginBottom: 16, lineHeight: 1.08,
+            color: '#0f0f0e', marginBottom: 16, lineHeight: 1.08,
           }}>
             {c('cta_title')}
           </h2>
           <p style={{
-            fontSize: 17, color: 'rgba(255,255,255,0.5)',
+            fontSize: 17, color: '#6b6b67',
             maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65,
           }}>
             {c('cta_subtitle')}
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://app.articlos.com/login" className="cta-white-btn">
+            <a href="https://app.articlos.com/login" className="btn btn-primary btn-lg">
               Log in →
             </a>
             <a
@@ -887,9 +887,10 @@ export default async function HomePage() {
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '13px 24px', borderRadius: 6,
-                border: '1px solid rgba(255,255,255,0.14)',
-                color: 'rgba(255,255,255,0.65)', fontSize: 15, fontWeight: 500,
+                border: '1px solid #e8e8e6',
+                color: '#6b6b67', fontSize: 15, fontWeight: 500,
                 textDecoration: 'none', transition: 'all 0.2s ease',
+                background: '#ffffff',
               }}
             >
               Contact the articlos team
