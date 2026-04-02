@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
   openGraph: {
-    title: 'The Articlos Blog',
+    title: 'The articlos Blog',
     description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
     url: 'https://articlos.com/blog',
   },

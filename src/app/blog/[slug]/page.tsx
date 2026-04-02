@@ -86,7 +86,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     dateModified: post.updatedAt.toISOString(),
     author: {
       '@type': 'Organization',
-      name: 'Articlos',
+      name: 'articlos',
       url: 'https://articlos.com',
     },
     publisher: {
@@ -178,7 +178,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 color: '#a0a09c',
               }}
             >
-              <span>By Articlos Team</span>
+              <span>By articlos Team</span>
               <span>·</span>
               <time dateTime={dateIso}>{formatDate(publishDate)}</time>
             </div>

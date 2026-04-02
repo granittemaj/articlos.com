@@ -7,11 +7,11 @@ import './globals.css'
 export const metadata: Metadata = {
   metadataBase: new URL('https://articlos.com'),
   title: {
-    default: 'Articlos — The Content Intelligence System That Never Stops',
-    template: '%s | Articlos',
+    default: 'articlos — The Content Intelligence System That Never Stops',
+    template: '%s | articlos',
   },
   description:
-    'The content intelligence system that never stops. Articlos discovers what to write, generates high-quality articles, and grows your organic traffic — automatically.',
+    'The content intelligence system that never stops. articlos discovers what to write, generates high-quality articles, and grows your organic traffic — automatically.',
   keywords: [
     'AI article generator',
     'SEO content automation',
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://articlos.com',
-    siteName: 'Articlos',
-    title: 'Articlos — The Content Intelligence System That Never Stops',
+    siteName: 'articlos',
+    title: 'articlos — The Content Intelligence System That Never Stops',
     description:
       'The content intelligence system that never stops. Discover what to write, generate high-quality articles, and grow your organic traffic — automatically.',
     images: [
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Articlos — AI Article Generator',
+        alt: 'articlos — AI Article Generator',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Articlos — The Content Intelligence System That Never Stops',
+    title: 'articlos — The Content Intelligence System That Never Stops',
     description:
       'The content intelligence system that never stops. AI-powered article generation for content teams that want to rank.',
     creator: '@articlos',

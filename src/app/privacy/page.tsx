@@ -52,7 +52,7 @@ We do not sell your personal information to third parties. We do not use your co
   {
     id: 'google-user-data',
     title: '4. Use of Google User Data',
-    body: `Articlos accesses data from Google Search Console (GSC) and Google Analytics 4 (GA4) via Google OAuth Services. This section explains exactly what data we access, why, and how it is handled.
+    body: `articlos accesses data from Google Search Console (GSC) and Google Analytics 4 (GA4) via Google OAuth Services. This section explains exactly what data we access, why, and how it is handled.
 
 **What data we access**
 • Google Search Console: search queries, impressions, clicks, average position, and page-level performance data for websites you connect to your articlos account.
