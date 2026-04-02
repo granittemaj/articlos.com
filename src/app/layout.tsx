@@ -7,11 +7,11 @@ import './globals.css'
 export const metadata: Metadata = {
   metadataBase: new URL('https://articlos.com'),
   title: {
-    default: 'Articlos — AI Article Generator for SEO',
+    default: 'Articlos — The Content Intelligence System That Never Stops',
     template: '%s | Articlos',
   },
   description:
-    'Articlos generates SEO-optimised articles, manages your content calendar, and publishes to WordPress — all on autopilot. Powered by GPT-4o and Gemini 1.5 Pro.',
+    'The content intelligence system that never stops. Articlos discovers what to write, generates high-quality articles, and grows your organic traffic — automatically.',
   keywords: [
     'AI article generator',
     'SEO content automation',
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://articlos.com',
     siteName: 'Articlos',
-    title: 'Articlos — AI Article Generator for SEO',
+    title: 'Articlos — The Content Intelligence System That Never Stops',
     description:
-      'Generate SEO-optimised articles automatically. Connect your WordPress site and let AI handle your content calendar.',
+      'The content intelligence system that never stops. Discover what to write, generate high-quality articles, and grow your organic traffic — automatically.',
     images: [
       {
         url: '/opengraph-image',
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Articlos — AI Article Generator for SEO',
+    title: 'Articlos — The Content Intelligence System That Never Stops',
     description:
-      'Generate SEO-optimised articles automatically with GPT-4o and Gemini 1.5 Pro.',
+      'The content intelligence system that never stops. AI-powered article generation for content teams that want to rank.',
     creator: '@articlos',
   },
   robots: {

@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Service — articlos',
-  description: 'Terms of Service for articlos, the AI-powered content intelligence system.',
+  description: 'The terms that govern your use of articlos. Clear, fair, and written to be actually readable.',
 }
 
 const sections = [

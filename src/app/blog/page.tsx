@@ -8,12 +8,12 @@ import BlogCard from '@/components/BlogCard'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Blog — SEO & Content Marketing Insights',
+  title: 'Blog — SEO, Content & AI Insights',
   description:
-    'Expert articles on SEO, content marketing, AI writing, and growing organic traffic. Tips and strategies from the articlos team.',
+    'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
   openGraph: {
-    title: 'Blog | Articlos',
-    description: 'Expert articles on SEO, content marketing, and AI writing.',
+    title: 'The Articlos Blog',
+    description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
     url: 'https://articlos.com/blog',
   },
 }
