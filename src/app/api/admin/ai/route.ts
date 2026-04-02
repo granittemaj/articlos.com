@@ -63,7 +63,8 @@ Return ONLY valid JSON in this exact format (no markdown, no code fences):
 
       const result = await model.generateContent(prompt)
       const text = result.response.text().trim()
-      const parsed = JSON.parse(text)
+      const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
+      const parsed = JSON.parse(cleaned)
       return NextResponse.json(parsed)
     }
 
