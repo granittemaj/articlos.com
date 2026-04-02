@@ -159,11 +159,11 @@ export default function Nav() {
               Log in
             </a>
             <a
-              href="https://app.articlos.com/register"
+              href="/contact"
               className="btn btn-primary btn-sm"
               style={{ fontSize: 14 }}
             >
-              Start free →
+              Contact us →
             </a>
           </div>
 
@@ -274,11 +274,11 @@ export default function Nav() {
               Log in
             </a>
             <a
-              href="https://app.articlos.com/register"
+              href="/contact"
               className="btn btn-primary"
               style={{ justifyContent: 'center', padding: '13px' }}
             >
-              Start free →
+              Contact us →
             </a>
           </div>
         </div>

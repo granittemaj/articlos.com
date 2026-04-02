@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(req: Request) {
   try {
@@ -14,8 +15,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
     }
 
-    // Log submission (wire up an email provider like Resend here)
-    console.log('[Contact form]', { name, email, subject, message, timestamp: new Date().toISOString() })
+    await prisma.contactMessage.create({
+      data: {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        subject: subject?.trim() || null,
+        message: message.trim(),
+      },
+    })
 
     return NextResponse.json({ success: true })
   } catch {

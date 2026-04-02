@@ -280,23 +280,43 @@ export default async function BlogPostPage({ params }: PageProps) {
             >
               Join thousands of content teams using articlos to grow their organic traffic.
             </p>
-            <a
-              href="https://app.articlos.com/register"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '12px 24px',
-                background: '#ffffff',
-                color: '#0f0f0e',
-                borderRadius: 6,
-                fontWeight: 600,
-                fontSize: 15,
-                textDecoration: 'none',
-              }}
-            >
-              Start for free →
-            </a>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a
+                href="https://app.articlos.com/login"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '12px 24px',
+                  background: '#ffffff',
+                  color: '#0f0f0e',
+                  borderRadius: 6,
+                  fontWeight: 600,
+                  fontSize: 15,
+                  textDecoration: 'none',
+                }}
+              >
+                Log in →
+              </a>
+              <a
+                href="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '12px 24px',
+                  background: 'transparent',
+                  color: 'rgba(255,255,255,0.65)',
+                  borderRadius: 6,
+                  fontWeight: 500,
+                  fontSize: 15,
+                  textDecoration: 'none',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                }}
+              >
+                Contact the articlos team
+              </a>
+            </div>
           </div>
         </section>
       </main>
