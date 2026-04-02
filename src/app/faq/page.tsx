@@ -4,8 +4,8 @@ import ScrollAnimations from '../ScrollAnimations'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ — articlos',
-  description: 'Frequently asked questions about articlos, the AI-powered content intelligence system.',
+  title: 'FAQ — Everything You Need to Know',
+  description: 'Got questions about how articlos works, what it integrates with, or how it generates content? We have the answers right here.',
 }
 
 const categories = [

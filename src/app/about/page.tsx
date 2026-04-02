@@ -4,8 +4,8 @@ import ScrollAnimations from '../ScrollAnimations'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'About — articlos',
-  description: 'articlos is a content intelligence system built for content teams that want to dominate search, automatically.',
+  title: 'About — We Built the System That Never Stops',
+  description: 'articlos is on a mission to make great content effortless. Meet the team turning content strategy into a system that discovers, writes, and ranks — automatically.',
 }
 
 export default function AboutPage() {

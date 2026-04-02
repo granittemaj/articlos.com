@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy — articlos',
-  description: 'How articlos uses cookies and similar technologies.',
+  description: 'A plain-English breakdown of the cookies articlos uses, what they do, and how to control them.',
 }
 
 const sections = [

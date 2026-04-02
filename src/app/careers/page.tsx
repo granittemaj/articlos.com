@@ -3,8 +3,8 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Careers',
-  description: 'Join the team building the future of AI-powered content intelligence. See open positions at Articlos.',
+  title: 'Careers — Join the Team Building What\'s Next',
+  description: 'We\'re building the content intelligence system that never stops. If that excites you, we\'d love to meet you.',
 }
 
 export default function CareersPage() {
