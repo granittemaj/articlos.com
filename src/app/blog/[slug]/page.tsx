@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import ShareButtons from '@/components/ShareButtons'
 import { formatDate } from '@/lib/utils'
 import { marked } from 'marked'
 
@@ -241,6 +242,12 @@ export default async function BlogPostPage({ params }: PageProps) {
               ))}
             </div>
           )}
+
+          {/* Share */}
+          <ShareButtons
+            title={post.title}
+            url={`https://articlos.com/blog/${post.slug}`}
+          />
         </article>
 
         {/* CTA */}

@@ -96,7 +96,7 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'Features', href: '/#features' },
-                { label: 'Contact', href: '/#contact' },
+                { label: 'About', href: '/about' },
                 { label: 'Blog', href: '/blog' },
               ].map((item) => (
                 <Link
@@ -136,9 +136,10 @@ export default function Footer() {
                 { label: 'About', href: '/about' },
                 { label: 'Careers', href: '/careers' },
                 { label: 'FAQ', href: '/faq' },
+                { label: 'Contact', href: '/contact' },
                 { label: 'Terms', href: '/terms' },
                 { label: 'Privacy', href: '/privacy' },
-                { label: 'Contact', href: 'mailto:hello@articlos.com' },
+                { label: 'Cookies', href: '/cookies' },
               ].map((item) => (
                 <Link
                   key={item.label}

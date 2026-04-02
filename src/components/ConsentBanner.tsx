@@ -49,7 +49,7 @@ export default function ConsentBanner() {
               We use cookies to keep you signed in, analyse usage, and improve articlos. By continuing you accept our{' '}
               <Link href="/terms" className="consent-link">Terms</Link>
               {' '}and{' '}
-              <Link href="/privacy" className="consent-link">Privacy Policy</Link>.
+              <Link href="/cookies" className="consent-link">Cookie Policy</Link>.
             </p>
           </div>
         </div>
