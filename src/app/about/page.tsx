@@ -176,21 +176,18 @@ export default function AboutPage() {
           }}>
             Ready to build your content machine?
           </h2>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', marginBottom: 36, lineHeight: 1.65 }}>
-            Start free. No credit card required.
-          </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://app.articlos.com/register" className="cta-white-btn">
-              Get started free →
+            <a href="https://app.articlos.com/login" className="cta-white-btn">
+              Log in →
             </a>
-            <a href="mailto:hello@articlos.com" style={{
+            <a href="/contact" style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '13px 24px', borderRadius: 6,
               border: '1px solid rgba(255,255,255,0.14)',
               color: 'rgba(255,255,255,0.65)', fontSize: 15, fontWeight: 500,
               textDecoration: 'none',
             }}>
-              Contact us
+              Contact the articlos team
             </a>
           </div>
         </div>

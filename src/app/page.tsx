@@ -120,11 +120,11 @@ export default async function HomePage() {
             display: 'flex', gap: 10, justifyContent: 'center',
             flexWrap: 'wrap', marginBottom: 72,
           }}>
-            <a href="https://app.articlos.com/register" className="btn btn-primary btn-lg" style={{ gap: 8 }}>
-              Get started free
+            <a href="https://app.articlos.com/login" className="btn btn-primary btn-lg" style={{ gap: 8 }}>
+              Log in
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
-            <a href="#features" className="btn btn-ghost btn-lg">See the platform</a>
+            <a href="/contact" className="btn btn-ghost btn-lg">Contact the articlos team</a>
           </div>
         </div>
 
@@ -879,11 +879,11 @@ export default async function HomePage() {
             {c('cta_subtitle')}
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://app.articlos.com/register" className="cta-white-btn">
-              Get started free →
+            <a href="https://app.articlos.com/login" className="cta-white-btn">
+              Log in →
             </a>
             <a
-              href="mailto:hello@articlos.com"
+              href="/contact"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '13px 24px', borderRadius: 6,
@@ -892,7 +892,7 @@ export default async function HomePage() {
                 textDecoration: 'none', transition: 'all 0.2s ease',
               }}
             >
-              Contact sales
+              Contact the articlos team
             </a>
           </div>
         </div>
