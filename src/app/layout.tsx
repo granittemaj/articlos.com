@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       'Generate SEO-optimised articles automatically. Connect your WordPress site and let AI handle your content calendar.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'Articlos — AI Article Generator',

@@ -78,7 +78,7 @@ export default function NewsletterSection() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
             <span style={{ fontSize: 14, color: '#4ade80', fontWeight: 500 }}>
-              You&apos;re in! Check your inbox to confirm.
+              You&apos;re subscribed! We&apos;ll be in touch soon.
             </span>
           </div>
         ) : (
