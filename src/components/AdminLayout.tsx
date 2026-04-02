@@ -64,7 +64,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         {/* Logo */}
-        <div className="sidebar-logo">
+        <Link href="/plogin-admin" className="sidebar-logo" style={{ textDecoration: 'none', cursor: 'pointer' }}>
           <div
             style={{
               width: 28,
@@ -97,7 +97,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           >
             ADMIN
           </span>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="sidebar-nav">
