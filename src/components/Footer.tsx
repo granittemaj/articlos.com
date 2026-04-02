@@ -96,7 +96,7 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'Features', href: '/#features' },
-                { label: 'Pricing', href: '/pricing' },
+                { label: 'About', href: '/about' },
                 { label: 'Blog', href: '/blog' },
               ].map((item) => (
                 <Link

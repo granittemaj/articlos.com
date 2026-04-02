@@ -103,7 +103,7 @@ export default function Nav() {
           >
             {[
               { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
+              { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
               { label: 'Contact', href: '/contact' },
             ].map((item) => (
@@ -236,7 +236,7 @@ export default function Nav() {
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
               { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
+              { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
               { label: 'Contact', href: '/contact' },
             ].map((item) => (

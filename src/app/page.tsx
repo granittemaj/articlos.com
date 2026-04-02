@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
 import ScrollAnimations from './ScrollAnimations'
 import CountUp from '@/components/CountUp'
+import NewsletterSection from '@/components/NewsletterSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -897,6 +898,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <NewsletterSection />
       <Footer />
     </>
   )

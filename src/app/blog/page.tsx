@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
-import BlogFilters from '@/components/BlogFilters'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,22 +20,10 @@ export const metadata: Metadata = {
 
 const POSTS_PER_PAGE = 9
 
-async function getBlogData(page: number, tag?: string, q?: string) {
+async function getBlogData(page: number) {
   try {
-    const where = {
-      published: true as const,
-      ...(tag ? { tags: { contains: tag } } : {}),
-      ...(q
-        ? {
-            OR: [
-              { title: { contains: q, mode: 'insensitive' as const } },
-              { excerpt: { contains: q, mode: 'insensitive' as const } },
-            ],
-          }
-        : {}),
-    }
-
-    const [posts, total, tagPosts] = await Promise.all([
+    const where = { published: true as const }
+    const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
         orderBy: { publishedAt: 'desc' },
@@ -55,43 +41,23 @@ async function getBlogData(page: number, tag?: string, q?: string) {
         },
       }),
       prisma.post.count({ where }),
-      prisma.post.findMany({
-        where: { published: true },
-        select: { tags: true },
-      }),
     ])
-
-    const allTags = [
-      ...new Set(
-        tagPosts
-          .flatMap((p) => (p.tags ? p.tags.split(',').map((t) => t.trim()).filter(Boolean) : []))
-      ),
-    ].sort()
-
-    return { posts, total, pages: Math.ceil(total / POSTS_PER_PAGE), allTags }
+    return { posts, total, pages: Math.ceil(total / POSTS_PER_PAGE) }
   } catch {
-    return { posts: [], total: 0, pages: 0, allTags: [] }
+    return { posts: [], total: 0, pages: 0 }
   }
 }
 
 interface PageProps {
-  searchParams: { page?: string; tag?: string; q?: string }
+  searchParams: { page?: string }
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
   const page = Math.max(1, parseInt(searchParams.page || '1', 10))
-  const tag = searchParams.tag
-  const q = searchParams.q
-
-  const { posts, total, pages, allTags } = await getBlogData(page, tag, q)
+  const { posts, pages } = await getBlogData(page)
 
   function buildUrl(p: number) {
-    const params = new URLSearchParams()
-    if (p > 1) params.set('page', String(p))
-    if (tag) params.set('tag', tag)
-    if (q) params.set('q', q)
-    const qs = params.toString()
-    return `/blog${qs ? `?${qs}` : ''}`
+    return p > 1 ? `/blog?page=${p}` : '/blog'
   }
 
   return (
@@ -121,24 +87,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
             <p style={{ fontSize: 18, color: '#6b6b67', lineHeight: 1.6 }}>
               SEO strategies, content marketing tips, and insights on AI-powered writing from the articlos team.
             </p>
-            {total > 0 && (
-              <p style={{ fontSize: 13, color: '#a0a09c', marginTop: 12 }}>
-                {total} article{total !== 1 ? 's' : ''}
-                {tag ? ` tagged "${tag}"` : ''}
-                {q ? ` matching "${q}"` : ''}
-              </p>
-            )}
           </div>
         </section>
 
         {/* Posts Grid */}
         <section style={{ padding: '56px 24px 80px', background: '#fafaf9' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            {/* Filters */}
-            <Suspense fallback={null}>
-              <BlogFilters allTags={allTags} currentTag={tag} currentQ={q} />
-            </Suspense>
-
             {posts.length > 0 ? (
               <>
                 <div
@@ -191,7 +145,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
                         ← Prev
                       </Link>
                     )}
-
                     {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
                       if (pages > 7 && Math.abs(p - page) > 2 && p !== 1 && p !== pages) {
                         if (p === page - 3 || p === page + 3) {
@@ -204,26 +157,20 @@ export default async function BlogPage({ searchParams }: PageProps) {
                           key={p}
                           href={buildUrl(p)}
                           style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: 7,
+                            width: 36, height: 36, borderRadius: 7,
                             border: '1px solid',
                             borderColor: p === page ? '#0f0f0e' : '#e8e8e6',
                             background: p === page ? '#0f0f0e' : '#ffffff',
                             color: p === page ? '#ffffff' : '#3d3d3a',
-                            fontSize: 14,
-                            fontWeight: p === page ? 600 : 400,
+                            fontSize: 14, fontWeight: p === page ? 600 : 400,
                             textDecoration: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}
                         >
                           {p}
                         </Link>
                       )
                     })}
-
                     {page < pages && (
                       <Link
                         href={buildUrl(page + 1)}
@@ -257,33 +204,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
                 </div>
-                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#0f0f0e', marginBottom: 8 }}>
-                  {q || tag ? 'No articles found' : 'No posts yet'}
-                </h3>
-                <p style={{ fontSize: 15 }}>
-                  {q || tag
-                    ? 'Try a different search or tag.'
-                    : 'Check back soon — we\'re working on some great content.'}
-                </p>
-                {(q || tag) && (
-                  <Link
-                    href="/blog"
-                    style={{
-                      display: 'inline-block',
-                      marginTop: 16,
-                      padding: '8px 18px',
-                      borderRadius: 7,
-                      border: '1px solid #e8e8e6',
-                      background: '#ffffff',
-                      color: '#0f0f0e',
-                      fontSize: 14,
-                      fontWeight: 500,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    View all posts
-                  </Link>
-                )}
+                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#0f0f0e', marginBottom: 8 }}>No posts yet</h3>
+                <p style={{ fontSize: 15 }}>Check back soon — we&apos;re working on some great content.</p>
               </div>
             )}
           </div>

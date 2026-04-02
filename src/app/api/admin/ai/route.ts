@@ -33,14 +33,20 @@ export async function POST(req: NextRequest) {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
 
     if (action === 'topics') {
-      const prompt = `You are an SEO content strategist. Generate 8 high-value blog post topic ideas for ${niche ? `a website in the "${niche}" niche` : 'a general SaaS/content marketing audience'}.
+      const prompt = `You are a senior SEO and content strategist. Generate 8 high-value blog post topic ideas for ${niche ? `a website in the "${niche}" niche` : 'a content marketing / SaaS audience'}.
 
-For each topic, provide:
-- title: A compelling, SEO-friendly blog post title
-- keyword: The primary target keyword
+Vary the topics across these categories:
+- 2 traditional SEO topics (technical SEO, on-page optimisation, link building, keyword research, Core Web Vitals, etc.)
+- 2 content marketing topics (content strategy, editorial calendars, repurposing, content ROI, etc.)
+- 2 AEO / AI search topics (Answer Engine Optimisation, optimising for ChatGPT/Gemini/Perplexity, zero-click search, structured data, featured snippets, AI Overviews, etc.)
+- 2 impact / trends topics (how AI is changing search, the future of organic traffic, SGE impact, measuring content ROI, etc.)
+
+For each topic:
+- title: A compelling, specific, SEO-friendly blog post title
+- keyword: The primary target keyword (be specific)
 - intent: Search intent (informational/commercial/navigational)
 - difficulty: Estimated keyword difficulty (low/medium/high)
-- why: One sentence on why this topic is valuable
+- why: One sentence explaining why this topic is valuable and timely right now
 
 Return ONLY valid JSON in this exact format (no markdown, no code fences):
 {
