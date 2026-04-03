@@ -1,15 +1,10 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 import { Analytics } from '@vercel/analytics/next'
 import ConsentBanner from '@/components/ConsentBanner'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
 
-const geist = Geist({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://articlos.com'),
@@ -72,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={geist.className}>
+    <html lang="en" className={GeistSans.className}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
