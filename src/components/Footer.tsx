@@ -81,7 +81,7 @@ export default function Footer() {
 
           {/* Col 2: Product */}
           <div>
-            <h4
+            <p
               style={{
                 fontSize: 12,
                 fontWeight: 600,
@@ -92,7 +92,7 @@ export default function Footer() {
               }}
             >
               Product
-            </h4>
+            </p>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'Features', href: '/#features' },
@@ -119,7 +119,7 @@ export default function Footer() {
 
           {/* Col 3: Company */}
           <div>
-            <h4
+            <p
               style={{
                 fontSize: 12,
                 fontWeight: 600,
@@ -130,7 +130,7 @@ export default function Footer() {
               }}
             >
               Company
-            </h4>
+            </p>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'About', href: '/about' },
@@ -161,7 +161,7 @@ export default function Footer() {
 
           {/* Col 4: Connect */}
           <div>
-            <h4
+            <p
               style={{
                 fontSize: 12,
                 fontWeight: 600,
@@ -172,7 +172,7 @@ export default function Footer() {
               }}
             >
               Connect
-            </h4>
+            </p>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <a
                 href="https://www.linkedin.com/company/articlos/"
@@ -209,7 +209,7 @@ export default function Footer() {
             alignItems: 'center',
           }}
         >
-          <p style={{ fontSize: 13, color: '#a0a09c' }}>
+          <p style={{ fontSize: 13, color: '#6b6b67' }}>
             Built with ❤️ for content creators · © 2026 PAPINGU L.L.C.
           </p>
         </div>
