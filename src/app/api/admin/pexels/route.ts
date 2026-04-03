@@ -1,24 +1,34 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const STOP_WORDS = new Set([
-  'a', 'an', 'the', 'and', 'or', 'for', 'of', 'to', 'in', 'on', 'at', 'by',
-  'with', 'how', 'why', 'what', 'when', 'is', 'are', 'do', 'does', 'your',
-  'you', 'we', 'our', 'its', 'it', 'this', 'that', 'vs', 'vs.', 'from',
-  'using', 'get', 'best', 'top', 'most', 'more', 'less', 'into', 'about',
-])
+/** Ask Gemini for a concrete, visual Pexels search term for the given topic. */
+async function getVisualSearchTerm(topic: string): Promise<string> {
+  const geminiKey = process.env.GEMINI_API_KEY
+  if (!geminiKey) return topic.split(' ').slice(0, 2).join(' ')
 
-/** Extract the 1-2 most meaningful words from a keyword/title for Pexels. */
-function distillQuery(raw: string): string {
-  const words = raw
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 2 && !STOP_WORDS.has(w))
+  try {
+    const genAI = new GoogleGenerativeAI(geminiKey)
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
+    const result = await model.generateContent(
+      `Given this blog post topic: "${topic}"
 
-  // Return first 2 meaningful words joined — Pexels handles short phrases well
-  return words.slice(0, 2).join(' ') || raw.split(/\s+/)[0]
+Suggest ONE simple 1-2 word search term to find a relevant, high-quality stock photo on Pexels.
+The term must be:
+- Visually concrete (something a photographer would photograph)
+- Specific enough to return relevant images
+- NOT abstract concepts like "seo", "algorithm", "strategy", "marketing"
+
+Good examples: "laptop workspace", "team meeting", "analytics dashboard", "writing desk", "coffee notebook", "server room", "social media phone"
+
+Return ONLY the 1-2 word search term, nothing else.`
+    )
+    const term = result.response.text().trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
+    return term || topic.split(' ').slice(0, 2).join(' ')
+  } catch {
+    return topic.split(' ').slice(0, 2).join(' ')
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -31,11 +41,11 @@ export async function GET(req: NextRequest) {
   const apiKey = process.env.PEXELS_API_KEY
   if (!apiKey) return NextResponse.json({ url: null, message: 'PEXELS_API_KEY not configured' })
 
-  const pexelsQuery = distillQuery(query)
+  const pexelsQuery = await getVisualSearchTerm(query)
 
   try {
     const res = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(pexelsQuery)}&per_page=3&orientation=landscape`,
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(pexelsQuery)}&per_page=5&orientation=landscape`,
       { headers: { Authorization: apiKey } }
     )
     const data = await res.json()
@@ -45,6 +55,7 @@ export async function GET(req: NextRequest) {
       url: photo.src.large2x || photo.src.large || photo.src.original,
       photographer: photo.photographer,
       photographerUrl: photo.photographer_url,
+      searchTerm: pexelsQuery,
     })
   } catch {
     return NextResponse.json({ url: null })
