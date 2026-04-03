@@ -8,19 +8,31 @@ datasource db {
 }
 
 model Post {
-  id              String    @id @default(cuid())
-  title           String
-  slug            String    @unique
-  excerpt         String?
-  content         String    @db.Text
-  featuredImage   String?
-  tags            String?
-  published       Boolean   @default(false)
-  publishedAt     DateTime?
-  metaTitle       String?
-  metaDescription String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id               String        @id @default(cuid())
+  title            String
+  slug             String        @unique
+  excerpt          String?
+  content          String        @db.Text
+  featuredImage    String?
+  featuredImageAlt String?
+  tags             String?
+  published        Boolean       @default(false)
+  publishedAt      DateTime?
+  metaTitle        String?
+  metaDescription  String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  versions         PostVersion[]
+}
+
+model PostVersion {
+  id      String   @id @default(cuid())
+  postId  String
+  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  title   String
+  content String   @db.Text
+  excerpt String?
+  savedAt DateTime @default(now())
 }
 
 model SiteContent {
@@ -36,5 +48,11 @@ model ContactMessage {
   subject   String?
   message   String   @db.Text
   read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
   createdAt DateTime @default(now())
 }

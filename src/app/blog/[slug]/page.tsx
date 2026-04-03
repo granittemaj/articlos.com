@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = post.metaTitle || post.title
   const description = post.metaDescription || post.excerpt || ''
-  const ogImage = post.featuredImage || '/og-image.png'
+  const ogImage = post.featuredImage || '/opengraph-image'
 
   return {
     title,
@@ -81,7 +81,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || '',
-    image: post.featuredImage || 'https://articlos.com/og-image.png',
+    image: post.featuredImage || 'https://articlos.com/opengraph-image',
     datePublished: dateIso,
     dateModified: post.updatedAt.toISOString(),
     author: {
@@ -196,7 +196,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           >
             <img
               src={post.featuredImage}
-              alt={post.title}
+              alt={post.featuredImageAlt || post.title}
               style={{
                 width: '100%',
                 borderRadius: 12,

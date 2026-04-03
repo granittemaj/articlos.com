@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(req: Request) {
   try {
@@ -11,6 +12,17 @@ export async function POST(req: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
+    }
+
+    // Save subscriber locally regardless of Brevo
+    try {
+      await prisma.newsletterSubscriber.upsert({
+        where: { email: email.trim().toLowerCase() },
+        update: {},
+        create: { email: email.trim().toLowerCase() },
+      })
+    } catch {
+      // Non-fatal — continue even if local save fails
     }
 
     const apiKey = process.env.BREVO_API_KEY

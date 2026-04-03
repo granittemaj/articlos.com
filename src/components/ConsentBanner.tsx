@@ -18,6 +18,9 @@ export default function ConsentBanner() {
 
   function dismiss(accepted: boolean) {
     localStorage.setItem('articlos_consent', accepted ? 'accepted' : 'declined')
+    if (accepted) {
+      window.dispatchEvent(new Event('articlos_consent_accepted'))
+    }
     setLeaving(true)
     setTimeout(() => setVisible(false), 380)
   }

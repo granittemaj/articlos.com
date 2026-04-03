@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
+import BlogSearch from '@/components/BlogSearch'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,15 +21,24 @@ export const metadata: Metadata = {
 
 const POSTS_PER_PAGE = 9
 
-async function getBlogData(page: number) {
+async function getBlogData(page: number, q?: string) {
   try {
-    const where = { published: true as const }
+    const where = {
+      published: true as const,
+      ...(q ? {
+        OR: [
+          { title: { contains: q, mode: 'insensitive' as const } },
+          { excerpt: { contains: q, mode: 'insensitive' as const } },
+          { tags: { contains: q, mode: 'insensitive' as const } },
+        ],
+      } : {}),
+    }
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
         orderBy: { publishedAt: 'desc' },
-        skip: (page - 1) * POSTS_PER_PAGE,
-        take: POSTS_PER_PAGE,
+        skip: q ? 0 : (page - 1) * POSTS_PER_PAGE,
+        take: q ? 100 : POSTS_PER_PAGE,
         select: {
           id: true,
           title: true,
@@ -42,22 +52,26 @@ async function getBlogData(page: number) {
       }),
       prisma.post.count({ where }),
     ])
-    return { posts, total, pages: Math.ceil(total / POSTS_PER_PAGE) }
+    return { posts, total, pages: q ? 1 : Math.ceil(total / POSTS_PER_PAGE) }
   } catch {
     return { posts: [], total: 0, pages: 0 }
   }
 }
 
 interface PageProps {
-  searchParams: { page?: string }
+  searchParams: { page?: string; q?: string }
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
   const page = Math.max(1, parseInt(searchParams.page || '1', 10))
-  const { posts, pages } = await getBlogData(page)
+  const q = searchParams.q?.trim() || ''
+  const { posts, pages } = await getBlogData(page, q || undefined)
 
   function buildUrl(p: number) {
-    return p > 1 ? `/blog?page=${p}` : '/blog'
+    const params = new URLSearchParams()
+    if (p > 1) params.set('page', String(p))
+    if (q) params.set('q', q)
+    return `/blog${params.toString() ? '?' + params.toString() : ''}`
   }
 
   return (
@@ -87,12 +101,23 @@ export default async function BlogPage({ searchParams }: PageProps) {
             <p style={{ fontSize: 18, color: '#6b6b67', lineHeight: 1.6 }}>
               SEO strategies, content marketing tips, and insights on AI-powered writing from the articlos team.
             </p>
+            <BlogSearch initialQuery={q} />
           </div>
         </section>
 
         {/* Posts Grid */}
         <section style={{ padding: '56px 24px 80px', background: '#fafaf9' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+            {q && (
+              <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <p style={{ fontSize: 14, color: '#6b6b67' }}>
+                  {posts.length} result{posts.length !== 1 ? 's' : ''} for <strong style={{ color: '#0f0f0e' }}>&ldquo;{q}&rdquo;</strong>
+                </p>
+                <Link href="/blog" style={{ fontSize: 13, color: '#6b6b67', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                  Clear
+                </Link>
+              </div>
+            )}
             {posts.length > 0 ? (
               <>
                 <div

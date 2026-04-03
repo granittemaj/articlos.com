@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import ConsentBanner from '@/components/ConsentBanner'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -77,18 +77,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-6L4N2Q05PW"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-6L4N2Q05PW');
-          `}
-        </Script>
+        <GoogleAnalytics />
         <Analytics />
         <ConsentBanner />
       </body>

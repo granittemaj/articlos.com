@@ -44,6 +44,7 @@ export async function PUT(req: Request, { params }: Params) {
       excerpt,
       content,
       featuredImage,
+      featuredImageAlt,
       tags,
       published,
       publishedAt,
@@ -76,6 +77,30 @@ export async function PUT(req: Request, { params }: Params) {
       resolvedPublishedAt = null
     }
 
+    // Save a version snapshot before updating
+    try {
+      await prisma.postVersion.create({
+        data: {
+          postId: params.id,
+          title: currentPost.title,
+          content: currentPost.content,
+          excerpt: currentPost.excerpt ?? undefined,
+        },
+      })
+      // Keep only last 10 versions
+      const versions = await prisma.postVersion.findMany({
+        where: { postId: params.id },
+        orderBy: { savedAt: 'desc' },
+        select: { id: true },
+      })
+      if (versions.length > 10) {
+        const toDelete = versions.slice(10).map((v) => v.id)
+        await prisma.postVersion.deleteMany({ where: { id: { in: toDelete } } })
+      }
+    } catch {
+      // Non-fatal — version save should not block post update
+    }
+
     const post = await prisma.post.update({
       where: { id: params.id },
       data: {
@@ -84,6 +109,7 @@ export async function PUT(req: Request, { params }: Params) {
         excerpt: excerpt ?? currentPost.excerpt,
         ...(content !== undefined && { content }),
         featuredImage: featuredImage ?? currentPost.featuredImage,
+        featuredImageAlt: featuredImageAlt ?? currentPost.featuredImageAlt,
         tags: tags ?? currentPost.tags,
         published: published ?? currentPost.published,
         publishedAt: resolvedPublishedAt,
