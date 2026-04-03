@@ -11,11 +11,20 @@ interface PostData {
   excerpt: string
   content: string
   featuredImage: string
+  featuredImageAlt: string
   tags: string
   published: boolean
   publishedAt: string
   metaTitle: string
   metaDescription: string
+}
+
+interface PostVersion {
+  id: string
+  title: string
+  excerpt: string | null
+  content: string
+  savedAt: string
 }
 
 interface PostEditorProps {
@@ -29,6 +38,7 @@ const defaultData: PostData = {
   excerpt: '',
   content: '',
   featuredImage: '',
+  featuredImageAlt: '',
   tags: '',
   published: false,
   publishedAt: new Date().toISOString().split('T')[0],
@@ -51,6 +61,7 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
           : defaultData.publishedAt,
         tags: initialData.tags || '',
         featuredImage: initialData.featuredImage || '',
+        featuredImageAlt: initialData.featuredImageAlt || '',
         excerpt: initialData.excerpt || '',
         metaTitle: initialData.metaTitle || '',
         metaDescription: initialData.metaDescription || '',
@@ -99,6 +110,8 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState('')
   const [aiKeywords, setAiKeywords] = useState('')
+  const [versions, setVersions] = useState<PostVersion[]>([])
+  const [versionsOpen, setVersionsOpen] = useState(false)
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -113,6 +126,15 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
       editorRef.current.innerHTML = initialData.content
     }
   }, [])
+
+  // Load version history for existing posts
+  useEffect(() => {
+    if (!postId) return
+    fetch(`/api/admin/posts/${postId}/versions`)
+      .then((r) => r.json())
+      .then((d) => setVersions(d.versions || []))
+      .catch(() => {})
+  }, [postId])
 
   function updateField<K extends keyof PostData>(key: K, value: PostData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -245,6 +267,7 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
       excerpt: form.excerpt || null,
       content,
       featuredImage: form.featuredImage || null,
+      featuredImageAlt: form.featuredImageAlt || null,
       tags: form.tags || null,
       published: publishState !== undefined ? publishState : form.published,
       publishedAt: form.publishedAt || null,
@@ -307,6 +330,7 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
     { label: 'Img', title: 'Insert Image', action: handleInsertImage },
   ]
 
+  const metaTitleLength = form.metaTitle.length
   const metaDescLength = form.metaDescription.length
 
   return (
@@ -496,6 +520,19 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
                 placeholder="https://example.com/image.jpg"
                 style={{ marginTop: 4 }}
               />
+              {form.featuredImage && (
+                <>
+                  <p className="form-hint" style={{ marginTop: 8 }}>Alt text (for accessibility & SEO):</p>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={form.featuredImageAlt}
+                    onChange={(e) => updateField('featuredImageAlt', e.target.value)}
+                    placeholder="Describe the image…"
+                    style={{ marginTop: 4 }}
+                  />
+                </>
+              )}
             </div>
 
             {/* Excerpt */}
@@ -751,15 +788,28 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
             >
               <h3 style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>SEO</h3>
               <div className="form-group" style={{ marginBottom: 10 }}>
-                <label className="form-label" style={{ fontSize: 12 }}>Meta Title</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                  <label className="form-label" style={{ fontSize: 12 }}>Meta Title</label>
+                  <span style={{
+                    fontSize: 11, fontWeight: 600,
+                    color: metaTitleLength > 60 ? '#dc2626' : '#a0a09c',
+                  }}>
+                    {metaTitleLength}/60
+                  </span>
+                </div>
                 <input
                   type="text"
                   className="form-input"
                   value={form.metaTitle}
                   onChange={(e) => updateField('metaTitle', e.target.value)}
                   placeholder={form.title || 'SEO title'}
-                  style={{ fontSize: 13 }}
+                  style={{ fontSize: 13, borderColor: metaTitleLength > 60 ? '#fca5a5' : undefined }}
                 />
+                {metaTitleLength > 60 && (
+                  <p style={{ fontSize: 11, color: '#dc2626', marginTop: 4 }}>
+                    Exceeds 60 characters. Search engines may truncate this.
+                  </p>
+                )}
               </div>
               <div className="form-group">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
@@ -792,6 +842,68 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
                 )}
               </div>
             </div>
+            {/* Version History */}
+            {isEditMode && versions.length > 0 && (
+              <div style={{ background: '#ffffff', border: '1px solid #e8e8e6', borderRadius: 8, overflow: 'hidden' }}>
+                <button
+                  onClick={() => setVersionsOpen((v) => !v)}
+                  style={{
+                    width: '100%', padding: '12px 16px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: 'Geist, sans-serif',
+                  }}
+                >
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#0f0f0e' }}>
+                    Version history ({versions.length})
+                  </span>
+                  <span style={{ fontSize: 14, color: '#9b9b96', transform: versionsOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>›</span>
+                </button>
+                {versionsOpen && (
+                  <div style={{ borderTop: '1px solid #e8e8e6' }}>
+                    {versions.map((v) => (
+                      <div
+                        key={v.id}
+                        style={{
+                          padding: '10px 16px',
+                          borderBottom: '1px solid #f0f0ee',
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+                        }}
+                      >
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 12, color: '#0f0f0e', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {v.title}
+                          </div>
+                          <div style={{ fontSize: 11, color: '#a0a09c', marginTop: 2 }}>
+                            {new Date(v.savedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            {' · '}{Math.round(v.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length)} words
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            if (!confirm('Restore this version? Current content will be replaced.')) return
+                            if (editorRef.current) {
+                              editorRef.current.innerHTML = v.content
+                              updateField('content', v.content)
+                            }
+                            if (v.title) updateField('title', v.title)
+                            if (v.excerpt) updateField('excerpt', v.excerpt)
+                          }}
+                          style={{
+                            fontSize: 11, padding: '3px 8px', borderRadius: 4,
+                            border: '1px solid #e8e8e6', background: '#f9f9f8',
+                            color: '#3d3d3a', cursor: 'pointer', whiteSpace: 'nowrap',
+                            fontFamily: 'Geist, sans-serif',
+                          }}
+                        >
+                          Restore
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

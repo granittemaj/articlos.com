@@ -45,6 +45,24 @@ const CONTENT_FIELDS = [
     description: 'Supporting text below the CTA headline.',
     rows: 2,
   },
+  {
+    key: 'newsletter_title',
+    label: 'Newsletter Section Title',
+    description: 'Headline above the newsletter signup form.',
+    rows: 1,
+  },
+  {
+    key: 'newsletter_subtitle',
+    label: 'Newsletter Section Subtitle',
+    description: 'Supporting text below the newsletter headline.',
+    rows: 2,
+  },
+  {
+    key: 'social_proof_label',
+    label: 'Social Proof Label',
+    description: 'The small label above the logos carousel (e.g. "Trusted by 2,400+ content teams").',
+    rows: 1,
+  },
 ]
 
 const DEFAULTS: Record<string, string> = {
@@ -58,6 +76,10 @@ const DEFAULTS: Record<string, string> = {
   cta_title: 'Start generating content today',
   cta_subtitle:
     'Join 2,400+ websites already using articlos to build their organic traffic on autopilot.',
+  newsletter_title: 'Stay ahead of the content curve',
+  newsletter_subtitle:
+    'Weekly insights on SEO, AI content, and what\'s actually working in content marketing — straight to your inbox. No fluff.',
+  social_proof_label: 'Trusted by 2,400+ content teams',
 }
 
 interface FieldState {
