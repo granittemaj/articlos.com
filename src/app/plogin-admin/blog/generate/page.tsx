@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface Topic {
   title: string
@@ -21,26 +22,106 @@ interface GeneratedPost {
   featuredImage: string
 }
 
-type Step = 'topics' | 'generate' | 'review'
+interface BatchResult {
+  topic: Topic
+  postId?: string
+  error?: string
+}
+
+type Step = 'topics' | 'generate' | 'review' | 'batch'
+
+const steps: Step[] = ['topics', 'generate', 'review']
+
+async function fetchPexelsImage(query: string): Promise<string> {
+  try {
+    const res = await fetch(`/api/admin/pexels?query=${encodeURIComponent(query)}`)
+    const data = await res.json()
+    return data.url || ''
+  } catch {
+    return ''
+  }
+}
+
+async function generateAndSave(topic: Topic): Promise<{ postId: string }> {
+  // Generate content
+  const genRes = await fetch('/api/admin/ai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'generate', topic: topic.title, keywords: topic.keyword }),
+  })
+  const genData = await genRes.json()
+  if (!genRes.ok) throw new Error(genData.error || 'Generation failed')
+
+  // Fetch Pexels image in parallel
+  const featuredImage = await fetchPexelsImage(topic.keyword || topic.title)
+
+  const slug = genData.title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 80)
+
+  const saveRes = await fetch('/api/admin/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title: genData.title,
+      slug,
+      excerpt: genData.excerpt,
+      content: genData.content,
+      tags: genData.tags,
+      metaTitle: genData.metaTitle,
+      metaDescription: genData.metaDescription,
+      published: false,
+      publishedAt: null,
+      featuredImage: featuredImage || null,
+    }),
+  })
+  const saveData = await saveRes.json()
+  if (!saveRes.ok) throw new Error(saveData.error || 'Save failed')
+  return { postId: saveData.post.id }
+}
 
 export default function GeneratePage() {
   const router = useRouter()
   const [step, setStep] = useState<Step>('topics')
   const [niche, setNiche] = useState('')
   const [topics, setTopics] = useState<Topic[]>([])
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null)
+  const [selectedIndexes, setSelectedIndexes] = useState<Set<number>>(new Set())
   const [customTopic, setCustomTopic] = useState('')
   const [customKeywords, setCustomKeywords] = useState('')
   const [generated, setGenerated] = useState<GeneratedPost | null>(null)
   const [loading, setLoading] = useState(false)
   const [suggesting, setSuggesting] = useState(false)
+  const [fetchingImage, setFetchingImage] = useState(false)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // Batch state
+  const [batchResults, setBatchResults] = useState<BatchResult[]>([])
+  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; title: string } | null>(null)
+
+  const MAX_SELECT = 3
+
+  function toggleTopic(i: number) {
+    setSelectedIndexes(prev => {
+      const next = new Set(prev)
+      if (next.has(i)) {
+        next.delete(i)
+      } else if (next.size < MAX_SELECT) {
+        next.add(i)
+        setCustomTopic('')
+      }
+      return next
+    })
+  }
 
   async function handleFindTopics() {
     setLoading(true)
     setError('')
     setTopics([])
+    setSelectedIndexes(new Set())
     try {
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
@@ -71,7 +152,7 @@ export default function GeneratePage() {
       if (!res.ok) throw new Error(data.error || 'Failed to get suggestion')
       setCustomTopic(data.title || '')
       setCustomKeywords(data.keyword || '')
-      setSelectedTopic(null)
+      setSelectedIndexes(new Set())
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
     } finally {
@@ -79,10 +160,16 @@ export default function GeneratePage() {
     }
   }
 
-  async function handleGenerate() {
-    const topic = selectedTopic ? selectedTopic.title : customTopic
-    const keywords = selectedTopic ? selectedTopic.keyword : customKeywords
-    if (!topic.trim()) {
+  // Single generate → review step
+  async function handleGenerateSingle() {
+    const topicTitle = selectedIndexes.size === 1
+      ? topics[Array.from(selectedIndexes)[0]].title
+      : customTopic
+    const keywords = selectedIndexes.size === 1
+      ? topics[Array.from(selectedIndexes)[0]].keyword
+      : customKeywords
+
+    if (!topicTitle.trim()) {
       setError('Please select or enter a topic.')
       return
     }
@@ -92,16 +179,53 @@ export default function GeneratePage() {
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'generate', topic, keywords }),
+        body: JSON.stringify({ action: 'generate', topic: topicTitle, keywords }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to generate post')
-      setGenerated({ ...data, featuredImage: data.featuredImage || '' })
+
+      // Fetch Pexels image
+      setFetchingImage(true)
+      const imgUrl = await fetchPexelsImage(keywords || topicTitle)
+      setFetchingImage(false)
+
+      setGenerated({ ...data, featuredImage: imgUrl || data.featuredImage || '' })
       setStep('review')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
+      setFetchingImage(false)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Batch generate → batch results step
+  async function handleGenerateBatch() {
+    const selected = Array.from(selectedIndexes).map(i => topics[i])
+    setBatchResults([])
+    setBatchProgress({ current: 0, total: selected.length, title: '' })
+    setStep('batch')
+
+    const results: BatchResult[] = []
+    for (let i = 0; i < selected.length; i++) {
+      const topic = selected[i]
+      setBatchProgress({ current: i + 1, total: selected.length, title: topic.title })
+      try {
+        const { postId } = await generateAndSave(topic)
+        results.push({ topic, postId })
+      } catch (e) {
+        results.push({ topic, error: e instanceof Error ? e.message : 'Failed' })
+      }
+      setBatchResults([...results])
+    }
+    setBatchProgress(null)
+  }
+
+  function handleGenerate() {
+    if (selectedIndexes.size > 1) {
+      handleGenerateBatch()
+    } else {
+      handleGenerateSingle()
     }
   }
 
@@ -155,6 +279,10 @@ export default function GeneratePage() {
     navigational: '#0891b2',
   }
 
+  const selectedCount = selectedIndexes.size
+  const isMulti = selectedCount > 1
+  const canGenerate = selectedCount > 0 || customTopic.trim().length > 0
+
   return (
     <div>
       <div className="page-header">
@@ -172,25 +300,27 @@ export default function GeneratePage() {
         </div>
 
         {/* Step indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {(['topics', 'generate', 'review'] as Step[]).map((s, i) => (
-            <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div style={{
-                width: 24, height: 24, borderRadius: '50%',
-                background: step === s ? '#0f0f0e' : steps.indexOf(step) > i ? '#0f0f0e' : '#e8e8e6',
-                color: step === s || steps.indexOf(step) > i ? '#fff' : '#6b6b67',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 700,
-              }}>
-                {steps.indexOf(step) > i ? '✓' : i + 1}
+        {step !== 'batch' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {(['topics', 'generate', 'review'] as Step[]).map((s, i) => (
+              <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: step === s ? '#0f0f0e' : steps.indexOf(step) > i ? '#0f0f0e' : '#e8e8e6',
+                  color: step === s || steps.indexOf(step) > i ? '#fff' : '#6b6b67',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 11, fontWeight: 700,
+                }}>
+                  {steps.indexOf(step) > i ? '✓' : i + 1}
+                </div>
+                <span style={{ fontSize: 12, color: step === s ? '#0f0f0e' : '#9b9b96', fontWeight: step === s ? 600 : 400 }}>
+                  {s === 'topics' ? 'Discover topics' : s === 'generate' ? 'Generate' : 'Review & save'}
+                </span>
+                {i < 2 && <span style={{ color: '#d4d4d0', fontSize: 12 }}>›</span>}
               </div>
-              <span style={{ fontSize: 12, color: step === s ? '#0f0f0e' : '#9b9b96', fontWeight: step === s ? 600 : 400 }}>
-                {s === 'topics' ? 'Discover topics' : s === 'generate' ? 'Generate' : 'Review & save'}
-              </span>
-              {i < 2 && <span style={{ color: '#d4d4d0', fontSize: 12 }}>›</span>}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="page-body">
@@ -243,7 +373,7 @@ export default function GeneratePage() {
                       if (!res.ok) throw new Error(data.error || 'Failed to get suggestion')
                       setCustomTopic(data.title || '')
                       setCustomKeywords(data.keyword || '')
-                      setSelectedTopic(null)
+                      setSelectedIndexes(new Set())
                       setStep('generate')
                     } catch (e) {
                       setError(e instanceof Error ? e.message : 'Something went wrong')
@@ -293,74 +423,87 @@ export default function GeneratePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {topics.length > 0 && (
               <div>
-                <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14 }}>
-                  Select a topic to write about
-                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <h2 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>
+                    Select topics to generate
+                  </h2>
+                  <span style={{ fontSize: 12, color: '#9b9b96' }}>
+                    {selectedCount === 0 ? 'Select up to 3' : `${selectedCount} of ${MAX_SELECT} selected`}
+                  </span>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {topics.map((t, i) => (
-                    <div
-                      key={i}
-                      onClick={() => { setSelectedTopic(t); setCustomTopic('') }}
-                      style={{
-                        background: selectedTopic === t ? '#0f0f0e' : '#ffffff',
-                        border: `1px solid ${selectedTopic === t ? '#0f0f0e' : '#e8e8e6'}`,
-                        borderRadius: 8, padding: '14px 16px',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                        <div style={{ flex: 1 }}>
+                  {topics.map((t, i) => {
+                    const isSelected = selectedIndexes.has(i)
+                    const isDisabled = !isSelected && selectedCount >= MAX_SELECT
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => !isDisabled && toggleTopic(i)}
+                        style={{
+                          background: isSelected ? '#0f0f0e' : '#ffffff',
+                          border: `1px solid ${isSelected ? '#0f0f0e' : '#e8e8e6'}`,
+                          borderRadius: 8, padding: '14px 16px',
+                          cursor: isDisabled ? 'not-allowed' : 'pointer',
+                          opacity: isDisabled ? 0.45 : 1,
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                          {/* Checkbox */}
                           <div style={{
-                            fontSize: 14, fontWeight: 600,
-                            color: selectedTopic === t ? '#ffffff' : '#0f0f0e',
-                            marginBottom: 4,
+                            width: 18, height: 18, borderRadius: 4, flexShrink: 0, marginTop: 2,
+                            border: `2px solid ${isSelected ? '#fff' : '#d4d4d0'}`,
+                            background: isSelected ? '#fff' : 'transparent',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}>
-                            {t.title}
+                            {isSelected && (
+                              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#0f0f0e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="2 6 5 9 10 3" />
+                              </svg>
+                            )}
                           </div>
-                          <div style={{ fontSize: 12, color: selectedTopic === t ? '#a0a09c' : '#6b6b67', marginBottom: 6 }}>
-                            {t.why}
+
+                          <div style={{ flex: 1 }}>
+                            <div style={{
+                              fontSize: 14, fontWeight: 600,
+                              color: isSelected ? '#ffffff' : '#0f0f0e',
+                              marginBottom: 4,
+                            }}>
+                              {t.title}
+                            </div>
+                            <div style={{ fontSize: 12, color: isSelected ? '#a0a09c' : '#6b6b67', marginBottom: 6 }}>
+                              {t.why}
+                            </div>
+                            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                              <span style={{
+                                fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
+                                background: isSelected ? 'rgba(255,255,255,0.1)' : '#f4f4f3',
+                                color: isSelected ? '#d4d4d0' : '#6b6b67',
+                              }}>
+                                {t.keyword}
+                              </span>
+                              <span style={{
+                                fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
+                                background: 'transparent',
+                                color: isSelected ? '#d4d4d0' : intentColor[t.intent] || '#6b6b67',
+                                border: `1px solid ${isSelected ? 'rgba(255,255,255,0.2)' : (intentColor[t.intent] || '#6b6b67') + '40'}`,
+                              }}>
+                                {t.intent}
+                              </span>
+                              <span style={{
+                                fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
+                                background: 'transparent',
+                                color: isSelected ? '#d4d4d0' : difficultyColor[t.difficulty] || '#6b6b67',
+                                border: `1px solid ${isSelected ? 'rgba(255,255,255,0.2)' : (difficultyColor[t.difficulty] || '#6b6b67') + '40'}`,
+                              }}>
+                                {t.difficulty} difficulty
+                              </span>
+                            </div>
                           </div>
-                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                            <span style={{
-                              fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
-                              background: selectedTopic === t ? 'rgba(255,255,255,0.1)' : '#f4f4f3',
-                              color: selectedTopic === t ? '#d4d4d0' : '#6b6b67',
-                            }}>
-                              {t.keyword}
-                            </span>
-                            <span style={{
-                              fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
-                              background: 'transparent',
-                              color: selectedTopic === t ? '#d4d4d0' : intentColor[t.intent] || '#6b6b67',
-                              border: `1px solid ${selectedTopic === t ? 'rgba(255,255,255,0.2)' : intentColor[t.intent] + '40' || '#e8e8e6'}`,
-                            }}>
-                              {t.intent}
-                            </span>
-                            <span style={{
-                              fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
-                              background: 'transparent',
-                              color: selectedTopic === t ? '#d4d4d0' : difficultyColor[t.difficulty] || '#6b6b67',
-                              border: `1px solid ${selectedTopic === t ? 'rgba(255,255,255,0.2)' : difficultyColor[t.difficulty] + '40' || '#e8e8e6'}`,
-                            }}>
-                              {t.difficulty} difficulty
-                            </span>
-                          </div>
-                        </div>
-                        <div style={{
-                          width: 20, height: 20, borderRadius: '50%',
-                          border: `2px solid ${selectedTopic === t ? '#fff' : '#d4d4d0'}`,
-                          background: selectedTopic === t ? '#fff' : 'transparent',
-                          flexShrink: 0, marginTop: 2,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                          {selectedTopic === t && (
-                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0f0f0e' }} />
-                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}
@@ -395,7 +538,7 @@ export default function GeneratePage() {
                   type="text"
                   className="form-input"
                   value={customTopic}
-                  onChange={(e) => { setCustomTopic(e.target.value); setSelectedTopic(null) }}
+                  onChange={(e) => { setCustomTopic(e.target.value); setSelectedIndexes(new Set()) }}
                   placeholder="e.g. How to automate content publishing with AI"
                   style={{ flex: 1 }}
                 />
@@ -410,23 +553,46 @@ export default function GeneratePage() {
               </div>
             </div>
 
+            {/* Info banner for multi-select */}
+            {isMulti && (
+              <div style={{
+                background: '#eff6ff', border: '1px solid #bfdbfe',
+                borderRadius: 8, padding: '10px 14px',
+                display: 'flex', alignItems: 'center', gap: 10,
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span style={{ fontSize: 13, color: '#1d4ed8' }}>
+                  {selectedCount} articles will be generated and saved as drafts automatically. Featured images from Pexels will be added to each.
+                </span>
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: 10 }}>
               <button
-                onClick={() => { setStep('topics'); setSelectedTopic(null) }}
+                onClick={() => { setStep('topics'); setSelectedIndexes(new Set()) }}
                 className="btn btn-ghost"
               >
                 ← Back
               </button>
               <button
                 onClick={handleGenerate}
-                disabled={loading || (!selectedTopic && !customTopic.trim())}
+                disabled={loading || !canGenerate}
                 className="btn btn-primary"
                 style={{ flex: 1, justifyContent: 'center' }}
               >
                 {loading ? (
                   <>
                     <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span>
-                    Writing article with Gemini…
+                    {fetchingImage ? 'Fetching image…' : 'Writing article with Gemini…'}
+                  </>
+                ) : isMulti ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    Generate {selectedCount} articles
                   </>
                 ) : (
                   <>
@@ -438,6 +604,111 @@ export default function GeneratePage() {
                 )}
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Batch progress + results */}
+        {step === 'batch' && (
+          <div style={{ maxWidth: 640 }}>
+            <div style={{ marginBottom: 20 }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
+                Generating {batchProgress ? `${batchProgress.current} of ${batchProgress.total}` : batchResults.length} articles
+              </h2>
+              {batchProgress && (
+                <p style={{ fontSize: 14, color: '#6b6b67' }}>
+                  Writing: <span style={{ color: '#0f0f0e', fontWeight: 500 }}>{batchProgress.title}</span>
+                </p>
+              )}
+            </div>
+
+            {/* Progress bar */}
+            {batchProgress && (
+              <div style={{
+                height: 4, background: '#e8e8e6', borderRadius: 2,
+                marginBottom: 24, overflow: 'hidden',
+              }}>
+                <div style={{
+                  height: '100%', background: '#0f0f0e', borderRadius: 2,
+                  width: `${((batchProgress.current - 1 + batchResults.length / batchProgress.total) / batchProgress.total) * 100}%`,
+                  transition: 'width 0.3s ease',
+                }} />
+              </div>
+            )}
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {batchResults.map((r, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: r.error ? '#fef2f2' : '#f0fdf4',
+                    border: `1px solid ${r.error ? '#fca5a5' : '#86efac'}`,
+                    borderRadius: 8, padding: '14px 16px',
+                    display: 'flex', alignItems: 'center', gap: 12,
+                  }}
+                >
+                  {r.error ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                  )}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: r.error ? '#dc2626' : '#15803d' }}>
+                      {r.topic.title}
+                    </div>
+                    {r.error && (
+                      <div style={{ fontSize: 12, color: '#dc2626', marginTop: 2 }}>{r.error}</div>
+                    )}
+                  </div>
+                  {r.postId && (
+                    <Link
+                      href={`/plogin-admin/blog/${r.postId}`}
+                      style={{
+                        fontSize: 13, fontWeight: 500, color: '#15803d',
+                        textDecoration: 'none', whiteSpace: 'nowrap',
+                        padding: '4px 10px', borderRadius: 6,
+                        border: '1px solid #86efac',
+                        background: '#fff',
+                      }}
+                    >
+                      Edit draft →
+                    </Link>
+                  )}
+                </div>
+              ))}
+
+              {/* Spinner for in-progress item */}
+              {batchProgress && (
+                <div style={{
+                  background: '#ffffff', border: '1px solid #e8e8e6',
+                  borderRadius: 8, padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', gap: 12,
+                }}>
+                  <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', fontSize: 16, color: '#9b9b96' }}>◌</span>
+                  <div style={{ fontSize: 14, color: '#6b6b67' }}>
+                    Generating &amp; finding image for <span style={{ fontWeight: 500, color: '#0f0f0e' }}>{batchProgress.title}</span>…
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {!batchProgress && (
+              <div style={{ marginTop: 24, display: 'flex', gap: 10 }}>
+                <button
+                  onClick={() => { setStep('generate'); setBatchResults([]) }}
+                  className="btn btn-ghost"
+                >
+                  ← Generate more
+                </button>
+                <Link href="/plogin-admin/blog" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                  View all posts →
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
@@ -471,7 +742,7 @@ export default function GeneratePage() {
               </div>
 
               <div>
-                <label className="form-label">Featured Image URL</label>
+                <label className="form-label">Featured Image</label>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                   <input
                     type="url"
@@ -485,11 +756,14 @@ export default function GeneratePage() {
                     <img
                       src={generated.featuredImage}
                       alt="Featured"
-                      style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 6, border: '1px solid #e8e8e6', flexShrink: 0 }}
+                      style={{ width: 80, height: 52, objectFit: 'cover', borderRadius: 6, border: '1px solid #e8e8e6', flexShrink: 0 }}
                       onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                     />
                   )}
                 </div>
+                {generated.featuredImage && (
+                  <p className="form-hint">Image sourced from Pexels. You can replace it with any URL.</p>
+                )}
               </div>
 
               <div>
@@ -606,5 +880,3 @@ export default function GeneratePage() {
     </div>
   )
 }
-
-const steps: Step[] = ['topics', 'generate', 'review']
