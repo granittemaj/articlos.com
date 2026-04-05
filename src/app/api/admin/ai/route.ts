@@ -36,52 +36,59 @@ export async function POST(req: NextRequest) {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
 
     if (action === 'topics') {
-      const seed = Math.floor(Math.random() * 100000)
-      const prompt = `You are a wildly creative content strategist who hates generic content. Generate 8 unexpected, high-value blog post topic ideas for ${niche ? `a website in the "${niche}" niche` : 'a content marketing / SaaS audience'}.
+      const ALL_ANGLES = [
+        'A real-world case study with specific numbers and measurable results',
+        'A contrarian take that directly challenges a widely-held belief in the industry',
+        'A data-driven deep-dive citing specific recent stats, studies, or benchmarks',
+        'A beginner guide that solves ONE very specific sub-problem (not a broad overview)',
+        'An advanced tactics post for experienced practitioners who already know the basics',
+        'A head-to-head tool or method comparison with a clear winner and reasoning',
+        'A bold, reasoned industry prediction for the next 12–18 months',
+        'A myth-busting piece that names a popular belief and dismantles it with evidence',
+        'A step-by-step tutorial for a very precise workflow, technique, or process',
+        'A failure post-mortem: what went wrong, why, and what to do differently',
+        'An emerging trend that almost nobody is writing about yet',
+        'A niche crossover that combines two unexpected fields or disciplines',
+        'An "X vs Y" comparison framed around a real decision practitioners face',
+        'A listicle with counterintuitive or surprising items most people haven\'t considered',
+        'A "behind the scenes" breakdown of a specific strategy used by a real company',
+        'A seasonal or timely angle tied to something happening right now in 2026',
+        'An interview-style or expert-roundup framing a specific ongoing debate',
+        'A cost/ROI analysis: is [popular tactic] actually worth it?',
+      ]
 
-RANDOMIZATION SEED: ${seed} — use this to vary your output. Be unpredictable. Never repeat yourself across calls.
+      // Truly randomise server-side: shuffle and take 8
+      const shuffled = ALL_ANGLES.slice().sort(() => Math.random() - 0.5)
+      const selectedAngles = shuffled.slice(0, 8)
 
-Pick exactly 8 angles from this list — choose a DIFFERENT random subset each time, never the same combination twice:
-- Real-world case studies with specific numbers/results
-- Controversial or contrarian takes that challenge conventional wisdom
-- Data-driven analysis (cite specific stats, studies, or benchmarks)
-- Beginner guides that tackle ONE very specific sub-problem (not broad overviews)
-- Advanced tactics for practitioners who already know the basics
-- Tool/method comparisons (head-to-head, with clear winners)
-- Bold industry predictions with reasoning
-- Myth-busting (name a popular belief and dismantle it)
-- Step-by-step tutorials for a precise workflow or technique
-- Expert roundup ideas (frame a specific debate or question)
-- Seasonal or timely hooks tied to current events or trends
-- Niche crossover ideas (combine two unexpected fields)
-- "X vs Y" comparisons that people actually search for
-- Listicles with genuinely unexpected or counterintuitive items
-- Emerging trends that almost nobody is covering yet
-- Failure post-mortems (what went wrong and lessons learned)
-- "Behind the scenes" of a specific process or strategy
+      const today = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
-STRICT RULES:
-- Never suggest generic titles like "Ultimate Guide to X", "10 Tips for Y", "Everything You Need to Know About Z", or "How to Get Started with X". Each title must feel specific, fresh, and clickable.
-- Every title should include a specific detail — a number, a named tool, a timeframe, a specific outcome, or a surprising angle.
-- ${niche ? `Dig DEEP into sub-niches and specific problems within "${niche}". Avoid surface-level takes. Think about the specific frustrations, edge cases, and underserved questions real practitioners have.` : 'Think about specific, underserved questions that real marketers and founders actually struggle with.'}
+      const prompt = `You are a sharp, opinionated content strategist writing for ${niche ? `a "${niche}" audience` : 'a content marketing / SaaS audience'} in ${today}.
 
-For each topic:
-- title: A compelling, specific, scroll-stopping blog post title (NOT generic)
-- keyword: The primary target keyword (long-tail and specific)
-- intent: Search intent (informational/commercial/navigational)
-- difficulty: Estimated keyword difficulty (low/medium/high)
-- why: One sentence explaining why this topic is valuable and timely right now
+Generate exactly 8 blog post topic ideas — one for each angle listed below. Use the angles in the order given.
 
-Return ONLY valid JSON in this exact format (no markdown, no code fences):
+ASSIGNED ANGLES (use each one, in order):
+${selectedAngles.map((a, i) => `${i + 1}. ${a}`).join('\n')}
+
+CONTEXT: It is currently ${today}. Topics must feel relevant and timely for right now — not 2023 or 2024. Reference current tools, platforms, and trends that exist in 2026. Avoid anything that was already overdone in 2024 (e.g. generic ChatGPT hype, "AI will replace writers", basic SEO 101 content).
+
+STRICT TITLE RULES:
+- No generic titles: "Ultimate Guide to X", "X Tips for Y", "Everything You Need to Know", "How to Get Started", "The Power of X", "Why X Matters"
+- Every title must include at least one specific detail: a number, a named tool, a concrete outcome, a timeframe, or a surprising framing
+- Titles should feel like something a real expert would share — not content-farm clickbait
+- ${niche ? `Go deep into sub-niches and edge cases within "${niche}". Think about the specific frustrations, workflow problems, and underserved questions that real practitioners in this space have in 2026.` : 'Think about the specific, nuanced questions that senior marketers and SaaS founders are actually debating right now.'}
+
+For each topic return:
+- title: The blog post title (specific, not generic)
+- keyword: Primary long-tail keyword to target
+- intent: informational / commercial / navigational
+- difficulty: low / medium / high
+- why: One sentence on why this topic is valuable and timely in ${today}
+
+Return ONLY valid JSON, no markdown, no code fences:
 {
   "topics": [
-    {
-      "title": "...",
-      "keyword": "...",
-      "intent": "...",
-      "difficulty": "...",
-      "why": "..."
-    }
+    { "title": "...", "keyword": "...", "intent": "...", "difficulty": "...", "why": "..." }
   ]
 }`
 
