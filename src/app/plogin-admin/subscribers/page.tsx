@@ -15,11 +15,14 @@ function formatDate(iso: string) {
   })
 }
 
+const SUBSCRIBERS_PER_PAGE = 20
+
 export default function SubscribersPage() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -48,6 +51,8 @@ export default function SubscribersPage() {
   const filtered = search.trim()
     ? subscribers.filter((s) => s.email.toLowerCase().includes(search.toLowerCase()))
     : subscribers
+  const totalPages = Math.ceil(filtered.length / SUBSCRIBERS_PER_PAGE)
+  const paginatedSubscribers = filtered.slice((page - 1) * SUBSCRIBERS_PER_PAGE, page * SUBSCRIBERS_PER_PAGE)
 
   return (
     <AdminLayout>
@@ -71,7 +76,7 @@ export default function SubscribersPage() {
           <input
             type="search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
             placeholder="Search by email…"
             className="form-input"
             style={{ maxWidth: 320 }}
@@ -101,54 +106,81 @@ export default function SubscribersPage() {
             </p>
           </div>
         ) : (
-          <div style={{
-            background: '#ffffff', border: '1px solid #e8e8e6', borderRadius: 10, overflow: 'hidden',
-          }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid #e8e8e6', background: '#f9f9f8' }}>
-                  <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#6b6b67' }}>
-                    Email
-                  </th>
-                  <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#6b6b67', width: 140 }}>
-                    Subscribed
-                  </th>
-                  <th style={{ padding: '10px 16px', width: 60 }} />
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((s, i) => (
-                  <tr
-                    key={s.id}
-                    style={{ borderBottom: i < filtered.length - 1 ? '1px solid #f0f0ee' : 'none' }}
-                  >
-                    <td style={{ padding: '12px 16px', fontSize: 14, color: '#0f0f0e' }}>
-                      <a href={`mailto:${s.email}`} style={{ color: '#0f0f0e', textDecoration: 'none' }}>
-                        {s.email}
-                      </a>
-                    </td>
-                    <td style={{ padding: '12px 16px', fontSize: 13, color: '#a0a09c' }}>
-                      {formatDate(s.createdAt)}
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <button
-                        onClick={() => deleteSubscriber(s.id)}
-                        disabled={deleting === s.id}
-                        style={{
-                          fontSize: 12, color: '#dc2626', background: 'none',
-                          border: 'none', cursor: 'pointer', padding: '4px 8px',
-                          borderRadius: 4, opacity: deleting === s.id ? 0.5 : 1,
-                          fontFamily: 'Geist, sans-serif',
-                        }}
-                      >
-                        {deleting === s.id ? '…' : 'Remove'}
-                      </button>
-                    </td>
+          <>
+            <div style={{
+              background: '#ffffff', border: '1px solid #e8e8e6', borderRadius: 10, overflow: 'hidden',
+            }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid #e8e8e6', background: '#f9f9f8' }}>
+                    <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#6b6b67' }}>
+                      Email
+                    </th>
+                    <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: '#6b6b67', width: 140 }}>
+                      Subscribed
+                    </th>
+                    <th style={{ padding: '10px 16px', width: 60 }} />
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {paginatedSubscribers.map((s, i) => (
+                    <tr
+                      key={s.id}
+                      style={{ borderBottom: i < paginatedSubscribers.length - 1 ? '1px solid #f0f0ee' : 'none' }}
+                    >
+                      <td style={{ padding: '12px 16px', fontSize: 14, color: '#0f0f0e' }}>
+                        <a href={`mailto:${s.email}`} style={{ color: '#0f0f0e', textDecoration: 'none' }}>
+                          {s.email}
+                        </a>
+                      </td>
+                      <td style={{ padding: '12px 16px', fontSize: 13, color: '#a0a09c' }}>
+                        {formatDate(s.createdAt)}
+                      </td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <button
+                          onClick={() => deleteSubscriber(s.id)}
+                          disabled={deleting === s.id}
+                          style={{
+                            fontSize: 12, color: '#dc2626', background: 'none',
+                            border: 'none', cursor: 'pointer', padding: '4px 8px',
+                            borderRadius: 4, opacity: deleting === s.id ? 0.5 : 1,
+                            fontFamily: 'Geist, sans-serif',
+                          }}
+                        >
+                          {deleting === s.id ? '…' : 'Remove'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {totalPages > 1 && (
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: 12, padding: '16px 0', fontSize: 13, color: '#6b6b67',
+              }}>
+                <button
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="btn btn-ghost btn-sm"
+                  style={{ opacity: page === 1 ? 0.4 : 1 }}
+                >
+                  Previous
+                </button>
+                <span>Page {page} of {totalPages}</span>
+                <button
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="btn btn-ghost btn-sm"
+                  style={{ opacity: page === totalPages ? 0.4 : 1 }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </AdminLayout>

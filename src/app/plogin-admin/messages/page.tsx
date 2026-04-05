@@ -18,12 +18,15 @@ function formatDate(iso: string) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
+const MESSAGES_PER_PAGE = 20
+
 export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<Message | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'unread'>('all')
+  const [page, setPage] = useState(1)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -67,6 +70,8 @@ export default function MessagesPage() {
 
   const filtered = filter === 'unread' ? messages.filter(m => !m.read) : messages
   const unreadCount = messages.filter(m => !m.read).length
+  const totalPages = Math.ceil(filtered.length / MESSAGES_PER_PAGE)
+  const paginatedMessages = filtered.slice((page - 1) * MESSAGES_PER_PAGE, page * MESSAGES_PER_PAGE)
 
   return (
     <AdminLayout>
@@ -99,7 +104,7 @@ export default function MessagesPage() {
           {(['all', 'unread'] as const).map(f => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => { setFilter(f); setPage(1) }}
               style={{
                 padding: '5px 14px', borderRadius: 6, fontSize: 13, fontWeight: 500,
                 border: '1px solid',
@@ -140,7 +145,7 @@ export default function MessagesPage() {
           <div style={{ display: 'grid', gridTemplateColumns: selected ? '1fr 1.4fr' : '1fr', gap: 16, alignItems: 'start' }} className="messages-layout">
             {/* List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {filtered.map(msg => (
+              {paginatedMessages.map(msg => (
                 <div
                   key={msg.id}
                   onClick={() => openMessage(msg)}
@@ -177,6 +182,31 @@ export default function MessagesPage() {
                   </div>
                 </div>
               ))}
+
+              {totalPages > 1 && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: 12, padding: '12px 0', fontSize: 13, color: '#6b6b67',
+                }}>
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="btn btn-ghost btn-sm"
+                    style={{ opacity: page === 1 ? 0.4 : 1 }}
+                  >
+                    Previous
+                  </button>
+                  <span>Page {page} of {totalPages}</span>
+                  <button
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    className="btn btn-ghost btn-sm"
+                    style={{ opacity: page === totalPages ? 0.4 : 1 }}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Detail panel */}

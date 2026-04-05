@@ -16,11 +16,17 @@ interface Post {
   excerpt: string | null
 }
 
+const POSTS_PER_PAGE = 15
+
 export default function AdminBlogPage() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [togglingId, setTogglingId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [bulkLoading, setBulkLoading] = useState(false)
 
   async function fetchPosts() {
     try {
@@ -37,6 +43,81 @@ export default function AdminBlogPage() {
   useEffect(() => {
     fetchPosts()
   }, [])
+
+  // Reset page when search changes
+  useEffect(() => {
+    setPage(1)
+  }, [search])
+
+  // Clear selection when page changes
+  useEffect(() => {
+    setSelectedIds(new Set())
+  }, [page])
+
+  // Filtered and paginated posts
+  const filteredPosts = posts.filter((p) =>
+    p.title.toLowerCase().includes(search.toLowerCase())
+  )
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
+  const paginatedPosts = filteredPosts.slice(
+    (page - 1) * POSTS_PER_PAGE,
+    page * POSTS_PER_PAGE
+  )
+
+  function handleSelectAll(checked: boolean) {
+    if (checked) {
+      setSelectedIds(new Set(paginatedPosts.map((p) => p.id)))
+    } else {
+      setSelectedIds(new Set())
+    }
+  }
+
+  function handleSelectOne(id: string, checked: boolean) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (checked) {
+        next.add(id)
+      } else {
+        next.delete(id)
+      }
+      return next
+    })
+  }
+
+  async function handleBulkPublish(publish: boolean) {
+    setBulkLoading(true)
+    try {
+      for (const id of selectedIds) {
+        await fetch(`/api/admin/posts/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ published: publish }),
+        })
+      }
+      setSelectedIds(new Set())
+      await fetchPosts()
+    } catch {
+      alert(`Failed to ${publish ? 'publish' : 'unpublish'} posts.`)
+    } finally {
+      setBulkLoading(false)
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (!confirm(`Delete ${selectedIds.size} post(s)? This cannot be undone.`)) return
+    setBulkLoading(true)
+    try {
+      for (const id of selectedIds) {
+        await fetch(`/api/admin/posts/${id}`, { method: 'DELETE' })
+      }
+      setSelectedIds(new Set())
+      await fetchPosts()
+    } catch {
+      alert('Failed to delete posts.')
+    } finally {
+      setBulkLoading(false)
+    }
+  }
 
   async function handleDelete(id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
@@ -138,131 +219,244 @@ export default function AdminBlogPage() {
             </Link>
           </div>
         ) : (
-          <div
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e8e8e6',
-              borderRadius: 8,
-              overflow: 'hidden',
-            }}
-          >
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Tags</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {posts.map((post) => (
-                  <tr key={post.id}>
-                    <td>
-                      <Link
-                        href={`/plogin-admin/blog/${post.id}`}
-                        style={{
-                          fontWeight: 500,
-                          fontSize: 14,
-                          color: '#0f0f0e',
-                          textDecoration: 'none',
-                        }}
-                      >
-                        {post.title}
-                      </Link>
-                      <div style={{ fontSize: 12, color: '#a0a09c', marginTop: 2 }}>
-                        /{post.slug}
-                      </div>
-                    </td>
-                    <td>
-                      <span
-                        className={`status-badge ${post.published ? 'published' : 'draft'}`}
-                      >
-                        <span
-                          style={{
-                            width: 5,
-                            height: 5,
-                            borderRadius: '50%',
-                            background: post.published ? '#16a34a' : '#a0a09c',
-                            display: 'inline-block',
-                          }}
+          <>
+            {/* Search bar */}
+            <div style={{ marginBottom: 12 }}>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Search posts..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{ maxWidth: 320 }}
+              />
+            </div>
+
+            {/* Bulk actions toolbar */}
+            {selectedIds.size > 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 12px',
+                  marginBottom: 12,
+                  background: '#f5f5f3',
+                  border: '1px solid #e8e8e6',
+                  borderRadius: 8,
+                  fontSize: 13,
+                }}
+              >
+                <span style={{ fontWeight: 500 }}>{selectedIds.size} selected</span>
+                <button
+                  onClick={() => handleBulkPublish(true)}
+                  disabled={bulkLoading}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12 }}
+                >
+                  Publish
+                </button>
+                <button
+                  onClick={() => handleBulkPublish(false)}
+                  disabled={bulkLoading}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12 }}
+                >
+                  Unpublish
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  disabled={bulkLoading}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12, color: '#dc2626' }}
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setSelectedIds(new Set())}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12 }}
+                >
+                  Clear selection
+                </button>
+              </div>
+            )}
+
+            <div
+              style={{
+                background: '#ffffff',
+                border: '1px solid #e8e8e6',
+                borderRadius: 8,
+                overflow: 'hidden',
+              }}
+            >
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: 36 }}>
+                      <input
+                        type="checkbox"
+                        checked={
+                          paginatedPosts.length > 0 &&
+                          paginatedPosts.every((p) => selectedIds.has(p.id))
+                        }
+                        onChange={(e) => handleSelectAll(e.target.checked)}
+                      />
+                    </th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Tags</th>
+                    <th style={{ textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedPosts.map((post) => (
+                    <tr key={post.id}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(post.id)}
+                          onChange={(e) => handleSelectOne(post.id, e.target.checked)}
                         />
-                        {post.published ? 'Published' : 'Draft'}
-                      </span>
-                    </td>
-                    <td style={{ fontSize: 13, color: '#6b6b67' }}>
-                      {formatDate(post.publishedAt || post.createdAt)}
-                    </td>
-                    <td>
-                      {post.tags ? (
-                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                          {post.tags
-                            .split(',')
-                            .slice(0, 2)
-                            .map((t) => (
-                              <span key={t.trim()} className="tag-chip" style={{ fontSize: 11 }}>
-                                {t.trim()}
-                              </span>
-                            ))}
-                        </div>
-                      ) : (
-                        <span style={{ fontSize: 12, color: '#d4d4d0' }}>—</span>
-                      )}
-                    </td>
-                    <td>
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: 6,
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        <button
-                          onClick={() => handleTogglePublish(post)}
-                          disabled={togglingId === post.id}
-                          className="btn btn-ghost btn-sm"
-                          style={{ fontSize: 12 }}
-                        >
-                          {togglingId === post.id
-                            ? '...'
-                            : post.published
-                            ? 'Unpublish'
-                            : 'Publish'}
-                        </button>
+                      </td>
+                      <td>
                         <Link
                           href={`/plogin-admin/blog/${post.id}`}
-                          className="btn btn-ghost btn-sm"
-                          style={{ fontSize: 12 }}
+                          style={{
+                            fontWeight: 500,
+                            fontSize: 14,
+                            color: '#0f0f0e',
+                            textDecoration: 'none',
+                          }}
                         >
-                          Edit
+                          {post.title}
                         </Link>
-                        {post.published && (
-                          <a
-                            href={`/blog/${post.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <div style={{ fontSize: 12, color: '#a0a09c', marginTop: 2 }}>
+                          /{post.slug}
+                        </div>
+                      </td>
+                      <td>
+                        <span
+                          className={`status-badge ${post.published ? 'published' : 'draft'}`}
+                        >
+                          <span
+                            style={{
+                              width: 5,
+                              height: 5,
+                              borderRadius: '50%',
+                              background: post.published ? '#16a34a' : '#a0a09c',
+                              display: 'inline-block',
+                            }}
+                          />
+                          {post.published ? 'Published' : 'Draft'}
+                        </span>
+                      </td>
+                      <td style={{ fontSize: 13, color: '#6b6b67' }}>
+                        {formatDate(post.publishedAt || post.createdAt)}
+                      </td>
+                      <td>
+                        {post.tags ? (
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                            {post.tags
+                              .split(',')
+                              .slice(0, 2)
+                              .map((t) => (
+                                <span key={t.trim()} className="tag-chip" style={{ fontSize: 11 }}>
+                                  {t.trim()}
+                                </span>
+                              ))}
+                          </div>
+                        ) : (
+                          <span style={{ fontSize: 12, color: '#d4d4d0' }}>—</span>
+                        )}
+                      </td>
+                      <td>
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: 6,
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <button
+                            onClick={() => handleTogglePublish(post)}
+                            disabled={togglingId === post.id}
                             className="btn btn-ghost btn-sm"
                             style={{ fontSize: 12 }}
                           >
-                            View ↗
-                          </a>
-                        )}
-                        <button
-                          onClick={() => handleDelete(post.id, post.title)}
-                          disabled={deletingId === post.id}
-                          className="btn btn-ghost btn-sm"
-                          style={{ fontSize: 12, color: '#dc2626' }}
-                        >
-                          {deletingId === post.id ? '...' : 'Delete'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                            {togglingId === post.id
+                              ? '...'
+                              : post.published
+                              ? 'Unpublish'
+                              : 'Publish'}
+                          </button>
+                          <Link
+                            href={`/plogin-admin/blog/${post.id}`}
+                            className="btn btn-ghost btn-sm"
+                            style={{ fontSize: 12 }}
+                          >
+                            Edit
+                          </Link>
+                          {post.published && (
+                            <a
+                              href={`/blog/${post.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-ghost btn-sm"
+                              style={{ fontSize: 12 }}
+                            >
+                              View ↗
+                            </a>
+                          )}
+                          <button
+                            onClick={() => handleDelete(post.id, post.title)}
+                            disabled={deletingId === post.id}
+                            className="btn btn-ghost btn-sm"
+                            style={{ fontSize: 12, color: '#dc2626' }}
+                          >
+                            {deletingId === post.id ? '...' : 'Delete'}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {filteredPosts.length > POSTS_PER_PAGE && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 12,
+                  marginTop: 16,
+                  fontSize: 13,
+                }}
+              >
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="btn btn-ghost btn-sm"
+                >
+                  Previous
+                </button>
+                <span style={{ color: '#6b6b67' }}>
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="btn btn-ghost btn-sm"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
