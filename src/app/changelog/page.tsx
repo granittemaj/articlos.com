@@ -1,9 +1,6 @@
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
-import { prisma } from '@/lib/prisma'
-
-export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Changelog',
@@ -11,17 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/changelog' },
 }
 
-interface ChangelogEntry {
-  title: string
-  description: string
-}
-
-interface ChangelogSection {
-  month: string
-  entries: ChangelogEntry[]
-}
-
-const FALLBACK: ChangelogSection[] = [
+const FALLBACK = [
   {
     month: 'April 2026',
     entries: [
@@ -58,19 +45,8 @@ const FALLBACK: ChangelogSection[] = [
   },
 ]
 
-async function getChangelog(): Promise<ChangelogSection[]> {
-  try {
-    const record = await prisma.siteContent.findUnique({ where: { key: 'changelog' } })
-    if (record) {
-      const parsed = JSON.parse(record.value) as ChangelogSection[]
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed
-    }
-  } catch { /* DB unavailable */ }
-  return FALLBACK
-}
-
-export default async function ChangelogPage() {
-  const changelog = await getChangelog()
+export default function ChangelogPage() {
+  const changelog = FALLBACK
 
   return (
     <>
