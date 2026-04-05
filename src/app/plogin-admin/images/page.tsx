@@ -25,6 +25,7 @@ export default function ImagesPage() {
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -44,6 +45,19 @@ export default function ImagesPage() {
     await navigator.clipboard.writeText(url)
     setCopied(url)
     setTimeout(() => setCopied(null), 2000)
+  }
+
+  async function deleteImage(url: string) {
+    if (!confirm('Delete this image? This cannot be undone.')) return
+    setDeleting(url)
+    try {
+      await fetch(`/api/admin/images?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
+      setImages((prev) => prev.filter((img) => img.url !== url))
+    } catch {
+      alert('Failed to delete image.')
+    } finally {
+      setDeleting(null)
+    }
   }
 
   return (
@@ -132,20 +146,38 @@ export default function ImagesPage() {
                   <p style={{ fontSize: 11, color: '#a0a09c', marginBottom: 8 }}>
                     {formatSize(img.size)} · {formatDate(img.uploadedAt)}
                   </p>
-                  <button
-                    onClick={() => copyUrl(img.url)}
-                    style={{
-                      width: '100%', padding: '6px 10px', borderRadius: 5,
-                      border: '1px solid #e8e8e6',
-                      background: copied === img.url ? '#f0fdf4' : '#ffffff',
-                      color: copied === img.url ? '#16a34a' : '#3d3d3a',
-                      fontSize: 12, fontWeight: 500, cursor: 'pointer',
-                      fontFamily: 'Geist, sans-serif',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    {copied === img.url ? '✓ Copied!' : 'Copy URL'}
-                  </button>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button
+                      onClick={() => copyUrl(img.url)}
+                      style={{
+                        flex: 1, padding: '6px 10px', borderRadius: 5,
+                        border: '1px solid #e8e8e6',
+                        background: copied === img.url ? '#f0fdf4' : '#ffffff',
+                        color: copied === img.url ? '#16a34a' : '#3d3d3a',
+                        fontSize: 12, fontWeight: 500, cursor: 'pointer',
+                        fontFamily: 'Geist, sans-serif',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      {copied === img.url ? '✓ Copied!' : 'Copy URL'}
+                    </button>
+                    <button
+                      onClick={() => deleteImage(img.url)}
+                      disabled={deleting === img.url}
+                      style={{
+                        padding: '6px 10px', borderRadius: 5,
+                        border: '1px solid #fecaca',
+                        background: '#fff5f5',
+                        color: '#dc2626',
+                        fontSize: 12, fontWeight: 500,
+                        cursor: deleting === img.url ? 'not-allowed' : 'pointer',
+                        fontFamily: 'Geist, sans-serif',
+                      }}
+                      title="Delete image"
+                    >
+                      {deleting === img.url ? '…' : '🗑'}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

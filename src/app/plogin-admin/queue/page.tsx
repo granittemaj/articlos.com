@@ -84,6 +84,7 @@ export default function QueuePage() {
   const [loading, setLoading] = useState(true)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [filter, setFilter] = useState<FilterTab>('all')
+  const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [publishStatus, setPublishStatus] = useState<'draft' | 'publish'>('draft')
   const [generating, setGenerating] = useState(false)
@@ -110,11 +111,11 @@ export default function QueuePage() {
     fetchQueue()
   }, [])
 
-  // Reset page when filter changes
+  // Reset page when filter or search changes
   useEffect(() => {
     setPage(1)
     setSelectedIds(new Set())
-  }, [filter])
+  }, [filter, search])
 
   // Clear selection on page change
   useEffect(() => {
@@ -123,8 +124,10 @@ export default function QueuePage() {
 
   // Filtered items
   const filtered = items.filter((item) => {
-    if (filter === 'all') return true
-    return item.status === filter
+    const matchesFilter = filter === 'all' || item.status === filter
+    const q = search.toLowerCase()
+    const matchesSearch = !q || item.title.toLowerCase().includes(q) || item.keyword.toLowerCase().includes(q)
+    return matchesFilter && matchesSearch
   })
 
   // Pagination
@@ -260,6 +263,18 @@ export default function QueuePage() {
             {error}
           </div>
         )}
+
+        {/* Search */}
+        <div style={{ marginBottom: 12 }}>
+          <input
+            type="text"
+            className="form-input"
+            placeholder="Search by title or keyword…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ maxWidth: 320 }}
+          />
+        </div>
 
         {/* Filter tabs */}
         <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>

@@ -3,10 +3,13 @@ import Link from 'next/link'
 
 async function getStats() {
   try {
-    const [totalPosts, publishedPosts, draftPosts] = await Promise.all([
+    const now = new Date()
+    const [totalPosts, publishedPosts, draftPosts, scheduledPosts, subscribers] = await Promise.all([
       prisma.post.count(),
       prisma.post.count({ where: { published: true } }),
-      prisma.post.count({ where: { published: false } }),
+      prisma.post.count({ where: { published: false, OR: [{ publishedAt: null }, { publishedAt: { lt: now } }] } }),
+      prisma.post.count({ where: { published: false, publishedAt: { gt: now } } }),
+      prisma.newsletterSubscriber.count().catch(() => 0),
     ])
 
     const recentPosts = await prisma.post.findMany({
@@ -21,19 +24,21 @@ async function getStats() {
       },
     })
 
-    return { totalPosts, publishedPosts, draftPosts, recentPosts }
+    return { totalPosts, publishedPosts, draftPosts, scheduledPosts, subscribers, recentPosts }
   } catch {
     return {
       totalPosts: 0,
       publishedPosts: 0,
       draftPosts: 0,
+      scheduledPosts: 0,
+      subscribers: 0,
       recentPosts: [],
     }
   }
 }
 
 export default async function AdminDashboard() {
-  const { totalPosts, publishedPosts, draftPosts, recentPosts } = await getStats()
+  const { totalPosts, publishedPosts, draftPosts, scheduledPosts, subscribers, recentPosts } = await getStats()
 
   const statCards = [
     {
@@ -67,6 +72,28 @@ export default async function AdminDashboard() {
         </svg>
       ),
     },
+    {
+      label: 'Scheduled',
+      value: scheduledPosts,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.75">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Subscribers',
+      value: subscribers,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="1.75">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      ),
+    },
   ]
 
   return (
@@ -83,10 +110,11 @@ export default async function AdminDashboard() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(5, 1fr)',
             gap: 16,
             marginBottom: 32,
           }}
+          className="dashboard-stats"
         >
           {statCards.map((card) => (
             <div
@@ -296,6 +324,14 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 900px) {
+          .dashboard-stats { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+        @media (max-width: 600px) {
+          .dashboard-stats { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+      `}</style>
     </div>
   )
 }

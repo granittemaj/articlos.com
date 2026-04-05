@@ -842,6 +842,36 @@ export default function PostEditor({ initialData, postId }: PostEditorProps) {
                 )}
               </div>
             </div>
+            {/* Google SERP Preview */}
+            <div style={{ background: '#ffffff', border: '1px solid #e8e8e6', borderRadius: 8, padding: 16 }}>
+              <h3 style={{ fontSize: 13, fontWeight: 600, marginBottom: 12, color: '#0f0f0e' }}>Search preview</h3>
+              <div style={{ padding: '12px 14px', background: '#f9f9f8', borderRadius: 6, border: '1px solid #e8e8e6' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <div style={{
+                    width: 16, height: 16, borderRadius: '50%', background: '#e8e8e6',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: '#6b6b67' }}>A</span>
+                  </div>
+                  <span style={{ fontSize: 12, color: '#6b6b67' }}>
+                    articlos.com › blog › {form.slug || 'post-slug'}
+                  </span>
+                </div>
+                <div style={{
+                  fontSize: 14, color: '#1a0dab', fontWeight: 500, lineHeight: 1.3,
+                  marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
+                  {(form.metaTitle || form.title || 'Page title') + ' | articlos'}
+                </div>
+                <div style={{
+                  fontSize: 12, color: '#4d5156', lineHeight: 1.5,
+                  display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden',
+                }}>
+                  {form.metaDescription || form.excerpt || 'Meta description will appear here. Aim for 120–160 characters.'}
+                </div>
+              </div>
+            </div>
+
             {/* Version History */}
             {isEditMode && versions.length > 0 && (
               <div style={{ background: '#ffffff', border: '1px solid #e8e8e6', borderRadius: 8, overflow: 'hidden' }}>

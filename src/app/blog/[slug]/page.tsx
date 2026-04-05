@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ShareButtons from '@/components/ShareButtons'
-import { formatDate } from '@/lib/utils'
+import BlogCard from '@/components/BlogCard'
+import { formatDate, readingTime, extractToc, injectHeadingIds } from '@/lib/utils'
 import { marked } from 'marked'
 
 interface PageProps {
@@ -18,6 +20,33 @@ async function getPost(slug: string) {
     })
   } catch {
     return null
+  }
+}
+
+async function getRelatedPosts(postId: string, tags: string[]) {
+  if (!tags.length) return []
+  try {
+    return await prisma.post.findMany({
+      where: {
+        published: true,
+        id: { not: postId },
+        OR: tags.map((tag) => ({ tags: { contains: tag, mode: 'insensitive' as const } })),
+      },
+      take: 3,
+      orderBy: { publishedAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        featuredImage: true,
+        tags: true,
+        publishedAt: true,
+        createdAt: true,
+      },
+    })
+  } catch {
+    return []
   }
 }
 
@@ -59,19 +88,18 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound()
   }
 
-  // Determine if content is HTML or Markdown
   const isHtml = post.content.trim().startsWith('<')
-  let htmlContent: string
+  const rawHtml = isHtml ? post.content : await marked(post.content)
 
-  if (isHtml) {
-    htmlContent = post.content
-  } else {
-    htmlContent = await marked(post.content)
-  }
+  const processedHtml = injectHeadingIds(rawHtml)
+  const toc = extractToc(rawHtml)
+  const minutes = readingTime(rawHtml)
 
   const tagList = post.tags
     ? post.tags.split(',').map((t) => t.trim()).filter(Boolean)
     : []
+
+  const relatedPosts = await getRelatedPosts(post.id, tagList)
 
   const publishDate = post.publishedAt || post.createdAt
   const dateIso = new Date(publishDate).toISOString()
@@ -109,10 +137,41 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
 
       <main style={{ paddingTop: 60 }}>
+        {/* Breadcrumbs */}
+        <nav
+          aria-label="Breadcrumb"
+          style={{
+            maxWidth: 720,
+            margin: '0 auto',
+            padding: '16px 24px 0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            fontSize: 13,
+            color: '#a0a09c',
+          }}
+        >
+          <Link href="/" style={{ color: '#6b6b67', textDecoration: 'none' }}>Home</Link>
+          <span>/</span>
+          <Link href="/blog" style={{ color: '#6b6b67', textDecoration: 'none' }}>Blog</Link>
+          <span>/</span>
+          <span
+            style={{
+              color: '#0f0f0e',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: 320,
+            }}
+          >
+            {post.title}
+          </span>
+        </nav>
+
         {/* Article Header */}
         <header
           style={{
-            padding: '72px 24px 48px',
+            padding: '40px 24px 48px',
             borderBottom: '1px solid #e8e8e6',
             background: '#ffffff',
             textAlign: 'center',
@@ -131,9 +190,14 @@ export default async function BlogPostPage({ params }: PageProps) {
                 }}
               >
                 {tagList.map((tag) => (
-                  <span key={tag} className="tag-chip">
+                  <Link
+                    key={tag}
+                    href={`/blog/tag/${encodeURIComponent(tag.toLowerCase())}`}
+                    className="tag-chip"
+                    style={{ textDecoration: 'none' }}
+                  >
                     {tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}
@@ -176,11 +240,14 @@ export default async function BlogPostPage({ params }: PageProps) {
                 gap: 16,
                 fontSize: 13,
                 color: '#a0a09c',
+                flexWrap: 'wrap',
               }}
             >
               <span>By articlos Team</span>
               <span>·</span>
               <time dateTime={dateIso}>{formatDate(publishDate)}</time>
+              <span>·</span>
+              <span>{minutes} min read</span>
             </div>
           </div>
         </header>
@@ -216,9 +283,56 @@ export default async function BlogPostPage({ params }: PageProps) {
             padding: '48px 24px 80px',
           }}
         >
+          {/* Table of Contents */}
+          {toc.length >= 3 && (
+            <nav
+              aria-label="Table of contents"
+              style={{
+                background: '#f9f9f8',
+                border: '1px solid #e8e8e6',
+                borderRadius: 10,
+                padding: '20px 24px',
+                marginBottom: 40,
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  color: '#6b6b67',
+                  marginBottom: 12,
+                }}
+              >
+                In this article
+              </p>
+              <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {toc.map((item) => (
+                  <li
+                    key={item.id}
+                    style={{ paddingLeft: item.level === 3 ? 16 : 0 }}
+                  >
+                    <a
+                      href={`#${item.id}`}
+                      style={{
+                        fontSize: item.level === 3 ? 13 : 14,
+                        color: '#3d3d3a',
+                        textDecoration: 'none',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+
           <div
             className="post-content"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
+            dangerouslySetInnerHTML={{ __html: processedHtml }}
           />
 
           {/* Tags footer */}
@@ -236,9 +350,14 @@ export default async function BlogPostPage({ params }: PageProps) {
             >
               <span style={{ fontSize: 13, color: '#a0a09c', fontWeight: 500 }}>Tags:</span>
               {tagList.map((tag) => (
-                <span key={tag} className="tag-chip">
+                <Link
+                  key={tag}
+                  href={`/blog/tag/${encodeURIComponent(tag.toLowerCase())}`}
+                  className="tag-chip"
+                  style={{ textDecoration: 'none' }}
+                >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}
@@ -249,6 +368,51 @@ export default async function BlogPostPage({ params }: PageProps) {
             url={`https://articlos.com/blog/${post.slug}`}
           />
         </article>
+
+        {/* Related Posts */}
+        {relatedPosts.length > 0 && (
+          <section
+            style={{
+              borderTop: '1px solid #e8e8e6',
+              padding: '64px 24px',
+              background: '#fafaf9',
+            }}
+          >
+            <div style={{ maxWidth: 900, margin: '0 auto' }}>
+              <h2
+                style={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  letterSpacing: '-0.03em',
+                  marginBottom: 24,
+                  color: '#0f0f0e',
+                }}
+              >
+                Related articles
+              </h2>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  gap: 20,
+                }}
+              >
+                {relatedPosts.map((p) => (
+                  <BlogCard
+                    key={p.id}
+                    title={p.title}
+                    slug={p.slug}
+                    excerpt={p.excerpt}
+                    featuredImage={p.featuredImage}
+                    tags={p.tags}
+                    publishedAt={p.publishedAt}
+                    createdAt={p.createdAt}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <section
