@@ -1,13 +1,26 @@
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
+import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Changelog',
   description: 'See what\'s new in articlos — latest features, improvements, and fixes.',
 }
 
-const changelog = [
+interface ChangelogEntry {
+  title: string
+  description: string
+}
+
+interface ChangelogSection {
+  month: string
+  entries: ChangelogEntry[]
+}
+
+const FALLBACK: ChangelogSection[] = [
   {
     month: 'April 2026',
     entries: [
@@ -44,7 +57,20 @@ const changelog = [
   },
 ]
 
-export default function ChangelogPage() {
+async function getChangelog(): Promise<ChangelogSection[]> {
+  try {
+    const record = await prisma.siteContent.findUnique({ where: { key: 'changelog' } })
+    if (record) {
+      const parsed = JSON.parse(record.value) as ChangelogSection[]
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+    }
+  } catch { /* DB unavailable */ }
+  return FALLBACK
+}
+
+export default async function ChangelogPage() {
+  const changelog = await getChangelog()
+
   return (
     <>
       <Nav />
@@ -126,15 +152,14 @@ export default function ChangelogPage() {
                   gap: 16,
                   paddingLeft: 31,
                 }}>
-                  {section.entries.map((entry) => (
+                  {section.entries.map((entry, i) => (
                     <div
-                      key={entry.title}
+                      key={i}
                       style={{
                         background: '#ffffff',
                         border: '1px solid #e8e8e6',
                         borderRadius: 10,
                         padding: '20px 24px',
-                        transition: 'border-color 0.15s ease',
                       }}
                     >
                       <h3 style={{

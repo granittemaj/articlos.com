@@ -14,12 +14,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
     }
 
+    const normalized = email.trim().toLowerCase()
+
+    // Rate limit: reject if already subscribed within the last 60 seconds (prevents hammering)
+    try {
+      const existing = await prisma.newsletterSubscriber.findUnique({
+        where: { email: normalized },
+        select: { createdAt: true },
+      })
+      if (existing && Date.now() - existing.createdAt.getTime() < 60_000) {
+        return NextResponse.json({ success: true }) // Silently succeed — already subscribed
+      }
+    } catch { /* DB unavailable — continue */ }
+
     // Save subscriber locally regardless of Brevo
     try {
       await prisma.newsletterSubscriber.upsert({
-        where: { email: email.trim().toLowerCase() },
+        where: { email: normalized },
         update: {},
-        create: { email: email.trim().toLowerCase() },
+        create: { email: normalized },
       })
     } catch {
       // Non-fatal — continue even if local save fails
@@ -41,7 +54,7 @@ export async function POST(req: Request) {
         Accept: 'application/json',
       },
       body: JSON.stringify({
-        email: email.trim().toLowerCase(),
+        email: normalized,
         ...(listId ? { listIds: [listId] } : {}),
         updateEnabled: true,
       }),

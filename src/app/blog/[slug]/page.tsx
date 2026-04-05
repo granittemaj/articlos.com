@@ -104,6 +104,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const publishDate = post.publishedAt || post.createdAt
   const dateIso = new Date(publishDate).toISOString()
 
+  const wordCount = rawHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean).length
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -112,6 +114,8 @@ export default async function BlogPostPage({ params }: PageProps) {
     image: post.featuredImage || 'https://articlos.com/opengraph-image',
     datePublished: dateIso,
     dateModified: post.updatedAt.toISOString(),
+    wordCount,
+    timeRequired: `PT${minutes}M`,
     author: {
       '@type': 'Organization',
       name: 'articlos',
