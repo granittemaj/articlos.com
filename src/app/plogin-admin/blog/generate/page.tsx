@@ -42,7 +42,7 @@ async function fetchPexelsImage(query: string): Promise<string> {
   }
 }
 
-async function generateAndSave(topic: Topic): Promise<{ postId: string }> {
+async function generateAndSave(topic: Topic, publish: boolean = false): Promise<{ postId: string }> {
   // Generate content
   const genRes = await fetch('/api/admin/ai', {
     method: 'POST',
@@ -73,8 +73,8 @@ async function generateAndSave(topic: Topic): Promise<{ postId: string }> {
       tags: genData.tags,
       metaTitle: genData.metaTitle,
       metaDescription: genData.metaDescription,
-      published: false,
-      publishedAt: null,
+      published: publish,
+      publishedAt: publish ? new Date().toISOString().split('T')[0] : null,
       featuredImage: featuredImage || null,
     }),
   })
@@ -97,6 +97,13 @@ export default function GeneratePage() {
   const [fetchingImage, setFetchingImage] = useState(false)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // Keyword suggestions for step 1
+  const [suggestedKeywords, setSuggestedKeywords] = useState<string[]>([])
+  const [loadingKeywords, setLoadingKeywords] = useState(false)
+
+  // Publish status (draft or publish) — chosen before generating
+  const [publishStatus, setPublishStatus] = useState<'draft' | 'publish'>('draft')
 
   // Batch state
   const [batchResults, setBatchResults] = useState<BatchResult[]>([])
@@ -211,7 +218,7 @@ export default function GeneratePage() {
       const topic = selected[i]
       setBatchProgress({ current: i + 1, total: selected.length, title: topic.title })
       try {
-        const { postId } = await generateAndSave(topic)
+        const { postId } = await generateAndSave(topic, publishStatus === 'publish')
         results.push({ topic, postId })
       } catch (e) {
         results.push({ topic, error: e instanceof Error ? e.message : 'Failed' })
@@ -358,7 +365,92 @@ export default function GeneratePage() {
                 />
                 <p className="form-hint">Leave blank for general content marketing topics.</p>
               </div>
-              <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+
+              {/* Keyword suggestions */}
+              <div style={{ marginTop: 12, marginBottom: 16 }}>
+                <button
+                  onClick={async () => {
+                    setLoadingKeywords(true)
+                    setSuggestedKeywords([])
+                    try {
+                      const res = await fetch('/api/admin/ai', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'keywords', niche }),
+                      })
+                      const data = await res.json()
+                      if (!res.ok) throw new Error(data.error || 'Failed')
+                      setSuggestedKeywords(data.keywords || [])
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : 'Failed to suggest keywords')
+                    } finally {
+                      setLoadingKeywords(false)
+                    }
+                  }}
+                  disabled={loadingKeywords || loading || suggesting}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12, gap: 6, marginBottom: 8 }}
+                >
+                  {loadingKeywords ? (
+                    <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Suggesting keywords…</>
+                  ) : (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z" />
+                      </svg>
+                      Suggest keywords
+                    </>
+                  )}
+                </button>
+                {suggestedKeywords.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: 11, color: '#9b9b96', marginBottom: 6 }}>
+                      Click a keyword to use it as a custom topic:
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {suggestedKeywords.map((kw) => (
+                        <button
+                          key={kw}
+                          onClick={() => {
+                            setCustomTopic(kw)
+                            setCustomKeywords(kw)
+                            setSelectedIndexes(new Set())
+                            setStep('generate')
+                          }}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center',
+                            padding: '4px 12px', borderRadius: 20,
+                            fontSize: 12, fontWeight: 500,
+                            background: '#f4f4f3', color: '#0f0f0e',
+                            border: '1px solid #e8e8e6',
+                            cursor: 'pointer', fontFamily: 'Geist, sans-serif',
+                            transition: 'all 0.15s',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#0f0f0e'
+                            e.currentTarget.style.color = '#ffffff'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = '#f4f4f3'
+                            e.currentTarget.style.color = '#0f0f0e'
+                          }}
+                        >
+                          {kw}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {loadingKeywords && (
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i} className="skeleton" style={{ height: 26, width: 70 + i * 14, borderRadius: 14 }} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', gap: 8 }}>
                 <button
                   onClick={async () => {
                     setSuggesting(true)
@@ -553,6 +645,56 @@ export default function GeneratePage() {
               </div>
             </div>
 
+            {/* Publish status selector */}
+            <div style={{
+              background: '#ffffff', border: '1px solid #e8e8e6',
+              borderRadius: 8, padding: '14px 16px',
+            }}>
+              <p style={{ fontSize: 13, fontWeight: 600, color: '#0f0f0e', marginBottom: 10 }}>
+                After generating
+              </p>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <label style={{
+                  flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 12px', borderRadius: 6, cursor: 'pointer',
+                  border: `1.5px solid ${publishStatus === 'draft' ? '#0f0f0e' : '#e8e8e6'}`,
+                  background: publishStatus === 'draft' ? '#f8f8f7' : '#ffffff',
+                  transition: 'all 0.15s',
+                }}>
+                  <input
+                    type="radio"
+                    name="publishStatus"
+                    checked={publishStatus === 'draft'}
+                    onChange={() => setPublishStatus('draft')}
+                    style={{ accentColor: '#0f0f0e' }}
+                  />
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>Save as draft</div>
+                    <div style={{ fontSize: 11, color: '#9b9b96' }}>Review first</div>
+                  </div>
+                </label>
+                <label style={{
+                  flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 12px', borderRadius: 6, cursor: 'pointer',
+                  border: `1.5px solid ${publishStatus === 'publish' ? '#0f0f0e' : '#e8e8e6'}`,
+                  background: publishStatus === 'publish' ? '#f8f8f7' : '#ffffff',
+                  transition: 'all 0.15s',
+                }}>
+                  <input
+                    type="radio"
+                    name="publishStatus"
+                    checked={publishStatus === 'publish'}
+                    onChange={() => setPublishStatus('publish')}
+                    style={{ accentColor: '#0f0f0e' }}
+                  />
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>Publish immediately</div>
+                    <div style={{ fontSize: 11, color: '#9b9b96' }}>Goes live right away</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
             {/* Info banner for multi-select */}
             {isMulti && (
               <div style={{
@@ -564,7 +706,7 @@ export default function GeneratePage() {
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
                 <span style={{ fontSize: 13, color: '#1d4ed8' }}>
-                  {selectedCount} articles will be generated and saved as drafts automatically. Featured images from Pexels will be added to each.
+                  {selectedCount} articles will be generated and {publishStatus === 'publish' ? 'published' : 'saved as drafts'} automatically. Featured images from Pexels will be added to each.
                 </span>
               </div>
             )}
@@ -675,7 +817,7 @@ export default function GeneratePage() {
                         background: '#fff',
                       }}
                     >
-                      Edit draft →
+                      {publishStatus === 'publish' ? 'View post →' : 'Edit draft →'}
                     </Link>
                   )}
                 </div>
