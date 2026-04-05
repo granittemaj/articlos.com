@@ -178,6 +178,52 @@ export default function AdminBlogPage() {
     setTimeout(() => { setRelinkStatus({}); setRelinkSummary('') }, 4000)
   }
 
+  async function handleRelinkAll() {
+    const publishedPosts = posts.filter((p) => p.published)
+    if (publishedPosts.length === 0) return
+    if (!confirm(`Add SEO links to all ${publishedPosts.length} published posts? This will run in the background and may take a few minutes.`)) return
+
+    setBulkLoading(true)
+    setRelinkSummary('')
+    const nextStatus: Record<string, 'processing' | 'done' | 'error'> = {}
+    publishedPosts.forEach((p) => { nextStatus[p.id] = 'processing' })
+    setRelinkStatus({ ...nextStatus })
+
+    let done = 0
+    let failed = 0
+    for (const post of publishedPosts) {
+      try {
+        const res = await fetch(`/api/admin/posts/${post.id}`)
+        const data = await res.json()
+        if (!data.post?.content) { nextStatus[post.id] = 'done'; setRelinkStatus({ ...nextStatus }); done++; continue }
+
+        const aiRes = await fetch('/api/admin/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'relink', content: data.post.content, title: data.post.title }),
+        })
+        const aiData = await aiRes.json()
+        if (!aiData.content) { nextStatus[post.id] = 'error'; setRelinkStatus({ ...nextStatus }); failed++; continue }
+
+        await fetch(`/api/admin/posts/${post.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: aiData.content }),
+        })
+        nextStatus[post.id] = 'done'
+        setRelinkStatus({ ...nextStatus })
+        done++
+      } catch {
+        nextStatus[post.id] = 'error'
+        setRelinkStatus({ ...nextStatus })
+        failed++
+      }
+    }
+    setBulkLoading(false)
+    setRelinkSummary(`Done: ${done} updated${failed > 0 ? `, ${failed} failed` : ''}.`)
+    setTimeout(() => { setRelinkStatus({}); setRelinkSummary('') }, 6000)
+  }
+
   async function handleDelete(id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
     setDeletingId(id)
@@ -212,7 +258,25 @@ export default function AdminBlogPage() {
     <div>
       <div className="page-header">
         <h1 className="page-header-title">Blog Posts</h1>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {relinkSummary && !selectedIds.size && (
+            <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 500 }}>{relinkSummary}</span>
+          )}
+          <button
+            onClick={handleRelinkAll}
+            disabled={bulkLoading || posts.filter(p => p.published).length === 0}
+            className="btn btn-ghost btn-sm"
+            style={{ gap: 6, fontSize: 12 }}
+            title="Add SEO cross-links to all published posts"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            {bulkLoading && Object.keys(relinkStatus).length > 0
+              ? `${Object.values(relinkStatus).filter(s => s === 'done').length}/${Object.keys(relinkStatus).length} linked…`
+              : 'Relink all'}
+          </button>
           <Link href="/plogin-admin/blog/generate" className="btn btn-ghost btn-sm" style={{ gap: 6 }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />

@@ -39,7 +39,7 @@ export default async function TagPage({ params }: PageProps) {
         published: true,
         tags: { contains: tag, mode: 'insensitive' },
       },
-      orderBy: { publishedAt: 'desc' },
+      orderBy: [{ publishedAt: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }],
       select: {
         id: true,
         title: true,
