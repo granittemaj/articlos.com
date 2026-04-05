@@ -109,7 +109,31 @@ export default function GeneratePage() {
   const [batchResults, setBatchResults] = useState<BatchResult[]>([])
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; title: string } | null>(null)
 
+  // Queue save state
+  const [savingToQueue, setSavingToQueue] = useState(false)
+  const [queueMessage, setQueueMessage] = useState('')
+
   const MAX_SELECT = 3
+
+  async function saveToQueue(topicsToSave: Topic[]) {
+    setSavingToQueue(true)
+    setQueueMessage('')
+    setError('')
+    try {
+      const res = await fetch('/api/admin/queue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topics: topicsToSave, niche }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to save to queue')
+      setQueueMessage(`${data.added} topic${data.added === 1 ? '' : 's'} saved to queue`)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save to queue')
+    } finally {
+      setSavingToQueue(false)
+    }
+  }
 
   function toggleTopic(i: number) {
     setSelectedIndexes(prev => {
@@ -519,10 +543,54 @@ export default function GeneratePage() {
                   <h2 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>
                     Select topics to generate
                   </h2>
-                  <span style={{ fontSize: 12, color: '#9b9b96' }}>
-                    {selectedCount === 0 ? 'Select up to 3' : `${selectedCount} of ${MAX_SELECT} selected`}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 12, color: '#9b9b96' }}>
+                      {selectedCount === 0 ? 'Select up to 3' : `${selectedCount} of ${MAX_SELECT} selected`}
+                    </span>
+                    {selectedCount > 0 && (
+                      <button
+                        onClick={() => saveToQueue(Array.from(selectedIndexes).map(i => topics[i]))}
+                        disabled={savingToQueue}
+                        className="btn btn-ghost btn-sm"
+                        style={{ fontSize: 12, gap: 4 }}
+                      >
+                        {savingToQueue ? (
+                          <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Saving…</>
+                        ) : (
+                          <>Save selected to queue</>
+                        )}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => saveToQueue(topics)}
+                      disabled={savingToQueue}
+                      className="btn btn-ghost btn-sm"
+                      style={{ fontSize: 12, gap: 4 }}
+                    >
+                      {savingToQueue ? (
+                        <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Saving…</>
+                      ) : (
+                        <>Save all to queue</>
+                      )}
+                    </button>
+                  </div>
                 </div>
+                {queueMessage && (
+                  <div style={{
+                    background: '#f0fdf4', border: '1px solid #86efac',
+                    borderRadius: 8, padding: '10px 14px', marginBottom: 10,
+                    display: 'flex', alignItems: 'center', gap: 10,
+                  }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <span style={{ fontSize: 13, color: '#15803d' }}>{queueMessage}</span>
+                    <Link href="/plogin-admin/queue" style={{ fontSize: 13, fontWeight: 500, color: '#15803d', marginLeft: 'auto' }}>
+                      View queue →
+                    </Link>
+                  </div>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {topics.map((t, i) => {
                     const isSelected = selectedIndexes.has(i)
@@ -718,6 +786,17 @@ export default function GeneratePage() {
               >
                 ← Back
               </button>
+              <Link
+                href="/plogin-admin/queue"
+                className="btn btn-ghost"
+                style={{ textDecoration: 'none', gap: 6 }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                  <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                  <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+                View queue →
+              </Link>
               <button
                 onClick={handleGenerate}
                 disabled={loading || !canGenerate}
