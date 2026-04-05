@@ -14,20 +14,21 @@ function getClient() {
 //     | { action: 'suggest', niche?: string }
 //     | { action: 'keywords', niche?: string }
 //     | { action: 'generate', topic: string, keywords?: string }
+//     | { action: 'relink', content: string, title: string }
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string }
+  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string; content?: string; title?: string }
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { action, niche, topic, keywords, context } = body
+  const { action, niche, topic, keywords, context, content, title } = body
 
   try {
     const genAI = getClient()
@@ -186,6 +187,43 @@ Fields to populate:
 - content: The full article as an HTML string using h2/h3/p/ul/li tags`
 
       const result = await generateModel.generateContent(prompt)
+      const parsed = JSON.parse(result.response.text())
+      return NextResponse.json(parsed)
+    }
+
+    if (action === 'relink') {
+      if (!content) return NextResponse.json({ error: 'content is required' }, { status: 400 })
+
+      const relinkModel = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash-lite',
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: SchemaType.OBJECT,
+            properties: { content: { type: SchemaType.STRING } },
+            required: ['content'],
+          },
+        },
+      })
+
+      const result = await relinkModel.generateContent(
+        `You are an SEO editor. Improve the internal and external linking of this blog article${title ? ` titled "${title}"` : ''}.
+
+Rules:
+- Add 3-5 internal links to articlos.com pages where they fit naturally in the existing text. Use these exact hrefs:
+  * /blog — when mentioning "our blog", "more articles", "read more", "further reading"
+  * / — when mentioning "articlos", "our platform", "AI content tools"
+  * /about — when mentioning "our team", "about us", "who we are"
+  * /faq — when mentioning "common questions", "learn more", "frequently asked"
+- Add 1-2 external links to authoritative sources (Moz, Google Search Central, HubSpot, Semrush, Ahrefs, Search Engine Journal) that back up a specific factual claim already in the article. Use target="_blank" rel="noopener noreferrer".
+- Do NOT rewrite, add, or remove any text — only wrap existing words in <a> tags.
+- Do NOT add links to text that is already inside an <a> tag.
+- Return the full article HTML with the links added.
+
+Article HTML:
+${content}`
+      )
+
       const parsed = JSON.parse(result.response.text())
       return NextResponse.json(parsed)
     }

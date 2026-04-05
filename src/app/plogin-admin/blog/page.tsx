@@ -119,6 +119,45 @@ export default function AdminBlogPage() {
     }
   }
 
+  async function handleBulkRelink() {
+    if (!confirm(`Add SEO links to ${selectedIds.size} post(s)? This will update their content.`)) return
+    setBulkLoading(true)
+    let done = 0
+    let failed = 0
+    for (const id of selectedIds) {
+      try {
+        // Fetch current post content
+        const res = await fetch(`/api/admin/posts/${id}`)
+        const data = await res.json()
+        const post = data.post
+        if (!post?.content) { done++; continue }
+
+        // Ask AI to add links
+        const aiRes = await fetch('/api/admin/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'relink', content: post.content, title: post.title }),
+        })
+        const aiData = await aiRes.json()
+        if (!aiData.content) { failed++; continue }
+
+        // Save updated content
+        await fetch(`/api/admin/posts/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: aiData.content }),
+        })
+        done++
+      } catch {
+        failed++
+      }
+    }
+    setSelectedIds(new Set())
+    await fetchPosts()
+    setBulkLoading(false)
+    alert(`Done. ${done} updated${failed > 0 ? `, ${failed} failed` : ''}.`)
+  }
+
   async function handleDelete(id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
     setDeletingId(id)
@@ -271,6 +310,15 @@ export default function AdminBlogPage() {
                   style={{ fontSize: 12, color: '#dc2626' }}
                 >
                   Delete
+                </button>
+                <button
+                  onClick={handleBulkRelink}
+                  disabled={bulkLoading}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12 }}
+                  title="Use AI to add internal and external SEO links"
+                >
+                  Add SEO links
                 </button>
                 <button
                   onClick={() => setSelectedIds(new Set())}
