@@ -13,9 +13,9 @@ const btnStyle: React.CSSProperties = {
   gap: 6,
   padding: '7px 14px',
   borderRadius: 6,
-  border: '1px solid #e8e8e6',
-  background: '#ffffff',
-  color: '#3d3d3a',
+  border: '1px solid var(--border)',
+  background: 'var(--surface)',
+  color: 'var(--text)',
   fontSize: 13,
   fontWeight: 500,
   textDecoration: 'none',
@@ -25,12 +25,12 @@ const btnStyle: React.CSSProperties = {
 }
 
 function hoverOn(e: React.MouseEvent<HTMLElement>) {
-  e.currentTarget.style.background = '#f8f8f7'
-  e.currentTarget.style.borderColor = '#c8c8c4'
+  e.currentTarget.style.background = 'var(--bg-elevated)'
+  e.currentTarget.style.borderColor = 'var(--text-muted)'
 }
 function hoverOff(e: React.MouseEvent<HTMLElement>) {
-  e.currentTarget.style.background = '#ffffff'
-  e.currentTarget.style.borderColor = '#e8e8e6'
+  e.currentTarget.style.background = 'var(--surface)'
+  e.currentTarget.style.borderColor = 'var(--border)'
 }
 
 export default function ShareButtons({ title, url }: ShareButtonsProps) {
@@ -64,19 +64,19 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
       gap: 8,
       marginTop: 48,
       paddingTop: 24,
-      borderTop: '1px solid #e8e8e6',
+      borderTop: '1px solid var(--border)',
       flexWrap: 'wrap',
     }}>
-      <span style={{ fontSize: 13, color: '#a0a09c', fontWeight: 500, marginRight: 4 }}>Share:</span>
+      <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, marginRight: 4 }}>Share:</span>
 
       {/* Copy link */}
       <button
         onClick={copyLink}
         style={{
           ...btnStyle,
-          background: copied ? '#f0fdf4' : '#ffffff',
-          color: copied ? '#16a34a' : '#3d3d3a',
-          borderColor: copied ? '#bbf7d0' : '#e8e8e6',
+          background: copied ? '#f0fdf4' : 'var(--surface)',
+          color: copied ? '#16a34a' : 'var(--text)',
+          borderColor: copied ? '#bbf7d0' : 'var(--border)',
         }}
         onMouseEnter={hoverOn}
         onMouseLeave={hoverOff}

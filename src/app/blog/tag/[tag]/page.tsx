@@ -64,18 +64,18 @@ export default async function TagPage({ params }: PageProps) {
         <section
           style={{
             padding: '64px 24px 48px',
-            borderBottom: '1px solid #e8e8e6',
-            background: '#ffffff',
+            borderBottom: '1px solid var(--border)',
+            background: 'var(--surface)',
           }}
         >
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             {/* Breadcrumb */}
-            <nav style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#a0a09c', marginBottom: 20 }}>
-              <Link href="/" style={{ color: '#6b6b67', textDecoration: 'none' }}>Home</Link>
+            <nav style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>
+              <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Home</Link>
               <span>/</span>
-              <Link href="/blog" style={{ color: '#6b6b67', textDecoration: 'none' }}>Blog</Link>
+              <Link href="/blog" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Blog</Link>
               <span>/</span>
-              <span style={{ color: '#0f0f0e' }}>{tag}</span>
+              <span style={{ color: 'var(--text)' }}>{tag}</span>
             </nav>
             <span className="tag-chip" style={{ marginBottom: 16, display: 'inline-block' }}>{tag}</span>
             <h1
@@ -84,31 +84,31 @@ export default async function TagPage({ params }: PageProps) {
                 fontWeight: 700,
                 letterSpacing: '-0.04em',
                 marginBottom: 8,
-                color: '#0f0f0e',
+                color: 'var(--text)',
               }}
             >
               Articles tagged &ldquo;{tag}&rdquo;
             </h1>
-            <p style={{ fontSize: 16, color: '#6b6b67' }}>
+            <p style={{ fontSize: 16, color: 'var(--text-muted)' }}>
               {posts.length} article{posts.length !== 1 ? 's' : ''} found
             </p>
           </div>
         </section>
 
         {/* Posts grid */}
-        <section style={{ padding: '48px 24px 80px', background: '#fafaf9' }}>
+        <section style={{ padding: '48px 24px 80px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             {posts.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '64px 24px' }}>
-                <p style={{ fontSize: 16, color: '#6b6b67', marginBottom: 20 }}>
+                <p style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 20 }}>
                   No articles found for &ldquo;{tag}&rdquo;.
                 </p>
                 <Link
                   href="/blog"
                   style={{
                     padding: '10px 22px',
-                    background: '#0f0f0e',
-                    color: '#ffffff',
+                    background: 'var(--accent)',
+                    color: 'var(--accent-fg)',
                     borderRadius: 6,
                     fontWeight: 500,
                     fontSize: 14,

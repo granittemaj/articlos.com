@@ -41,20 +41,14 @@ export default function AboutPage() {
       {/* Hero */}
       <section style={{
         padding: '140px 24px 96px',
-        background: '#f9f9f8',
+        background: 'var(--bg)',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle at 1px 1px, #d4d4d0 1px, transparent 0)',
-          backgroundSize: '28px 28px',
-          opacity: 0.4,
-          pointerEvents: 'none',
-        }} />
+        <div className="hero-grid" style={{ opacity: 0.4 }} />
         <div style={{ maxWidth: 760, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div className="fade-up" style={{
-            display: 'inline-block', fontSize: 11, fontWeight: 600, color: '#9b9b96',
+            display: 'inline-block', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
             textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 20,
           }}>
             About
@@ -62,12 +56,12 @@ export default function AboutPage() {
           <h1 className="fade-up fade-up-delay-1" style={{
             fontSize: 'clamp(36px, 6vw, 64px)',
             fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.06,
-            color: '#0f0f0e', marginBottom: 24,
+            color: 'var(--text)', marginBottom: 24,
           }}>
             We automate content intelligence.
           </h1>
           <p className="fade-up fade-up-delay-2" style={{
-            fontSize: 19, color: '#6b6b67', lineHeight: 1.65, maxWidth: 580,
+            fontSize: 19, color: 'var(--text-muted)', lineHeight: 1.65, maxWidth: 580,
           }}>
             articlos is a content intelligence system built for content teams that refuse to publish mediocre content at mediocre speed. We discover, plan, generate, measure, and improve — so you don&apos;t have to.
           </p>
@@ -75,11 +69,11 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section style={{ padding: '96px 24px', background: '#ffffff' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div className="fade-up" style={{
             padding: 40,
-            background: '#0f0f0e',
+            background: 'var(--cta-bg)',
             borderRadius: 16,
           }}>
             <div style={{
@@ -91,7 +85,7 @@ export default function AboutPage() {
             <p style={{
               fontSize: 'clamp(20px, 3vw, 28px)',
               fontWeight: 600, letterSpacing: '-0.03em',
-              color: '#ffffff', lineHeight: 1.4,
+              color: 'var(--cta-text)', lineHeight: 1.4,
             }}>
               &ldquo;Make it possible for any content team to build compounding organic traffic — without the bottleneck of manual content operations.&rdquo;
             </p>
@@ -100,7 +94,7 @@ export default function AboutPage() {
       </section>
 
       {/* Story */}
-      <section style={{ padding: '0 24px 96px', background: '#ffffff' }}>
+      <section style={{ padding: '0 24px 96px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div className="fade-up" style={{ marginBottom: 40 }}>
             <h2 style={{
@@ -115,7 +109,7 @@ export default function AboutPage() {
                 'We built articlos to give every content team access to that kind of system. Not a writing assistant, not a keyword tool, not another AI chatbot — but a complete content intelligence loop that discovers opportunities, plans around them, generates articles that actually rank, measures what works, and continuously improves.',
                 'Today, articlos powers thousands of websites across every niche imaginable. From solo bloggers to agency teams managing hundreds of clients, the system adapts. The intelligence scales. The content compounds.',
               ].map((p, i) => (
-                <p key={i} style={{ fontSize: 16, color: '#3d3d3a', lineHeight: 1.75 }}>
+                <p key={i} style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.75 }}>
                   {p}
                 </p>
               ))}
@@ -125,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section style={{ padding: '96px 24px', background: '#f9f9f8' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{
@@ -134,7 +128,7 @@ export default function AboutPage() {
             }}>
               What we believe
             </h2>
-            <p style={{ fontSize: 16, color: '#6b6b67', maxWidth: 400, margin: '0 auto', lineHeight: 1.65 }}>
+            <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 400, margin: '0 auto', lineHeight: 1.65 }}>
               The principles behind every product decision we make.
             </p>
           </div>
@@ -149,7 +143,7 @@ export default function AboutPage() {
               >
                 <div style={{
                   width: 40, height: 40, borderRadius: 10,
-                  background: '#0f0f0e', color: '#fff',
+                  background: 'var(--accent)', color: 'var(--accent-fg)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 16, marginBottom: 16,
                 }}>
@@ -158,7 +152,7 @@ export default function AboutPage() {
                 <h3 style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 10 }}>
                   {v.title}
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65 }}>
                   {v.desc}
                 </p>
               </div>
@@ -168,12 +162,12 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: '96px 24px', background: '#0f0f0e', textAlign: 'center' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--cta-bg)', textAlign: 'center' }}>
         <div style={{ maxWidth: 520, margin: '0 auto' }} className="fade-up">
           <h2 style={{
             fontSize: 'clamp(28px, 4vw, 44px)',
             fontWeight: 700, letterSpacing: '-0.04em',
-            color: '#ffffff', marginBottom: 16, lineHeight: 1.1,
+            color: 'var(--cta-text)', marginBottom: 16, lineHeight: 1.1,
           }}>
             Ready to build your content machine?
           </h2>

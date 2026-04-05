@@ -45,7 +45,7 @@ function UnsubscribeContent() {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '80px 24px',
-        background: '#fafaf9',
+        background: 'var(--bg)',
       }}
     >
       <div style={{ textAlign: 'center', maxWidth: 480 }}>
@@ -56,7 +56,7 @@ function UnsubscribeContent() {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                background: '#f0fdf4',
+                background: 'rgba(22,163,74,0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -73,12 +73,12 @@ function UnsubscribeContent() {
                 fontWeight: 700,
                 letterSpacing: '-0.04em',
                 marginBottom: 12,
-                color: '#0f0f0e',
+                color: 'var(--text)',
               }}
             >
               You&apos;ve been unsubscribed
             </h1>
-            <p style={{ fontSize: 17, color: '#6b6b67', lineHeight: 1.6, marginBottom: 32 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 32 }}>
               {email} has been removed from our newsletter. You won&apos;t receive any more emails from us.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -86,8 +86,8 @@ function UnsubscribeContent() {
                 href="/"
                 style={{
                   padding: '10px 22px',
-                  background: '#0f0f0e',
-                  color: '#ffffff',
+                  background: 'var(--accent)',
+                  color: 'var(--accent-fg)',
                   borderRadius: 6,
                   fontWeight: 600,
                   fontSize: 14,
@@ -105,15 +105,15 @@ function UnsubscribeContent() {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                background: '#f9f9f8',
-                border: '1px solid #e8e8e6',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 24px',
               }}
             >
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6b6b67" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
               </svg>
@@ -125,14 +125,14 @@ function UnsubscribeContent() {
                 fontWeight: 700,
                 letterSpacing: '-0.04em',
                 marginBottom: 12,
-                color: '#0f0f0e',
+                color: 'var(--text)',
               }}
             >
               Unsubscribe
             </h1>
-            <p style={{ fontSize: 17, color: '#6b6b67', lineHeight: 1.6, marginBottom: 28 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 28 }}>
               {email
-                ? <>Are you sure you want to remove <strong style={{ color: '#0f0f0e', fontWeight: 500 }}>{email}</strong> from the articlos newsletter?</>
+                ? <>Are you sure you want to remove <strong style={{ color: 'var(--text)', fontWeight: 500 }}>{email}</strong> from the articlos newsletter?</>
                 : 'Enter your email address to unsubscribe from the articlos newsletter.'}
             </p>
 
@@ -146,13 +146,13 @@ function UnsubscribeContent() {
                   width: '100%',
                   padding: '10px 14px',
                   borderRadius: 7,
-                  border: '1px solid #e8e8e6',
+                  border: '1px solid var(--border)',
                   fontSize: 14,
-                  color: '#0f0f0e',
+                  color: 'var(--text)',
                   outline: 'none',
                   marginBottom: 20,
                   boxSizing: 'border-box',
-                  background: '#ffffff',
+                  background: 'var(--surface)',
                   fontFamily: 'inherit',
                 }}
               />
@@ -170,8 +170,8 @@ function UnsubscribeContent() {
                 disabled={status === 'loading' || !email}
                 style={{
                   padding: '10px 22px',
-                  background: '#0f0f0e',
-                  color: '#ffffff',
+                  background: 'var(--accent)',
+                  color: 'var(--accent-fg)',
                   borderRadius: 6,
                   fontWeight: 600,
                   fontSize: 14,
@@ -187,12 +187,12 @@ function UnsubscribeContent() {
                 href="/"
                 style={{
                   padding: '10px 22px',
-                  background: '#ffffff',
-                  color: '#0f0f0e',
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
                   borderRadius: 6,
                   fontWeight: 500,
                   fontSize: 14,
-                  border: '1px solid #e8e8e6',
+                  border: '1px solid var(--border)',
                   textDecoration: 'none',
                 }}
               >
@@ -211,7 +211,7 @@ export default function UnsubscribePage() {
     <>
       <Nav />
       <main style={{ paddingTop: 60 }}>
-        <Suspense fallback={<div style={{ minHeight: 'calc(100vh - 200px)', background: '#fafaf9' }} />}>
+        <Suspense fallback={<div style={{ minHeight: 'calc(100vh - 200px)', background: 'var(--bg)' }} />}>
           <UnsubscribeContent />
         </Suspense>
       </main>

@@ -17,13 +17,13 @@ export default function CareersPage() {
       <section style={{
         paddingTop: 128, paddingBottom: 80,
         paddingLeft: 24, paddingRight: 24,
-        background: '#f9f9f8',
-        borderBottom: '1px solid #e4e4e2',
+        background: 'var(--bg)',
+        borderBottom: '1px solid var(--border)',
       }}>
         <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <div style={{
             display: 'inline-block', fontSize: 11, fontWeight: 600,
-            color: '#9b9b96', textTransform: 'uppercase',
+            color: 'var(--text-muted)', textTransform: 'uppercase',
             letterSpacing: '0.12em', marginBottom: 20,
           }}>
             Careers
@@ -31,12 +31,12 @@ export default function CareersPage() {
           <h1 style={{
             fontSize: 'clamp(36px, 6vw, 64px)',
             fontWeight: 700, letterSpacing: '-0.045em',
-            lineHeight: 1.06, color: '#0f0f0e', marginBottom: 20,
+            lineHeight: 1.06, color: 'var(--text)', marginBottom: 20,
           }}>
             Build the future of<br />content intelligence
           </h1>
           <p style={{
-            fontSize: 18, color: '#6b6b67',
+            fontSize: 18, color: 'var(--text-muted)',
             lineHeight: 1.65, maxWidth: 520, margin: '0 auto',
           }}>
             We&apos;re a small, ambitious team building AI systems that help content teams win at organic search.
@@ -46,34 +46,34 @@ export default function CareersPage() {
       </section>
 
       {/* No openings */}
-      <section style={{ padding: '96px 24px', background: '#ffffff' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
           <div style={{
-            background: '#f9f9f8',
-            border: '1px solid #e4e4e2',
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
             borderRadius: 12,
             padding: '64px 48px',
             textAlign: 'center',
           }}>
             <div style={{
               width: 56, height: 56, borderRadius: '50%',
-              background: '#f4f4f3', border: '1px solid #e4e4e2',
+              background: 'var(--bg-elevated)', border: '1px solid var(--border)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px',
             }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a0a09c" strokeWidth="1.75">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.75">
                 <rect x="2" y="7" width="20" height="14" rx="2" />
                 <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
               </svg>
             </div>
             <h2 style={{
               fontSize: 22, fontWeight: 700,
-              letterSpacing: '-0.03em', color: '#0f0f0e', marginBottom: 12,
+              letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: 12,
             }}>
               No open positions right now
             </h2>
             <p style={{
-              fontSize: 15, color: '#6b6b67',
+              fontSize: 15, color: 'var(--text-muted)',
               lineHeight: 1.65, maxWidth: 400, margin: '0 auto 28px',
             }}>
               We don&apos;t have any open roles at the moment, but we&apos;re always interested in hearing from
@@ -83,7 +83,7 @@ export default function CareersPage() {
               href="mailto:hello@articlos.com"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: '#0f0f0e', color: '#ffffff',
+                background: 'var(--accent)', color: 'var(--accent-fg)',
                 padding: '11px 22px', borderRadius: 7,
                 fontSize: 14, fontWeight: 500, textDecoration: 'none',
                 transition: 'opacity 0.15s ease',
@@ -129,17 +129,17 @@ export default function CareersPage() {
                 },
               ].map((v) => (
                 <div key={v.title} style={{
-                  background: '#f9f9f8',
-                  border: '1px solid #e4e4e2',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
                   borderRadius: 10, padding: '24px',
                 }}>
                   <div style={{
-                    fontSize: 20, marginBottom: 12, color: '#0f0f0e',
+                    fontSize: 20, marginBottom: 12, color: 'var(--text)',
                   }}>
                     {v.icon}
                   </div>
                   <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>{v.title}</h3>
-                  <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>{v.desc}</p>
+                  <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>{v.desc}</p>
                 </div>
               ))}
             </div>

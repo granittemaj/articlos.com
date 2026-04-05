@@ -107,30 +107,30 @@ export default function CookiesPage() {
     <>
       <Nav />
 
-      <section style={{ padding: '120px 24px 64px', background: '#f9f9f8', borderBottom: '1px solid #e4e4e2' }}>
+      <section style={{ padding: '120px 24px 64px', background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div style={{
-            fontSize: 11, fontWeight: 600, color: '#9b9b96',
+            fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
             textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 16,
           }}>
             Legal
           </div>
           <h1 style={{
             fontSize: 'clamp(28px, 5vw, 48px)',
-            fontWeight: 700, letterSpacing: '-0.04em', color: '#0f0f0e', marginBottom: 12,
+            fontWeight: 700, letterSpacing: '-0.04em', color: 'var(--text)', marginBottom: 12,
           }}>
             Cookie Policy
           </h1>
-          <p style={{ fontSize: 14, color: '#9b9b96' }}>
+          <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
             Last updated: April 2, 2026 · Effective: April 2, 2026
           </p>
         </div>
       </section>
 
-      <section style={{ padding: '64px 24px 96px', background: '#ffffff' }}>
+      <section style={{ padding: '64px 24px 96px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto', display: 'flex', gap: 56, alignItems: 'flex-start' }} className="privacy-layout">
           <aside style={{ width: 200, flexShrink: 0, position: 'sticky', top: 90 }} className="privacy-toc">
-            <div style={{ fontSize: 11, fontWeight: 600, color: '#9b9b96', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
               Contents
             </div>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -147,7 +147,7 @@ export default function CookiesPage() {
               <div key={s.id} id={s.id} style={{ marginBottom: 48 }}>
                 <h2 style={{
                   fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em',
-                  color: '#0f0f0e', marginBottom: 14,
+                  color: 'var(--text)', marginBottom: 14,
                 }}>
                   {s.title}
                 </h2>
@@ -157,10 +157,10 @@ export default function CookiesPage() {
                     const [label, ...rest] = para.split('\n')
                     return (
                       <div key={i} style={{ marginBottom: 14 }}>
-                        <div style={{ fontSize: 14, fontWeight: 700, color: '#0f0f0e', marginBottom: 4 }}>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
                           {label.replace(/\*\*/g, '')}
                         </div>
-                        <p style={{ fontSize: 15, color: '#3d3d3a', lineHeight: 1.75 }}>
+                        <p style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.75 }}>
                           {rest.join('\n')}
                         </p>
                       </div>
@@ -168,7 +168,7 @@ export default function CookiesPage() {
                   }
                   return (
                     <p key={i} style={{
-                      fontSize: 15, color: '#3d3d3a', lineHeight: 1.75, marginBottom: 14,
+                      fontSize: 15, color: 'var(--text)', lineHeight: 1.75, marginBottom: 14,
                       whiteSpace: 'pre-line',
                     }}>
                       {para}

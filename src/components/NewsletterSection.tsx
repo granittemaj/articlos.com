@@ -31,7 +31,7 @@ export default function NewsletterSection() {
 
   return (
     <section style={{
-      background: '#0f0f0e',
+      background: 'var(--cta-bg)',
       padding: '72px 24px',
       textAlign: 'center',
     }}>
@@ -39,11 +39,11 @@ export default function NewsletterSection() {
         {/* Icon */}
         <div style={{
           width: 44, height: 44, borderRadius: 10,
-          background: 'rgba(255,255,255,0.07)',
+          background: 'var(--cta-border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 20px',
         }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cta-text-muted)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
@@ -53,14 +53,14 @@ export default function NewsletterSection() {
           fontSize: 'clamp(22px, 4vw, 30px)',
           fontWeight: 700,
           letterSpacing: '-0.03em',
-          color: '#ffffff',
+          color: 'var(--cta-text)',
           marginBottom: 10,
         }}>
           Stay ahead of the content curve
         </h2>
         <p style={{
           fontSize: 15,
-          color: 'rgba(255,255,255,0.45)',
+          color: 'var(--cta-text-muted)',
           lineHeight: 1.65,
           marginBottom: 28,
         }}>
@@ -93,16 +93,16 @@ export default function NewsletterSection() {
                 flex: 1,
                 padding: '11px 14px',
                 borderRadius: 7,
-                border: '1px solid rgba(255,255,255,0.12)',
-                background: 'rgba(255,255,255,0.06)',
-                color: '#ffffff',
+                border: '1px solid var(--cta-border)',
+                background: 'var(--cta-border)',
+                color: 'var(--cta-text)',
                 fontSize: 14,
                 outline: 'none',
                 fontFamily: 'Geist, sans-serif',
                 minWidth: 0,
               }}
-              onFocus={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.28)' }}
-              onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.12)' }}
+              onFocus={(e) => { e.target.style.borderColor = 'var(--cta-text-muted)' }}
+              onBlur={(e) => { e.target.style.borderColor = 'var(--cta-border)' }}
             />
             <button
               type="submit"
@@ -110,8 +110,8 @@ export default function NewsletterSection() {
               style={{
                 padding: '11px 20px',
                 borderRadius: 7,
-                background: status === 'loading' ? 'rgba(255,255,255,0.7)' : '#ffffff',
-                color: '#0f0f0e',
+                background: 'var(--cta-text)',
+                color: 'var(--cta-bg)',
                 fontSize: 14,
                 fontWeight: 600,
                 border: 'none',
@@ -119,6 +119,7 @@ export default function NewsletterSection() {
                 fontFamily: 'Geist, sans-serif',
                 whiteSpace: 'nowrap',
                 transition: 'background 0.15s ease',
+                opacity: status === 'loading' ? 0.7 : 1,
               }}
             >
               {status === 'loading' ? 'Subscribing…' : 'Subscribe →'}
@@ -130,7 +131,7 @@ export default function NewsletterSection() {
           <p style={{ fontSize: 13, color: '#fca5a5', marginTop: 10 }}>{errorMsg}</p>
         )}
 
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 14 }}>
+        <p style={{ fontSize: 12, color: 'var(--cta-text-muted)', marginTop: 14 }}>
           No spam. Unsubscribe any time.
         </p>
       </div>

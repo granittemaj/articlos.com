@@ -19,7 +19,7 @@ export default function ThankYouPage() {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '80px 24px',
-            background: '#fafaf9',
+            background: 'var(--bg)',
           }}
         >
           <div style={{ textAlign: 'center', maxWidth: 480 }}>
@@ -28,7 +28,7 @@ export default function ThankYouPage() {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                background: '#f0fdf4',
+                background: 'rgba(22,163,74,0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -45,12 +45,12 @@ export default function ThankYouPage() {
                 fontWeight: 700,
                 letterSpacing: '-0.04em',
                 marginBottom: 12,
-                color: '#0f0f0e',
+                color: 'var(--text)',
               }}
             >
               Message received!
             </h1>
-            <p style={{ fontSize: 17, color: '#6b6b67', lineHeight: 1.6, marginBottom: 32 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 32 }}>
               Thanks for reaching out. We&apos;ll get back to you within one business day.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -58,8 +58,8 @@ export default function ThankYouPage() {
                 href="/"
                 style={{
                   padding: '10px 22px',
-                  background: '#0f0f0e',
-                  color: '#ffffff',
+                  background: 'var(--accent)',
+                  color: 'var(--accent-fg)',
                   borderRadius: 6,
                   fontWeight: 600,
                   fontSize: 14,
@@ -72,13 +72,13 @@ export default function ThankYouPage() {
                 href="/blog"
                 style={{
                   padding: '10px 22px',
-                  background: '#ffffff',
-                  color: '#0f0f0e',
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
                   borderRadius: 6,
                   fontWeight: 500,
                   fontSize: 14,
                   textDecoration: 'none',
-                  border: '1px solid #e8e8e6',
+                  border: '1px solid var(--border)',
                 }}
               >
                 Browse the blog

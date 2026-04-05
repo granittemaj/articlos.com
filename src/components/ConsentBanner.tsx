@@ -92,8 +92,8 @@ export default function ConsentBanner() {
           z-index: 1000;
           width: calc(100% - 48px);
           max-width: 760px;
-          background: #0f0f0e;
-          color: #f5f5f3;
+          background: var(--text);
+          color: var(--bg);
           border-radius: 16px;
           padding: 20px 24px;
           display: flex;
@@ -138,32 +138,35 @@ export default function ConsentBanner() {
           width: 36px;
           height: 36px;
           border-radius: 10px;
-          background: rgba(255,255,255,0.08);
+          background: transparent;
+          border: 1px solid var(--bg);
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          color: #a8a8a3;
+          color: var(--bg);
+          opacity: 0.5;
           margin-top: 1px;
         }
         .consent-title {
           font-size: 14px;
           font-weight: 600;
-          color: #f5f5f3;
+          color: var(--bg);
           margin-bottom: 3px;
           letter-spacing: -0.01em;
         }
         .consent-text {
           font-size: 13px;
-          color: #a8a8a3;
+          color: var(--text-muted);
           line-height: 1.55;
         }
         .consent-link {
-          color: #c8c8c2;
+          color: var(--bg);
           text-decoration: underline;
           text-underline-offset: 2px;
+          opacity: 0.7;
         }
-        .consent-link:hover { color: #f5f5f3; }
+        .consent-link:hover { opacity: 1; }
         .consent-actions {
           display: flex;
           align-items: center;
@@ -182,19 +185,20 @@ export default function ConsentBanner() {
           letter-spacing: -0.01em;
         }
         .consent-btn-secondary {
-          background: rgba(255,255,255,0.08);
-          color: #a8a8a3;
+          background: transparent;
+          color: var(--bg);
+          border: 1px solid var(--bg);
+          opacity: 0.5;
         }
         .consent-btn-secondary:hover {
-          background: rgba(255,255,255,0.13);
-          color: #d8d8d3;
+          opacity: 0.8;
         }
         .consent-btn-primary {
-          background: #ffffff;
-          color: #0f0f0e;
+          background: var(--bg);
+          color: var(--text);
         }
         .consent-btn-primary:hover {
-          background: #e8e8e4;
+          opacity: 0.9;
         }
         @media (max-width: 600px) {
           .consent-banner {

@@ -97,8 +97,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
           style={{
             padding: '80px 24px 56px',
             textAlign: 'center',
-            borderBottom: '1px solid #e8e8e6',
-            background: '#ffffff',
+            borderBottom: '1px solid var(--border)',
+            background: 'var(--surface)',
           }}
         >
           <div style={{ maxWidth: 600, margin: '0 auto' }}>
@@ -112,7 +112,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
             >
               The Blog
             </h1>
-            <p style={{ fontSize: 18, color: '#6b6b67', lineHeight: 1.6 }}>
+            <p style={{ fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.6 }}>
               SEO strategies, content marketing tips, and insights on AI-powered writing from the articlos team.
             </p>
             <BlogSearch initialQuery={q} />
@@ -120,14 +120,14 @@ export default async function BlogPage({ searchParams }: PageProps) {
         </section>
 
         {/* Posts Grid */}
-        <section style={{ padding: '56px 24px 80px', background: '#fafaf9' }}>
+        <section style={{ padding: '56px 24px 80px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             {q && (
               <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-                <p style={{ fontSize: 14, color: '#6b6b67' }}>
-                  {posts.length} result{posts.length !== 1 ? 's' : ''} for <strong style={{ color: '#0f0f0e' }}>&ldquo;{q}&rdquo;</strong>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
+                  {posts.length} result{posts.length !== 1 ? 's' : ''} for <strong style={{ color: 'var(--text)' }}>&ldquo;{q}&rdquo;</strong>
                 </p>
-                <Link href="/blog" style={{ fontSize: 13, color: '#6b6b67', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                <Link href="/blog" style={{ fontSize: 13, color: 'var(--text-muted)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
                   Clear
                 </Link>
               </div>
@@ -173,9 +173,9 @@ export default async function BlogPage({ searchParams }: PageProps) {
                         style={{
                           padding: '8px 16px',
                           borderRadius: 7,
-                          border: '1px solid #e8e8e6',
-                          background: '#ffffff',
-                          color: '#3d3d3a',
+                          border: '1px solid var(--border)',
+                          background: 'var(--surface)',
+                          color: 'var(--text)',
                           fontSize: 14,
                           fontWeight: 500,
                           textDecoration: 'none',
@@ -187,7 +187,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
                     {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
                       if (pages > 7 && Math.abs(p - page) > 2 && p !== 1 && p !== pages) {
                         if (p === page - 3 || p === page + 3) {
-                          return <span key={p} style={{ color: '#a0a09c', fontSize: 14 }}>…</span>
+                          return <span key={p} style={{ color: 'var(--text-muted)', fontSize: 14 }}>…</span>
                         }
                         return null
                       }
@@ -198,9 +198,9 @@ export default async function BlogPage({ searchParams }: PageProps) {
                           style={{
                             width: 36, height: 36, borderRadius: 7,
                             border: '1px solid',
-                            borderColor: p === page ? '#0f0f0e' : '#e8e8e6',
-                            background: p === page ? '#0f0f0e' : '#ffffff',
-                            color: p === page ? '#ffffff' : '#3d3d3a',
+                            borderColor: p === page ? 'var(--accent)' : 'var(--border)',
+                            background: p === page ? 'var(--accent)' : 'var(--surface)',
+                            color: p === page ? 'var(--accent-fg)' : 'var(--text)',
                             fontSize: 14, fontWeight: p === page ? 600 : 400,
                             textDecoration: 'none',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -216,9 +216,9 @@ export default async function BlogPage({ searchParams }: PageProps) {
                         style={{
                           padding: '8px 16px',
                           borderRadius: 7,
-                          border: '1px solid #e8e8e6',
-                          background: '#ffffff',
-                          color: '#3d3d3a',
+                          border: '1px solid var(--border)',
+                          background: 'var(--surface)',
+                          color: 'var(--text)',
                           fontSize: 14,
                           fontWeight: 500,
                           textDecoration: 'none',
@@ -231,19 +231,19 @@ export default async function BlogPage({ searchParams }: PageProps) {
                 )}
               </>
             ) : (
-              <div style={{ textAlign: 'center', padding: '80px 24px', color: '#6b6b67' }}>
+              <div style={{ textAlign: 'center', padding: '80px 24px', color: 'var(--text-muted)' }}>
                 <div style={{
                   width: 64, height: 64, borderRadius: '50%',
-                  background: '#f0f0ee', display: 'flex',
+                  background: 'var(--bg-elevated)', display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 20px',
                 }}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a0a09c" strokeWidth="1.75">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.75">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
                 </div>
-                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#0f0f0e', marginBottom: 8 }}>No posts yet</h3>
+                <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text)', marginBottom: 8 }}>No posts yet</h3>
                 <p style={{ fontSize: 15 }}>Check back soon — we&apos;re working on some great content.</p>
               </div>
             )}

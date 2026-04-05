@@ -1,9 +1,6 @@
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
-import { prisma } from '@/lib/prisma'
-
-export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Changelog',
@@ -11,17 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/changelog' },
 }
 
-interface ChangelogEntry {
-  title: string
-  description: string
-}
-
-interface ChangelogSection {
-  month: string
-  entries: ChangelogEntry[]
-}
-
-const FALLBACK: ChangelogSection[] = [
+const FALLBACK = [
   {
     month: 'April 2026',
     entries: [
@@ -58,19 +45,8 @@ const FALLBACK: ChangelogSection[] = [
   },
 ]
 
-async function getChangelog(): Promise<ChangelogSection[]> {
-  try {
-    const record = await prisma.siteContent.findUnique({ where: { key: 'changelog' } })
-    if (record) {
-      const parsed = JSON.parse(record.value) as ChangelogSection[]
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed
-    }
-  } catch { /* DB unavailable */ }
-  return FALLBACK
-}
-
-export default async function ChangelogPage() {
-  const changelog = await getChangelog()
+export default function ChangelogPage() {
+  const changelog = FALLBACK
 
   return (
     <>
@@ -78,7 +54,7 @@ export default async function ChangelogPage() {
 
       <section style={{
         padding: '140px 24px 96px',
-        background: '#fafaf9',
+        background: 'var(--bg)',
         minHeight: '100vh',
       }}>
         <div style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -87,7 +63,7 @@ export default async function ChangelogPage() {
             <h1 style={{
               fontSize: 36,
               fontWeight: 700,
-              color: '#0f0f0e',
+              color: 'var(--text)',
               letterSpacing: '-0.03em',
               lineHeight: 1.2,
               marginBottom: 12,
@@ -96,7 +72,7 @@ export default async function ChangelogPage() {
             </h1>
             <p style={{
               fontSize: 17,
-              color: '#6b6b67',
+              color: 'var(--text-muted)',
               lineHeight: 1.6,
               maxWidth: 500,
             }}>
@@ -113,7 +89,7 @@ export default async function ChangelogPage() {
               top: 8,
               bottom: 8,
               width: 1,
-              background: '#e8e8e6',
+              background: 'var(--border)',
             }} />
 
             {changelog.map((section, sectionIdx) => (
@@ -130,7 +106,7 @@ export default async function ChangelogPage() {
                     width: 15,
                     height: 15,
                     borderRadius: '50%',
-                    background: '#0f0f0e',
+                    background: 'var(--accent)',
                     flexShrink: 0,
                     position: 'relative',
                     zIndex: 1,
@@ -138,7 +114,7 @@ export default async function ChangelogPage() {
                   <h2 style={{
                     fontSize: 18,
                     fontWeight: 600,
-                    color: '#0f0f0e',
+                    color: 'var(--text)',
                     letterSpacing: '-0.02em',
                     margin: 0,
                   }}>
@@ -157,8 +133,8 @@ export default async function ChangelogPage() {
                     <div
                       key={i}
                       style={{
-                        background: '#ffffff',
-                        border: '1px solid #e8e8e6',
+                        background: 'var(--surface)',
+                        border: '1px solid var(--border)',
                         borderRadius: 10,
                         padding: '20px 24px',
                       }}
@@ -166,7 +142,7 @@ export default async function ChangelogPage() {
                       <h3 style={{
                         fontSize: 15,
                         fontWeight: 600,
-                        color: '#0f0f0e',
+                        color: 'var(--text)',
                         marginBottom: 6,
                         letterSpacing: '-0.01em',
                       }}>
@@ -174,7 +150,7 @@ export default async function ChangelogPage() {
                       </h3>
                       <p style={{
                         fontSize: 14,
-                        color: '#6b6b67',
+                        color: 'var(--text-muted)',
                         lineHeight: 1.6,
                         margin: 0,
                       }}>
