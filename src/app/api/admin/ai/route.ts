@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 function getClient() {
   const apiKey = process.env.GEMINI_API_KEY
@@ -206,6 +207,21 @@ Fields to populate:
         },
       })
 
+      // Fetch published posts for cross-linking
+      let otherPosts: { title: string; slug: string }[] = []
+      try {
+        otherPosts = await prisma.post.findMany({
+          where: { published: true, ...(title ? { title: { not: title } } : {}) },
+          take: 20,
+          select: { title: true, slug: true },
+          orderBy: { publishedAt: 'desc' },
+        })
+      } catch { /* DB unavailable */ }
+
+      const crossLinkSection = otherPosts.length > 0
+        ? `\n- Cross-links to other blog posts on this site (add 1-2 where topically relevant):\n${otherPosts.map(p => `  * <a href="/blog/${p.slug}">${p.title}</a>`).join('\n')}`
+        : ''
+
       const result = await relinkModel.generateContent(
         `You are an SEO editor. Improve the internal and external linking of this blog article${title ? ` titled "${title}"` : ''}.
 
@@ -214,7 +230,7 @@ Rules:
   * /blog — when mentioning "our blog", "more articles", "read more", "further reading"
   * / — when mentioning "articlos", "our platform", "AI content tools"
   * /about — when mentioning "our team", "about us", "who we are"
-  * /faq — when mentioning "common questions", "learn more", "frequently asked"
+  * /faq — when mentioning "common questions", "learn more", "frequently asked"${crossLinkSection}
 - Add 1-2 external links to authoritative sources (Moz, Google Search Central, HubSpot, Semrush, Ahrefs, Search Engine Journal) that back up a specific factual claim already in the article. Use target="_blank" rel="noopener noreferrer".
 - Do NOT rewrite, add, or remove any text — only wrap existing words in <a> tags.
 - Do NOT add links to text that is already inside an <a> tag.

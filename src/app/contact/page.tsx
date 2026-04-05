@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
 export default function ContactPage() {
+  const router = useRouter()
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sending, setSending] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
   function update(field: string, value: string) {
@@ -27,10 +28,9 @@ export default function ContactPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Something went wrong.')
-      setSuccess(true)
+      router.push('/contact/thank-you')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.')
-    } finally {
       setSending(false)
     }
   }
@@ -154,29 +154,7 @@ export default function ContactPage() {
               border: '1px solid #e8e8e6',
               padding: 32,
             }}>
-              {success ? (
-                <div style={{ textAlign: 'center', padding: '32px 0' }}>
-                  <div style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: '50%',
-                    background: '#f0fdf4',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px',
-                  }}>
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  </div>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Message sent!</h3>
-                  <p style={{ fontSize: 15, color: '#6b6b67', lineHeight: 1.6 }}>
-                    Thanks for reaching out. We&apos;ll get back to you within one business day.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="contact-name-row">
                     <div>
                       <label style={{ fontSize: 13, fontWeight: 500, display: 'block', marginBottom: 6 }}>
@@ -295,7 +273,6 @@ export default function ContactPage() {
                     {sending ? 'Sending…' : 'Send message →'}
                   </button>
                 </form>
-              )}
             </div>
           </div>
         </section>
