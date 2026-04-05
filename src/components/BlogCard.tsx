@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatDate, truncate } from '@/lib/utils'
 
 interface BlogCardProps {
@@ -56,14 +57,22 @@ export default function BlogCard({
           width: '100%',
           height: 200,
           background: featuredImage
-            ? `url(${featuredImage}) center/cover no-repeat`
+            ? undefined
             : 'linear-gradient(135deg, #f0f0ee 0%, #e8e8e6 100%)',
           flexShrink: 0,
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {!featuredImage && (
+        {featuredImage ? (
+          <Image
+            src={featuredImage}
+            alt={title}
+            width={600}
+            height={200}
+            style={{ width: '100%', height: 200, objectFit: 'cover' }}
+          />
+        ) : (
           <div
             style={{
               position: 'absolute',

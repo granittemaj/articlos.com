@@ -70,6 +70,9 @@ export default function RootLayout({
     <html lang="en" className={GeistSans.className}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <meta name="theme-color" content="#0f0f0e" />
       </head>
       <body>
         {children}
