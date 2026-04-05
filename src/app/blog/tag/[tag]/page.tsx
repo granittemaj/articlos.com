@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Articles tagged "${tag}"`,
     description: `Browse all articlos blog posts tagged with "${tag}".`,
+    alternates: { canonical: `/blog/tag/${encodeURIComponent(tag.toLowerCase())}` },
   }
 }
 

@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy — articlos',
   description: 'We respect your data as much as your content. Here\'s exactly what we collect, why we collect it, and how we keep it safe.',
+  alternates: { canonical: '/privacy' },
 }
 
 const sections = [

@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Cookie Policy — articlos',
   description: 'A plain-English breakdown of the cookies articlos uses, what they do, and how to control them.',
+  alternates: { canonical: '/cookies' },
 }
 
 const sections = [
