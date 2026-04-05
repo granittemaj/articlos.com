@@ -12,6 +12,7 @@ function getClient() {
 // POST /api/admin/ai
 // body: { action: 'topics', niche?: string }
 //     | { action: 'suggest', niche?: string }
+//     | { action: 'keywords', niche?: string }
 //     | { action: 'generate', topic: string, keywords?: string }
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -68,6 +69,20 @@ Return ONLY valid JSON in this exact format (no markdown, no code fences):
       return NextResponse.json(parsed)
     }
 
+    if (action === 'keywords') {
+      const prompt = `You are an SEO keyword researcher. Suggest 8-10 high-value SEO keywords or long-tail keyword phrases for ${niche ? `the "${niche}" niche` : 'a content marketing / SaaS audience'}. Focus on keywords with good search volume and reasonable competition.
+
+Return ONLY a valid JSON array of strings, nothing else. Example: ["keyword 1", "keyword 2"]`
+
+      const result = await model.generateContent(prompt)
+      const text = result.response.text().trim()
+      const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
+      const match = cleaned.match(/\[[\s\S]*\]/)
+      if (!match) return NextResponse.json({ error: 'Failed to parse keywords' }, { status: 500 })
+      const keywords = JSON.parse(match[0])
+      return NextResponse.json({ keywords })
+    }
+
     if (action === 'suggest') {
       const prompt = `You are an expert SEO content strategist. Suggest ONE high-value, specific blog post idea${niche ? ` for a website about "${niche}"` : ' for a content marketing/SaaS audience'}${context ? `. Additional context: ${context}` : ''}.
 
@@ -97,6 +112,13 @@ Return ONLY valid JSON (no markdown, no code fences):
 
       const keywordHint = keywords ? `Primary keyword to target: "${keywords}".` : ''
 
+      // Use responseMimeType to force proper JSON encoding — prevents unescaped
+      // quotes in the HTML content field from breaking JSON.parse
+      const generateModel = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash-lite',
+        generationConfig: { responseMimeType: 'application/json' },
+      })
+
       const prompt = `You are an expert SEO content writer. Write a comprehensive, high-quality blog post about: "${topic}".
 
 ${keywordHint}
@@ -111,19 +133,16 @@ Requirements:
 - Optimize naturally for SEO — do not keyword-stuff
 - End with a strong conclusion
 
-Return ONLY valid JSON in this exact format (no markdown code fences outside the content):
-{
-  "title": "The blog post title",
-  "excerpt": "A 1-2 sentence meta description (max 160 chars)",
-  "metaTitle": "SEO meta title (max 60 chars)",
-  "metaDescription": "SEO meta description (max 160 chars)",
-  "tags": "tag1, tag2, tag3",
-  "content": "<h2>Section Title</h2><p>Content here...</p>"
-}`
+Return a JSON object with these fields:
+- title: The blog post title
+- excerpt: A 1-2 sentence meta description (max 160 chars)
+- metaTitle: SEO meta title (max 60 chars)
+- metaDescription: SEO meta description (max 160 chars)
+- tags: Comma-separated tags, e.g. "tag1, tag2, tag3"
+- content: The full article as an HTML string using h2/h3/p/ul/li tags`
 
-      const result = await model.generateContent(prompt)
+      const result = await generateModel.generateContent(prompt)
       const text = result.response.text().trim()
-      // Strip possible markdown code fences if Gemini adds them
       const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
       const parsed = JSON.parse(cleaned)
       return NextResponse.json(parsed)
