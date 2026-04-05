@@ -169,6 +169,14 @@ Requirements:
 - Optimize naturally for SEO — do not keyword-stuff
 - End with a strong conclusion
 
+Linking requirements (critical for SEO):
+- Internal links (3-5 throughout the article): Naturally link to articlos.com pages where relevant. Use these exact HTML snippets where they fit contextually:
+  * <a href="/blog">our blog</a> — when mentioning content resources or further reading
+  * <a href="/">articlos</a> — when referencing AI content automation tools
+  * <a href="/about">about us</a> — when establishing credibility
+  * <a href="/faq">FAQ</a> — when suggesting readers learn more
+- External links (1-2 only): Link to one or two authoritative sources (Google Search Central, Moz, HubSpot, Semrush, Ahrefs, or Search Engine Journal) to support a specific claim. Use target="_blank" rel="noopener noreferrer".
+
 Fields to populate:
 - title: The blog post title
 - excerpt: A 1-2 sentence meta description (max 160 chars)
