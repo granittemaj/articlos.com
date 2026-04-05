@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Changelog',
   description: 'See what\'s new in articlos — latest features, improvements, and fixes.',
+  alternates: { canonical: '/changelog' },
 }
 
 interface ChangelogEntry {

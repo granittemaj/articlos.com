@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: 'Blog — SEO, Content & AI Insights',
   description:
     'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
+  alternates: { canonical: '/blog' },
   openGraph: {
     title: 'The articlos Blog',
     description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
@@ -20,6 +21,18 @@ export const metadata: Metadata = {
 }
 
 const POSTS_PER_PAGE = 9
+
+async function publishScheduledPosts() {
+  try {
+    await prisma.post.updateMany({
+      where: {
+        published: false,
+        publishedAt: { lte: new Date(), not: null },
+      },
+      data: { published: true },
+    })
+  } catch { /* non-fatal */ }
+}
 
 async function getBlogData(page: number, q?: string) {
   try {
@@ -63,6 +76,7 @@ interface PageProps {
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
+  await publishScheduledPosts()
   const page = Math.max(1, parseInt(searchParams.page || '1', 10))
   const q = searchParams.q?.trim() || ''
   const { posts, pages } = await getBlogData(page, q || undefined)

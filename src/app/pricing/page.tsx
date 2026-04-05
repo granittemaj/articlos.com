@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Pricing — Simple Plans for Every Team',
   description:
     'From solo bloggers to content agencies — articlos has a plan for you. Start free, no credit card required.',
+  alternates: { canonical: '/pricing' },
   openGraph: {
     title: 'Pricing | articlos',
     description: 'Simple, transparent pricing for AI article generation. Start free.',

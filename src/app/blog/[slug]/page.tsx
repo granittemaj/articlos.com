@@ -13,6 +13,15 @@ interface PageProps {
   params: { slug: string }
 }
 
+async function publishScheduledPosts() {
+  try {
+    await prisma.post.updateMany({
+      where: { published: false, publishedAt: { lte: new Date(), not: null } },
+      data: { published: true },
+    })
+  } catch { /* non-fatal */ }
+}
+
 async function getPost(slug: string) {
   try {
     return await prisma.post.findFirst({
@@ -64,6 +73,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title,
       description,
@@ -82,6 +92,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
+  await publishScheduledPosts()
   const post = await getPost(params.slug)
 
   if (!post) {
