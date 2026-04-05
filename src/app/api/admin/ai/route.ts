@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
 
 function getClient() {
@@ -133,11 +133,26 @@ Return ONLY valid JSON (no markdown, no code fences):
 
       const keywordHint = keywords ? `Primary keyword to target: "${keywords}".` : ''
 
-      // Use responseMimeType to force proper JSON encoding — prevents unescaped
-      // quotes in the HTML content field from breaking JSON.parse
+      // Use responseMimeType + responseSchema to guarantee valid JSON —
+      // prevents HTML attributes (double quotes) in the content field from
+      // breaking JSON.parse, which was the source of the intermittent error
       const generateModel = genAI.getGenerativeModel({
         model: 'gemini-2.5-flash-lite',
-        generationConfig: { responseMimeType: 'application/json' },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: SchemaType.OBJECT,
+            properties: {
+              title: { type: SchemaType.STRING },
+              excerpt: { type: SchemaType.STRING },
+              metaTitle: { type: SchemaType.STRING },
+              metaDescription: { type: SchemaType.STRING },
+              tags: { type: SchemaType.STRING },
+              content: { type: SchemaType.STRING },
+            },
+            required: ['title', 'excerpt', 'metaTitle', 'metaDescription', 'tags', 'content'],
+          },
+        },
       })
 
       const prompt = `You are an expert SEO content writer. Write a comprehensive, high-quality blog post about: "${topic}".
@@ -154,7 +169,7 @@ Requirements:
 - Optimize naturally for SEO — do not keyword-stuff
 - End with a strong conclusion
 
-Return a JSON object with these fields:
+Fields to populate:
 - title: The blog post title
 - excerpt: A 1-2 sentence meta description (max 160 chars)
 - metaTitle: SEO meta title (max 60 chars)
@@ -163,9 +178,7 @@ Return a JSON object with these fields:
 - content: The full article as an HTML string using h2/h3/p/ul/li tags`
 
       const result = await generateModel.generateContent(prompt)
-      const text = result.response.text().trim()
-      const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
-      const parsed = JSON.parse(cleaned)
+      const parsed = JSON.parse(result.response.text())
       return NextResponse.json(parsed)
     }
 
