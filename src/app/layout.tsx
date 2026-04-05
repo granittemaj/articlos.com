@@ -73,6 +73,8 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <meta name="theme-color" content="#0f0f0e" />
+        {/* Anti-FOUC: apply theme before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})()` }} />
       </head>
       <body>
         {children}

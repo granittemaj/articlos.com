@@ -56,7 +56,7 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
             height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#a0a09c"
+            stroke="var(--text-muted)"
             strokeWidth="2"
             style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
           >
@@ -74,11 +74,11 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
               paddingRight: 12,
               paddingTop: 9,
               paddingBottom: 9,
-              border: '1px solid #e8e8e6',
+              border: '1px solid var(--border)',
               borderRadius: 8,
               fontSize: 14,
-              background: '#ffffff',
-              color: '#0f0f0e',
+              background: 'var(--surface)',
+              color: 'var(--text)',
               outline: 'none',
               fontFamily: 'Geist, sans-serif',
               boxSizing: 'border-box',
@@ -90,9 +90,9 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
           style={{
             padding: '9px 18px',
             borderRadius: 8,
-            border: '1px solid #e8e8e6',
-            background: '#0f0f0e',
-            color: '#ffffff',
+            border: '1px solid var(--accent)',
+            background: 'var(--accent)',
+            color: 'var(--accent-fg)',
             fontSize: 14,
             fontWeight: 500,
             cursor: 'pointer',
@@ -112,9 +112,9 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
             style={{
               padding: '9px 14px',
               borderRadius: 8,
-              border: '1px solid #e8e8e6',
-              background: '#ffffff',
-              color: '#6b6b67',
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              color: 'var(--text-muted)',
               fontSize: 13,
               cursor: 'pointer',
               fontFamily: 'Geist, sans-serif',
@@ -135,9 +135,9 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
               padding: '5px 14px',
               borderRadius: 20,
               border: '1px solid',
-              borderColor: !currentTag ? '#0f0f0e' : '#e8e8e6',
-              background: !currentTag ? '#0f0f0e' : '#ffffff',
-              color: !currentTag ? '#ffffff' : '#6b6b67',
+              borderColor: !currentTag ? 'var(--accent)' : 'var(--border)',
+              background: !currentTag ? 'var(--accent)' : 'var(--surface)',
+              color: !currentTag ? 'var(--accent-fg)' : 'var(--text-muted)',
               fontSize: 13,
               fontWeight: 500,
               cursor: 'pointer',
@@ -155,9 +155,9 @@ export default function BlogFilters({ allTags, currentTag, currentQ }: BlogFilte
                 padding: '5px 14px',
                 borderRadius: 20,
                 border: '1px solid',
-                borderColor: currentTag === tag ? '#0f0f0e' : '#e8e8e6',
-                background: currentTag === tag ? '#0f0f0e' : '#ffffff',
-                color: currentTag === tag ? '#ffffff' : '#6b6b67',
+                borderColor: currentTag === tag ? 'var(--accent)' : 'var(--border)',
+                background: currentTag === tag ? 'var(--accent)' : 'var(--surface)',
+                color: currentTag === tag ? 'var(--accent-fg)' : 'var(--text-muted)',
                 fontSize: 13,
                 fontWeight: 500,
                 cursor: 'pointer',

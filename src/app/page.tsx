@@ -57,7 +57,7 @@ export default async function HomePage() {
         padding: '128px 24px 80px',
         position: 'relative',
         overflow: 'hidden',
-        background: '#f9f9f8',
+        background: 'var(--bg)',
       }}>
         {/* Dot grid */}
         <div className="hero-grid" />
@@ -73,14 +73,14 @@ export default async function HomePage() {
           <div className="hero-badge" style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: '#ffffff', border: '1px solid #e4e4e2',
+              background: 'var(--surface)', border: '1px solid var(--border)',
               borderRadius: 100, padding: '5px 16px 5px 8px',
-              fontSize: 12, fontWeight: 500, color: '#6b6b67',
+              fontSize: 12, fontWeight: 500, color: 'var(--text-muted)',
               boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
             }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 5,
-                background: '#f0fdf4', border: '1px solid #bbf7d0',
+                background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.25)',
                 borderRadius: 100, padding: '2px 8px',
                 fontSize: 11, color: '#16a34a', fontWeight: 600,
               }}>
@@ -97,7 +97,7 @@ export default async function HomePage() {
             fontWeight: 700,
             letterSpacing: '-0.045em',
             lineHeight: 1.04,
-            color: '#0f0f0e',
+            color: 'var(--text)',
             marginBottom: 24,
             whiteSpace: 'pre-line',
           }}>
@@ -107,7 +107,7 @@ export default async function HomePage() {
           {/* Subtitle */}
           <p className="hero-sub" style={{
             fontSize: 'clamp(16px, 2vw, 19px)',
-            color: '#6b6b67',
+            color: 'var(--text-muted)',
             lineHeight: 1.65,
             maxWidth: 580,
             margin: '0 auto 40px',
@@ -268,11 +268,11 @@ export default async function HomePage() {
 
 
       {/* ── INTELLIGENCE LOOP ─────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: '#f9f9f8' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
             <div style={{
-              display: 'inline-block', fontSize: 11, fontWeight: 600, color: '#9b9b96',
+              display: 'inline-block', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
               textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 14,
             }}>
               Five-Stage System
@@ -280,12 +280,12 @@ export default async function HomePage() {
             <h2 style={{
               fontSize: 'clamp(32px, 5vw, 52px)',
               fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.08,
-              color: '#0f0f0e', marginBottom: 16,
+              color: 'var(--text)', marginBottom: 16,
             }}>
               Every stage. Automated.
             </h2>
             <p style={{
-              fontSize: 18, color: '#6b6b67', maxWidth: 480,
+              fontSize: 18, color: 'var(--text-muted)', maxWidth: 480,
               margin: '0 auto', lineHeight: 1.65,
             }}>
               A closed-loop intelligence system that continuously optimizes your entire content strategy.
@@ -300,7 +300,7 @@ export default async function HomePage() {
               position: 'absolute', top: 28,
               left: '10%', right: '10%',
               height: 1,
-              background: 'linear-gradient(to right, transparent, #d4d4d0 20%, #d4d4d0 80%, transparent)',
+              background: 'linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent)',
               zIndex: 0,
             }} />
             {[
@@ -317,7 +317,7 @@ export default async function HomePage() {
               >
                 <div className="stage-circle" style={{
                   width: 56, height: 56, borderRadius: '50%',
-                  background: '#ffffff', border: `2px solid ${stage.bd}`,
+                  background: 'var(--surface)', border: `2px solid ${stage.bd}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 18px', fontSize: 18, color: stage.col,
                   boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
@@ -331,7 +331,7 @@ export default async function HomePage() {
                 }}>
                   {stage.label}
                 </div>
-                <p style={{ fontSize: 12.5, color: '#6b6b67', lineHeight: 1.55 }}>
+                <p style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.55 }}>
                   {stage.desc}
                 </p>
               </div>
@@ -341,16 +341,16 @@ export default async function HomePage() {
       </section>
 
       {/* ── FEATURES BENTO ────────────────────────────────────────── */}
-      <section id="features" style={{ padding: '0 24px 96px', background: '#f9f9f8' }}>
+      <section id="features" style={{ padding: '0 24px 96px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: 48 }}>
             <h2 style={{
               fontSize: 'clamp(28px, 4vw, 44px)',
-              fontWeight: 700, letterSpacing: '-0.04em', color: '#0f0f0e', marginBottom: 12,
+              fontWeight: 700, letterSpacing: '-0.04em', color: 'var(--text)', marginBottom: 12,
             }}>
               Built for every stage of the loop
             </h2>
-            <p style={{ fontSize: 17, color: '#6b6b67', maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-muted)', maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
               From finding opportunities to publishing and auto-improving — everything in one platform.
             </p>
           </div>
@@ -370,7 +370,7 @@ export default async function HomePage() {
                 <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
                   Find your next 100 articles
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
                   AI scans your niche to surface high-intent, low-competition keywords your competitors haven&apos;t touched yet.
                 </p>
               </div>
@@ -429,7 +429,7 @@ export default async function HomePage() {
                 <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
                   Publish-ready in seconds
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
                   GPT-4o and Gemini 1.5 Pro generate full articles — structured, fact-checked, and optimized for both Google and AI overviews.
                 </p>
               </div>
@@ -486,7 +486,7 @@ export default async function HomePage() {
                 <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
                   Your content calendar, automated
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
                   articlos schedules weeks of content in minutes. Set publishing cadence and let the AI fill the calendar intelligently.
                 </p>
               </div>
@@ -541,7 +541,7 @@ export default async function HomePage() {
                 <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
                   Track every ranking, every click
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
                   Google Search Console and GA4 data flows in automatically. See exactly which articles drive revenue.
                 </p>
               </div>
@@ -667,7 +667,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── HOW IT WORKS ──────────────────────────────────────────── */}
-      <section id="how-it-works" style={{ padding: '96px 24px', background: '#ffffff' }}>
+      <section id="how-it-works" style={{ padding: '96px 24px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <div className="fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
             <h2 style={{
@@ -676,7 +676,7 @@ export default async function HomePage() {
             }}>
               Up and running in minutes
             </h2>
-            <p style={{ fontSize: 17, color: '#6b6b67', maxWidth: 400, margin: '0 auto', lineHeight: 1.65 }}>
+            <p style={{ fontSize: 17, color: 'var(--text-muted)', maxWidth: 400, margin: '0 auto', lineHeight: 1.65 }}>
               Three steps and your content machine is live. No dev work, no setup pain.
             </p>
           </div>
@@ -716,9 +716,9 @@ export default async function HomePage() {
               >
                 <div style={{
                   width: 56, height: 56, borderRadius: '50%',
-                  background: i === 0 ? '#0f0f0e' : '#ffffff',
-                  border: `2px solid ${i === 0 ? '#0f0f0e' : '#e4e4e2'}`,
-                  color: i === 0 ? '#ffffff' : '#6b6b67',
+                  background: i === 0 ? 'var(--accent)' : 'var(--surface)',
+                  border: `2px solid ${i === 0 ? 'var(--accent)' : 'var(--border)'}`,
+                  color: i === 0 ? 'var(--accent-fg)' : 'var(--text-muted)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 13, fontWeight: 700, margin: '0 auto 24px',
                   boxShadow: i === 0 ? '0 4px 16px rgba(0,0,0,0.16)' : 'none',
@@ -728,7 +728,7 @@ export default async function HomePage() {
                 <h3 style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 10 }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65 }}>
                   {step.desc}
                 </p>
               </div>
@@ -738,7 +738,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── STATS ─────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: '#0f0f0e' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--cta-bg)' }}>
         <div style={{
           maxWidth: 960, margin: '0 auto',
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0,
@@ -753,20 +753,20 @@ export default async function HomePage() {
               className={`fade-up fade-up-delay-${i + 1}`}
               style={{
                 textAlign: 'center', padding: '32px 40px',
-                borderRight: i < 2 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+                borderRight: i < 2 ? '1px solid var(--cta-border)' : 'none',
               }}
             >
               <div style={{
                 fontSize: 'clamp(40px, 6vw, 68px)',
                 fontWeight: 700, letterSpacing: '-0.05em',
-                color: '#ffffff', lineHeight: 1, marginBottom: 10,
+                color: 'var(--cta-text)', lineHeight: 1, marginBottom: 10,
               }}>
                 <CountUp target={stat.target} suffix={stat.suffix} />
               </div>
-              <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', fontWeight: 500, marginBottom: 5 }}>
+              <div style={{ fontSize: 15, color: 'var(--cta-text-muted)', fontWeight: 500, marginBottom: 5 }}>
                 {stat.label}
               </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.28)' }}>
+              <div style={{ fontSize: 12, color: 'var(--cta-text-muted)', opacity: 0.6 }}>
                 {stat.sub}
               </div>
             </div>
@@ -775,23 +775,23 @@ export default async function HomePage() {
       </section>
 
       {/* ── CONTACT / PRICING ─────────────────────────────────────── */}
-      <section id="contact" style={{ padding: '96px 24px', background: '#f9f9f8' }}>
+      <section id="contact" style={{ padding: '96px 24px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 580, margin: '0 auto', textAlign: 'center' }} className="fade-up">
           <div style={{
-            display: 'inline-block', fontSize: 11, fontWeight: 600, color: '#9b9b96',
+            display: 'inline-block', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
             textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 20,
           }}>
             Pricing
           </div>
           <h2 style={{
             fontSize: 'clamp(32px, 5vw, 48px)',
-            fontWeight: 700, letterSpacing: '-0.04em', color: '#0f0f0e',
+            fontWeight: 700, letterSpacing: '-0.04em', color: 'var(--text)',
             marginBottom: 18, lineHeight: 1.1,
           }}>
             Let&apos;s talk about your needs
           </h2>
           <p style={{
-            fontSize: 18, color: '#6b6b67', lineHeight: 1.65, marginBottom: 44,
+            fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: 44,
           }}>
             We offer flexible plans for content teams of all sizes — from solo bloggers to enterprise agencies.
             Reach out and we&apos;ll find the right fit for you.
@@ -812,7 +812,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── BLOG PREVIEW ──────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: '#ffffff' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div className="fade-up" style={{
             display: 'flex', alignItems: 'baseline',
@@ -848,7 +848,7 @@ export default async function HomePage() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="blog-grid">
               {[0, 1, 2].map(i => (
-                <div key={i} style={{ background: '#ffffff', border: '1px solid #e4e4e2', borderRadius: 10, overflow: 'hidden' }}>
+                <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
                   <div className="skeleton" style={{ height: 180 }} />
                   <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <div className="skeleton" style={{ height: 12, width: 80, borderRadius: 100 }} />
@@ -863,17 +863,17 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA BANNER ────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: '#f9f9f8', borderTop: '1px solid #e8e8e6', textAlign: 'center' }}>
+      <section style={{ padding: '96px 24px', background: 'var(--bg)', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
         <div style={{ maxWidth: 600, margin: '0 auto' }} className="fade-up">
           <h2 style={{
             fontSize: 'clamp(32px, 5vw, 56px)',
             fontWeight: 700, letterSpacing: '-0.045em',
-            color: '#0f0f0e', marginBottom: 16, lineHeight: 1.08,
+            color: 'var(--text)', marginBottom: 16, lineHeight: 1.08,
           }}>
             {c('cta_title')}
           </h2>
           <p style={{
-            fontSize: 17, color: '#6b6b67',
+            fontSize: 17, color: 'var(--text-muted)',
             maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65,
           }}>
             {c('cta_subtitle')}
@@ -887,10 +887,10 @@ export default async function HomePage() {
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '13px 24px', borderRadius: 6,
-                border: '1px solid #e8e8e6',
-                color: '#6b6b67', fontSize: 15, fontWeight: 500,
+                border: '1px solid var(--border)',
+                color: 'var(--text-muted)', fontSize: 15, fontWeight: 500,
                 textDecoration: 'none', transition: 'all 0.2s ease',
-                background: '#ffffff',
+                background: 'var(--surface)',
               }}
             >
               Contact the articlos team

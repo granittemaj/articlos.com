@@ -126,21 +126,21 @@ export default function FAQPage() {
       {/* Hero */}
       <section style={{
         padding: '140px 24px 80px',
-        background: '#f9f9f8',
+        background: 'var(--bg)',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
       }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle at 1px 1px, #d4d4d0 1px, transparent 0)',
+          // handled by hero-grid class
           backgroundSize: '28px 28px',
           opacity: 0.4,
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: 640, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div className="fade-up" style={{
-            display: 'inline-block', fontSize: 11, fontWeight: 600, color: '#9b9b96',
+            display: 'inline-block', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
             textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 20,
           }}>
             FAQ
@@ -148,15 +148,15 @@ export default function FAQPage() {
           <h1 className="fade-up fade-up-delay-1" style={{
             fontSize: 'clamp(32px, 6vw, 56px)',
             fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.08,
-            color: '#0f0f0e', marginBottom: 18,
+            color: 'var(--text)', marginBottom: 18,
           }}>
             Frequently asked questions
           </h1>
           <p className="fade-up fade-up-delay-2" style={{
-            fontSize: 18, color: '#6b6b67', lineHeight: 1.65, marginBottom: 32,
+            fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: 32,
           }}>
             Everything you need to know about articlos. Can&apos;t find your answer?{' '}
-            <a href="mailto:hello@articlos.com" style={{ color: '#0f0f0e', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+            <a href="mailto:hello@articlos.com" style={{ color: 'var(--text)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
               Email us
             </a>
             .
@@ -165,17 +165,17 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ Content */}
-      <section style={{ padding: '80px 24px 96px', background: '#ffffff' }}>
+      <section style={{ padding: '80px 24px 96px', background: 'var(--surface)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           {categories.map((cat, ci) => (
             <div key={cat.label} className="fade-up" style={{ marginBottom: 64 }}>
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 marginBottom: 28, paddingBottom: 16,
-                borderBottom: '1px solid #e4e4e2',
+                borderBottom: '1px solid var(--border)',
               }}>
                 <span style={{
-                  fontSize: 11, fontWeight: 700, color: '#9b9b96',
+                  fontSize: 11, fontWeight: 700, color: 'var(--text-muted)',
                   textTransform: 'uppercase', letterSpacing: '0.1em',
                 }}>{String(ci + 1).padStart(2, '0')}</span>
                 <h2 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em' }}>
@@ -186,11 +186,11 @@ export default function FAQPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {cat.questions.map((item, qi) => (
                   <details key={qi} style={{
-                    borderBottom: '1px solid #f0f0ee',
+                    borderBottom: '1px solid var(--border)',
                   }}>
                     <summary style={{
                       padding: '16px 0',
-                      fontSize: 15.5, fontWeight: 600, color: '#0f0f0e',
+                      fontSize: 15.5, fontWeight: 600, color: 'var(--text)',
                       cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       gap: 16,
@@ -200,15 +200,15 @@ export default function FAQPage() {
                       <span>{item.q}</span>
                       <span style={{
                         width: 20, height: 20, borderRadius: '50%',
-                        background: '#f4f4f3', display: 'flex', alignItems: 'center',
+                        background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center',
                         justifyContent: 'center', flexShrink: 0,
-                        fontSize: 14, color: '#6b6b67',
+                        fontSize: 14, color: 'var(--text-muted)',
                         transition: 'background 0.15s',
                       }}>+</span>
                     </summary>
                     <p style={{
                       padding: '0 0 18px',
-                      fontSize: 15, color: '#3d3d3a', lineHeight: 1.75,
+                      fontSize: 15, color: 'var(--text)', lineHeight: 1.75,
                     }}>
                       {item.a}
                     </p>
@@ -223,15 +223,15 @@ export default function FAQPage() {
       {/* CTA */}
       <section style={{
         padding: '80px 24px',
-        background: '#f9f9f8',
-        borderTop: '1px solid #e4e4e2',
+        background: 'var(--bg)',
+        borderTop: '1px solid var(--border)',
         textAlign: 'center',
       }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }} className="fade-up">
           <h2 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 12 }}>
             Still have questions?
           </h2>
-          <p style={{ fontSize: 16, color: '#6b6b67', marginBottom: 28, lineHeight: 1.65 }}>
+          <p style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 28, lineHeight: 1.65 }}>
             We&apos;re happy to help. Drop us a message and we&apos;ll get back to you within 24 hours.
           </p>
           <a href="mailto:hello@articlos.com" className="btn btn-primary btn-lg" style={{ gap: 8 }}>
@@ -248,8 +248,8 @@ export default function FAQPage() {
 
       <style>{`
         details summary::-webkit-details-marker { display: none; }
-        details[open] summary span:last-child { background: #0f0f0e !important; color: #fff !important; transform: rotate(45deg); }
-        details[open] summary { color: #0f0f0e; }
+        details[open] summary span:last-child { background: var(--accent) !important; color: var(--accent-fg) !important; transform: rotate(45deg); }
+        details[open] summary { color: var(--text); }
       `}</style>
     </>
   )

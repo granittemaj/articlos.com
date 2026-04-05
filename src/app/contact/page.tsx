@@ -43,8 +43,8 @@ export default function ContactPage() {
         {/* Hero */}
         <section style={{
           padding: '80px 24px 64px',
-          borderBottom: '1px solid #e8e8e6',
-          background: '#ffffff',
+          borderBottom: '1px solid var(--border)',
+          background: 'var(--surface)',
           textAlign: 'center',
         }}>
           <div style={{ maxWidth: 560, margin: '0 auto' }}>
@@ -56,14 +56,14 @@ export default function ContactPage() {
             }}>
               Get in touch
             </h1>
-            <p style={{ fontSize: 18, color: '#6b6b67', lineHeight: 1.6 }}>
+            <p style={{ fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.6 }}>
               Questions about articlos, partnership inquiries, or just want to say hi? We&apos;d love to hear from you.
             </p>
           </div>
         </section>
 
         {/* Content */}
-        <section style={{ padding: '64px 24px 96px', background: '#fafaf9' }}>
+        <section style={{ padding: '64px 24px 96px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 64, alignItems: 'start' }} className="contact-layout">
 
             {/* Left: info */}
@@ -71,7 +71,7 @@ export default function ContactPage() {
               <h2 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
                 Contact information
               </h2>
-              <p style={{ fontSize: 15, color: '#6b6b67', lineHeight: 1.65, marginBottom: 32 }}>
+              <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: 32 }}>
                 We typically respond within one business day.
               </p>
 
@@ -108,24 +108,24 @@ export default function ContactPage() {
                       alignItems: 'center',
                       gap: 12,
                       textDecoration: 'none',
-                      color: '#3d3d3a',
+                      color: 'var(--text)',
                     }}
                   >
                     <div style={{
                       width: 36,
                       height: 36,
                       borderRadius: 8,
-                      background: '#f0f0ee',
+                      background: 'var(--bg-elevated)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
-                      color: '#6b6b67',
+                      color: 'var(--text-muted)',
                     }}>
                       {item.icon}
                     </div>
                     <div>
-                      <div style={{ fontSize: 11, color: '#a0a09c', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
                         {item.label}
                       </div>
                       <div style={{ fontSize: 14, fontWeight: 500 }}>{item.value}</div>
@@ -137,21 +137,21 @@ export default function ContactPage() {
               <div style={{
                 marginTop: 48,
                 padding: 20,
-                background: '#f0f0ee',
+                background: 'var(--bg-elevated)',
                 borderRadius: 10,
               }}>
                 <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>Need help with your account?</div>
-                <p style={{ fontSize: 13, color: '#6b6b67', lineHeight: 1.6 }}>
-                  Check our <a href="/faq" style={{ color: '#0f0f0e', fontWeight: 500 }}>FAQ</a> for quick answers to common questions about billing, integrations, and content generation.
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                  Check our <a href="/faq" style={{ color: 'var(--text)', fontWeight: 500 }}>FAQ</a> for quick answers to common questions about billing, integrations, and content generation.
                 </p>
               </div>
             </div>
 
             {/* Right: form */}
             <div style={{
-              background: '#ffffff',
+              background: 'var(--surface)',
               borderRadius: 12,
-              border: '1px solid #e8e8e6',
+              border: '1px solid var(--border)',
               padding: 32,
             }}>
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -169,7 +169,7 @@ export default function ContactPage() {
                         style={{
                           width: '100%',
                           padding: '9px 12px',
-                          border: '1px solid #e8e8e6',
+                          border: '1px solid var(--border)',
                           borderRadius: 7,
                           fontSize: 14,
                           outline: 'none',
@@ -191,7 +191,7 @@ export default function ContactPage() {
                         style={{
                           width: '100%',
                           padding: '9px 12px',
-                          border: '1px solid #e8e8e6',
+                          border: '1px solid var(--border)',
                           borderRadius: 7,
                           fontSize: 14,
                           outline: 'none',
@@ -214,7 +214,7 @@ export default function ContactPage() {
                       style={{
                         width: '100%',
                         padding: '9px 12px',
-                        border: '1px solid #e8e8e6',
+                        border: '1px solid var(--border)',
                         borderRadius: 7,
                         fontSize: 14,
                         outline: 'none',
@@ -237,7 +237,7 @@ export default function ContactPage() {
                       style={{
                         width: '100%',
                         padding: '9px 12px',
-                        border: '1px solid #e8e8e6',
+                        border: '1px solid var(--border)',
                         borderRadius: 7,
                         fontSize: 14,
                         outline: 'none',
@@ -259,8 +259,8 @@ export default function ContactPage() {
                     style={{
                       padding: '11px 24px',
                       borderRadius: 7,
-                      background: sending ? '#6b6b67' : '#0f0f0e',
-                      color: '#ffffff',
+                      background: sending ? 'var(--text-muted)' : 'var(--accent)',
+                      color: 'var(--accent-fg)',
                       fontSize: 15,
                       fontWeight: 600,
                       border: 'none',

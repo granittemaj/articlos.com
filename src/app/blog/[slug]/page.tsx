@@ -163,16 +163,16 @@ export default async function BlogPostPage({ params }: PageProps) {
             alignItems: 'center',
             gap: 6,
             fontSize: 13,
-            color: '#a0a09c',
+            color: 'var(--text-muted)',
           }}
         >
-          <Link href="/" style={{ color: '#6b6b67', textDecoration: 'none' }}>Home</Link>
+          <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Home</Link>
           <span>/</span>
-          <Link href="/blog" style={{ color: '#6b6b67', textDecoration: 'none' }}>Blog</Link>
+          <Link href="/blog" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Blog</Link>
           <span>/</span>
           <span
             style={{
-              color: '#0f0f0e',
+              color: 'var(--text)',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -187,8 +187,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         <header
           style={{
             padding: '40px 24px 48px',
-            borderBottom: '1px solid #e8e8e6',
-            background: '#ffffff',
+            borderBottom: '1px solid var(--border)',
+            background: 'var(--surface)',
             textAlign: 'center',
           }}
         >
@@ -224,7 +224,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 fontWeight: 700,
                 letterSpacing: '-0.04em',
                 lineHeight: 1.1,
-                color: '#0f0f0e',
+                color: 'var(--text)',
                 marginBottom: 20,
               }}
             >
@@ -236,7 +236,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <p
                 style={{
                   fontSize: 18,
-                  color: '#6b6b67',
+                  color: 'var(--text-muted)',
                   lineHeight: 1.6,
                   maxWidth: 600,
                   margin: '0 auto 24px',
@@ -254,7 +254,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 justifyContent: 'center',
                 gap: 16,
                 fontSize: 13,
-                color: '#a0a09c',
+                color: 'var(--text-muted)',
                 flexWrap: 'wrap',
               }}
             >
@@ -282,7 +282,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               style={{
                 width: '100%',
                 borderRadius: 12,
-                border: '1px solid #e8e8e6',
+                border: '1px solid var(--border)',
                 objectFit: 'cover',
                 maxHeight: 480,
               }}
@@ -303,8 +303,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             <nav
               aria-label="Table of contents"
               style={{
-                background: '#f9f9f8',
-                border: '1px solid #e8e8e6',
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
                 borderRadius: 10,
                 padding: '20px 24px',
                 marginBottom: 40,
@@ -316,7 +316,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
-                  color: '#6b6b67',
+                  color: 'var(--text-muted)',
                   marginBottom: 12,
                 }}
               >
@@ -332,7 +332,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                       href={`#${item.id}`}
                       style={{
                         fontSize: item.level === 3 ? 13 : 14,
-                        color: '#3d3d3a',
+                        color: 'var(--text)',
                         textDecoration: 'none',
                         lineHeight: 1.4,
                       }}
@@ -356,14 +356,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               style={{
                 marginTop: 48,
                 paddingTop: 24,
-                borderTop: '1px solid #e8e8e6',
+                borderTop: '1px solid var(--border)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
                 flexWrap: 'wrap',
               }}
             >
-              <span style={{ fontSize: 13, color: '#a0a09c', fontWeight: 500 }}>Tags:</span>
+              <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>Tags:</span>
               {tagList.map((tag) => (
                 <Link
                   key={tag}
@@ -388,9 +388,9 @@ export default async function BlogPostPage({ params }: PageProps) {
         {relatedPosts.length > 0 && (
           <section
             style={{
-              borderTop: '1px solid #e8e8e6',
+              borderTop: '1px solid var(--border)',
               padding: '64px 24px',
-              background: '#fafaf9',
+              background: 'var(--bg)',
             }}
           >
             <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -400,7 +400,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   fontWeight: 700,
                   letterSpacing: '-0.03em',
                   marginBottom: 24,
-                  color: '#0f0f0e',
+                  color: 'var(--text)',
                 }}
               >
                 Related articles
@@ -432,7 +432,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* CTA */}
         <section
           style={{
-            background: '#0f0f0e',
+            background: 'var(--cta-bg)',
             padding: '64px 24px',
             textAlign: 'center',
           }}
@@ -443,7 +443,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 fontSize: 28,
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
-                color: '#ffffff',
+                color: 'var(--cta-text)',
                 marginBottom: 12,
               }}
             >
@@ -452,7 +452,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <p
               style={{
                 fontSize: 15,
-                color: 'rgba(255,255,255,0.55)',
+                color: 'var(--cta-text-muted)',
                 marginBottom: 28,
                 lineHeight: 1.6,
               }}
@@ -467,8 +467,8 @@ export default async function BlogPostPage({ params }: PageProps) {
                   alignItems: 'center',
                   gap: 6,
                   padding: '12px 24px',
-                  background: '#ffffff',
-                  color: '#0f0f0e',
+                  background: 'var(--cta-text)',
+                  color: 'var(--cta-bg)',
                   borderRadius: 6,
                   fontWeight: 600,
                   fontSize: 15,
@@ -485,12 +485,12 @@ export default async function BlogPostPage({ params }: PageProps) {
                   gap: 6,
                   padding: '12px 24px',
                   background: 'transparent',
-                  color: 'rgba(255,255,255,0.65)',
+                  color: 'var(--cta-text-secondary)',
                   borderRadius: 6,
                   fontWeight: 500,
                   fontSize: 15,
                   textDecoration: 'none',
-                  border: '1px solid rgba(255,255,255,0.14)',
+                  border: '1px solid var(--cta-border)',
                 }}
               >
                 Contact the articlos team
