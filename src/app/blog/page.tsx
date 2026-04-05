@@ -36,7 +36,7 @@ async function getBlogData(page: number, q?: string) {
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
-        orderBy: { publishedAt: 'desc' },
+        orderBy: [{ publishedAt: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }],
         skip: q ? 0 : (page - 1) * POSTS_PER_PAGE,
         take: q ? 100 : POSTS_PER_PAGE,
         select: {
