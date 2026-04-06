@@ -6,8 +6,9 @@ export const metadata: Metadata = {
   title: 'Pricing — Simple Plans for Every Team',
   description:
     'From solo bloggers to content agencies — articlos has a plan for you. Start free, no credit card required.',
+  alternates: { canonical: '/pricing' },
   openGraph: {
-    title: 'Pricing | Articlos',
+    title: 'Pricing | articlos',
     description: 'Simple, transparent pricing for AI article generation. Start free.',
     url: 'https://articlos.com/pricing',
   },
@@ -117,8 +118,8 @@ export default function PricingPage() {
           style={{
             padding: '80px 24px 64px',
             textAlign: 'center',
-            borderBottom: '1px solid #e8e8e6',
-            background: '#ffffff',
+            borderBottom: '1px solid var(--border)',
+            background: 'var(--surface)',
           }}
         >
           <div style={{ maxWidth: 560, margin: '0 auto' }}>
@@ -135,7 +136,7 @@ export default function PricingPage() {
             <p
               style={{
                 fontSize: 18,
-                color: '#6b6b67',
+                color: 'var(--text-muted)',
                 lineHeight: 1.6,
                 marginBottom: 24,
               }}
@@ -145,11 +146,11 @@ export default function PricingPage() {
             <div
               style={{
                 display: 'inline-flex',
-                background: '#f5f5f3',
+                background: 'var(--bg-elevated)',
                 borderRadius: 8,
                 padding: 3,
                 gap: 2,
-                border: '1px solid #e8e8e6',
+                border: '1px solid var(--border)',
               }}
             >
               <button
@@ -158,8 +159,8 @@ export default function PricingPage() {
                   borderRadius: 6,
                   fontSize: 13,
                   fontWeight: 600,
-                  background: '#ffffff',
-                  border: '1px solid #e8e8e6',
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
                   cursor: 'pointer',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
                 }}
@@ -172,7 +173,7 @@ export default function PricingPage() {
                   borderRadius: 6,
                   fontSize: 13,
                   fontWeight: 500,
-                  color: '#6b6b67',
+                  color: 'var(--text-muted)',
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
@@ -185,7 +186,7 @@ export default function PricingPage() {
         </section>
 
         {/* Pricing Cards */}
-        <section style={{ padding: '80px 24px', background: '#fafaf9' }}>
+        <section style={{ padding: '80px 24px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 1000, margin: '0 auto' }}>
             <div
               style={{
@@ -210,7 +211,7 @@ export default function PricingPage() {
                         fontWeight: 700,
                         textTransform: 'uppercase',
                         letterSpacing: '0.08em',
-                        color: '#6b6b67',
+                        color: 'var(--text-muted)',
                         marginBottom: 8,
                       }}
                     >
@@ -227,9 +228,9 @@ export default function PricingPage() {
                       >
                         {plan.price}
                       </span>
-                      <span style={{ fontSize: 14, color: '#6b6b67' }}>{plan.period}</span>
+                      <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>{plan.period}</span>
                     </div>
-                    <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.5 }}>
                       {plan.tagline}
                     </p>
                   </div>
@@ -244,7 +245,7 @@ export default function PricingPage() {
                   </a>
 
                   {/* Divider */}
-                  <div style={{ borderTop: '1px solid #e8e8e6' }} />
+                  <div style={{ borderTop: '1px solid var(--border)' }} />
 
                   {/* Features */}
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -275,8 +276,8 @@ export default function PricingPage() {
               style={{
                 marginTop: 32,
                 padding: '20px 24px',
-                background: '#ffffff',
-                border: '1px solid #e8e8e6',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
                 borderRadius: 8,
                 display: 'flex',
                 alignItems: 'center',
@@ -289,7 +290,7 @@ export default function PricingPage() {
                 <p style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
                   Need something bigger?
                 </p>
-                <p style={{ fontSize: 14, color: '#6b6b67' }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
                   Enterprise plans with custom volumes, SLAs, and dedicated support are available.
                 </p>
               </div>
@@ -305,7 +306,7 @@ export default function PricingPage() {
         </section>
 
         {/* Feature Comparison Table */}
-        <section style={{ padding: '0 24px 80px', background: '#fafaf9' }}>
+        <section style={{ padding: '0 24px 80px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 1000, margin: '0 auto' }}>
             <h2
               style={{
@@ -320,16 +321,16 @@ export default function PricingPage() {
             </h2>
             <div
               style={{
-                background: '#ffffff',
-                border: '1px solid #e8e8e6',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
                 borderRadius: 10,
                 overflow: 'hidden',
               }}
             >
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f8f8f7' }}>
-                    <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#6b6b67', borderBottom: '1px solid #e8e8e6' }}>
+                  <tr style={{ background: 'var(--bg-elevated)' }}>
+                    <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>
                       Feature
                     </th>
                     {plans.map((p) => (
@@ -340,9 +341,9 @@ export default function PricingPage() {
                           textAlign: 'center',
                           fontSize: 13,
                           fontWeight: 700,
-                          color: p.featured ? '#0f0f0e' : '#6b6b67',
-                          borderBottom: '1px solid #e8e8e6',
-                          borderLeft: '1px solid #e8e8e6',
+                          color: p.featured ? 'var(--text)' : 'var(--text-muted)',
+                          borderBottom: '1px solid var(--border)',
+                          borderLeft: '1px solid var(--border)',
                         }}
                       >
                         {p.name}
@@ -362,8 +363,8 @@ export default function PricingPage() {
                     ['API access', '—', '—', '✓'],
                     ['Dedicated support', '—', '—', '✓'],
                   ].map(([feature, ...vals], ri) => (
-                    <tr key={feature} style={{ background: ri % 2 === 1 ? '#fafaf9' : '#ffffff' }}>
-                      <td style={{ padding: '12px 20px', fontSize: 14, borderBottom: '1px solid #f0f0ee' }}>
+                    <tr key={feature} style={{ background: ri % 2 === 1 ? 'var(--bg)' : 'var(--surface)' }}>
+                      <td style={{ padding: '12px 20px', fontSize: 14, borderBottom: '1px solid var(--bg-elevated)' }}>
                         {feature}
                       </td>
                       {vals.map((v, vi) => (
@@ -373,10 +374,10 @@ export default function PricingPage() {
                             padding: '12px 20px',
                             textAlign: 'center',
                             fontSize: 14,
-                            color: v === '—' ? '#d4d4d0' : v === '✓' ? '#22c55e' : '#0f0f0e',
+                            color: v === '—' ? '#d4d4d0' : v === '✓' ? '#22c55e' : 'var(--text)',
                             fontWeight: v === '✓' ? 700 : 400,
-                            borderBottom: '1px solid #f0f0ee',
-                            borderLeft: '1px solid #f0f0ee',
+                            borderBottom: '1px solid var(--bg-elevated)',
+                            borderLeft: '1px solid var(--bg-elevated)',
                           }}
                         >
                           {v}
@@ -391,7 +392,7 @@ export default function PricingPage() {
         </section>
 
         {/* FAQ */}
-        <section style={{ padding: '0 24px 96px', background: '#fafaf9' }}>
+        <section style={{ padding: '0 24px 96px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 680, margin: '0 auto' }}>
             <h2
               style={{
@@ -410,7 +411,7 @@ export default function PricingPage() {
                   key={i}
                   style={{
                     padding: '20px 0',
-                    borderBottom: i < faqs.length - 1 ? '1px solid #e8e8e6' : 'none',
+                    borderBottom: i < faqs.length - 1 ? '1px solid var(--border)' : 'none',
                   }}
                 >
                   <h3
@@ -423,7 +424,7 @@ export default function PricingPage() {
                   >
                     {faq.q}
                   </h3>
-                  <p style={{ fontSize: 14, color: '#6b6b67', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
                     {faq.a}
                   </p>
                 </div>

@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font/sans'
+import { Analytics } from '@vercel/analytics/next'
+import ConsentBanner from '@/components/ConsentBanner'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
+
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://articlos.com'),
   title: {
-    default: 'Articlos — AI Article Generator for SEO',
-    template: '%s | Articlos',
+    default: 'articlos — The Content Intelligence System That Never Stops',
+    template: '%s | articlos',
   },
   description:
-    'Articlos generates SEO-optimised articles, manages your content calendar, and publishes to WordPress — all on autopilot. Powered by GPT-4o and Gemini 1.5 Pro.',
+    'The content intelligence system that never stops. articlos discovers what to write, generates high-quality articles, and grows your organic traffic — automatically.',
   keywords: [
     'AI article generator',
     'SEO content automation',
@@ -23,24 +28,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://articlos.com',
-    siteName: 'Articlos',
-    title: 'Articlos — AI Article Generator for SEO',
+    siteName: 'articlos',
+    title: 'articlos — The Content Intelligence System That Never Stops',
     description:
-      'Generate SEO-optimised articles automatically. Connect your WordPress site and let AI handle your content calendar.',
+      'The content intelligence system that never stops. Discover what to write, generate high-quality articles, and grow your organic traffic — automatically.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Articlos — AI Article Generator',
+        alt: 'articlos — AI Article Generator',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Articlos — AI Article Generator for SEO',
+    title: 'articlos — The Content Intelligence System That Never Stops',
     description:
-      'Generate SEO-optimised articles automatically with GPT-4o and Gemini 1.5 Pro.',
+      'The content intelligence system that never stops. AI-powered article generation for content teams that want to rank.',
     creator: '@articlos',
   },
   robots: {
@@ -62,17 +67,21 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <meta name="theme-color" content="#0f0f0e" />
+        {/* Anti-FOUC: apply theme before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})()` }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <GoogleAnalytics />
+        <Analytics />
+        <ConsentBanner />
+      </body>
     </html>
   )
 }

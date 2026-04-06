@@ -1,43 +1,92 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
+import BlogSearch from '@/components/BlogSearch'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Blog — SEO & Content Marketing Insights',
+  title: 'Blog — SEO, Content & AI Insights',
   description:
-    'Expert articles on SEO, content marketing, AI writing, and growing organic traffic. Tips and strategies from the articlos team.',
+    'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
+  alternates: { canonical: '/blog' },
   openGraph: {
-    title: 'Blog | Articlos',
-    description: 'Expert articles on SEO, content marketing, and AI writing.',
+    title: 'The articlos Blog',
+    description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
     url: 'https://articlos.com/blog',
   },
 }
 
-async function getPosts() {
+const POSTS_PER_PAGE = 9
+
+async function publishScheduledPosts() {
   try {
-    return await prisma.post.findMany({
-      where: { published: true },
-      orderBy: { publishedAt: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        excerpt: true,
-        featuredImage: true,
-        tags: true,
-        publishedAt: true,
-        createdAt: true,
+    await prisma.post.updateMany({
+      where: {
+        published: false,
+        publishedAt: { lte: new Date(), not: null },
       },
+      data: { published: true },
     })
+  } catch { /* non-fatal */ }
+}
+
+async function getBlogData(page: number, q?: string) {
+  try {
+    const where = {
+      published: true as const,
+      ...(q ? {
+        OR: [
+          { title: { contains: q, mode: 'insensitive' as const } },
+          { excerpt: { contains: q, mode: 'insensitive' as const } },
+          { tags: { contains: q, mode: 'insensitive' as const } },
+        ],
+      } : {}),
+    }
+    const [posts, total] = await Promise.all([
+      prisma.post.findMany({
+        where,
+        orderBy: [{ publishedAt: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }],
+        skip: q ? 0 : (page - 1) * POSTS_PER_PAGE,
+        take: q ? 100 : POSTS_PER_PAGE,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          featuredImage: true,
+          tags: true,
+          publishedAt: true,
+          createdAt: true,
+        },
+      }),
+      prisma.post.count({ where }),
+    ])
+    return { posts, total, pages: q ? 1 : Math.ceil(total / POSTS_PER_PAGE) }
   } catch {
-    return []
+    return { posts: [], total: 0, pages: 0 }
   }
 }
 
-export default async function BlogPage() {
-  const posts = await getPosts()
+interface PageProps {
+  searchParams: { page?: string; q?: string }
+}
+
+export default async function BlogPage({ searchParams }: PageProps) {
+  await publishScheduledPosts()
+  const page = Math.max(1, parseInt(searchParams.page || '1', 10))
+  const q = searchParams.q?.trim() || ''
+  const { posts, pages } = await getBlogData(page, q || undefined)
+
+  function buildUrl(p: number) {
+    const params = new URLSearchParams()
+    if (p > 1) params.set('page', String(p))
+    if (q) params.set('q', q)
+    return `/blog${params.toString() ? '?' + params.toString() : ''}`
+  }
 
   return (
     <>
@@ -48,8 +97,8 @@ export default async function BlogPage() {
           style={{
             padding: '80px 24px 56px',
             textAlign: 'center',
-            borderBottom: '1px solid #e8e8e6',
-            background: '#ffffff',
+            borderBottom: '1px solid var(--border)',
+            background: 'var(--surface)',
           }}
         >
           <div style={{ maxWidth: 600, margin: '0 auto' }}>
@@ -63,74 +112,139 @@ export default async function BlogPage() {
             >
               The Blog
             </h1>
-            <p
-              style={{
-                fontSize: 18,
-                color: '#6b6b67',
-                lineHeight: 1.6,
-              }}
-            >
+            <p style={{ fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.6 }}>
               SEO strategies, content marketing tips, and insights on AI-powered writing from the articlos team.
             </p>
+            <BlogSearch initialQuery={q} />
           </div>
         </section>
 
         {/* Posts Grid */}
-        <section style={{ padding: '64px 24px', background: '#fafaf9' }}>
+        <section style={{ padding: '56px 24px 80px', background: 'var(--bg)' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            {posts.length > 0 ? (
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: 24,
-                }}
-                className="blog-grid"
-              >
-                {posts.map((post) => (
-                  <BlogCard
-                    key={post.id}
-                    title={post.title}
-                    slug={post.slug}
-                    excerpt={post.excerpt}
-                    featuredImage={post.featuredImage}
-                    tags={post.tags}
-                    publishedAt={post.publishedAt}
-                    createdAt={post.createdAt}
-                  />
-                ))}
+            {q && (
+              <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
+                  {posts.length} result{posts.length !== 1 ? 's' : ''} for <strong style={{ color: 'var(--text)' }}>&ldquo;{q}&rdquo;</strong>
+                </p>
+                <Link href="/blog" style={{ fontSize: 13, color: 'var(--text-muted)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                  Clear
+                </Link>
               </div>
-            ) : (
-              <div
-                style={{
-                  textAlign: 'center',
-                  padding: '80px 24px',
-                  color: '#6b6b67',
-                }}
-              >
+            )}
+            {posts.length > 0 ? (
+              <>
                 <div
                   style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: '50%',
-                    background: '#f0f0ee',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 20px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: 24,
                   }}
+                  className="blog-grid"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a0a09c" strokeWidth="1.75">
+                  {posts.map((post) => (
+                    <BlogCard
+                      key={post.id}
+                      title={post.title}
+                      slug={post.slug}
+                      excerpt={post.excerpt}
+                      featuredImage={post.featuredImage}
+                      tags={post.tags}
+                      publishedAt={post.publishedAt}
+                      createdAt={post.createdAt}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {pages > 1 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      marginTop: 56,
+                    }}
+                  >
+                    {page > 1 && (
+                      <Link
+                        href={buildUrl(page - 1)}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: 7,
+                          border: '1px solid var(--border)',
+                          background: 'var(--surface)',
+                          color: 'var(--text)',
+                          fontSize: 14,
+                          fontWeight: 500,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        ← Prev
+                      </Link>
+                    )}
+                    {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
+                      if (pages > 7 && Math.abs(p - page) > 2 && p !== 1 && p !== pages) {
+                        if (p === page - 3 || p === page + 3) {
+                          return <span key={p} style={{ color: 'var(--text-muted)', fontSize: 14 }}>…</span>
+                        }
+                        return null
+                      }
+                      return (
+                        <Link
+                          key={p}
+                          href={buildUrl(p)}
+                          style={{
+                            width: 36, height: 36, borderRadius: 7,
+                            border: '1px solid',
+                            borderColor: p === page ? 'var(--accent)' : 'var(--border)',
+                            background: p === page ? 'var(--accent)' : 'var(--surface)',
+                            color: p === page ? 'var(--accent-fg)' : 'var(--text)',
+                            fontSize: 14, fontWeight: p === page ? 600 : 400,
+                            textDecoration: 'none',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          {p}
+                        </Link>
+                      )
+                    })}
+                    {page < pages && (
+                      <Link
+                        href={buildUrl(page + 1)}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: 7,
+                          border: '1px solid var(--border)',
+                          background: 'var(--surface)',
+                          color: 'var(--text)',
+                          fontSize: 14,
+                          fontWeight: 500,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        Next →
+                      </Link>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '80px 24px', color: 'var(--text-muted)' }}>
+                <div style={{
+                  width: 64, height: 64, borderRadius: '50%',
+                  background: 'var(--bg-elevated)', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 20px',
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.75">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
                 </div>
-                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#0f0f0e', marginBottom: 8 }}>
-                  No posts yet
-                </h3>
-                <p style={{ fontSize: 15 }}>
-                  Check back soon — we&apos;re working on some great content.
-                </p>
+                <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text)', marginBottom: 8 }}>No posts yet</h3>
+                <p style={{ fontSize: 15 }}>Check back soon — we&apos;re working on some great content.</p>
               </div>
             )}
           </div>

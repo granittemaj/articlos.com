@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatDate, truncate } from '@/lib/utils'
 
 interface BlogCardProps {
@@ -31,8 +32,8 @@ export default function BlogCard({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        background: '#ffffff',
-        border: '1px solid #e8e8e6',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
         borderRadius: 10,
         overflow: 'hidden',
         textDecoration: 'none',
@@ -56,14 +57,22 @@ export default function BlogCard({
           width: '100%',
           height: 200,
           background: featuredImage
-            ? `url(${featuredImage}) center/cover no-repeat`
-            : 'linear-gradient(135deg, #f0f0ee 0%, #e8e8e6 100%)',
+            ? undefined
+            : 'linear-gradient(135deg, var(--bg-elevated) 0%, var(--border) 100%)',
           flexShrink: 0,
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {!featuredImage && (
+        {featuredImage ? (
+          <Image
+            src={featuredImage}
+            alt={title}
+            width={600}
+            height={200}
+            style={{ width: '100%', height: 200, objectFit: 'cover' }}
+          />
+        ) : (
           <div
             style={{
               position: 'absolute',
@@ -73,7 +82,7 @@ export default function BlogCard({
               justifyContent: 'center',
             }}
           >
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4d4d0" strokeWidth="1.5">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--border)" strokeWidth="1.5">
               <rect x="3" y="3" width="18" height="18" rx="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
               <path d="M21 15l-5-5L5 21" />
@@ -110,7 +119,7 @@ export default function BlogCard({
             fontWeight: 600,
             lineHeight: 1.3,
             letterSpacing: '-0.02em',
-            color: '#0f0f0e',
+            color: 'var(--text)',
           }}
         >
           {title}
@@ -121,7 +130,7 @@ export default function BlogCard({
           <p
             style={{
               fontSize: 14,
-              color: '#6b6b67',
+              color: 'var(--text-muted)',
               lineHeight: 1.6,
               flex: 1,
             }}
@@ -134,7 +143,7 @@ export default function BlogCard({
         <p
           style={{
             fontSize: 12,
-            color: '#a0a09c',
+            color: 'var(--text-muted)',
             marginTop: 4,
           }}
         >

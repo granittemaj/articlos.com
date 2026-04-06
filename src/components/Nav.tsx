@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import BackToTop from './BackToTop'
+import ThemeToggle from './ThemeToggle'
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -33,10 +34,10 @@ export default function Nav() {
           right: 0,
           zIndex: 100,
           height: 60,
-          backgroundColor: scrolled ? 'rgba(250,250,249,0.92)' : '#fafaf9',
+          backgroundColor: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: '1px solid #e8e8e6',
+          borderBottom: '1px solid var(--border)',
           transition: 'background-color 0.2s ease, backdrop-filter 0.2s ease',
         }}
       >
@@ -67,11 +68,11 @@ export default function Nav() {
                 width: 30,
                 height: 30,
                 borderRadius: 7,
-                background: '#0f0f0e',
+                background: 'var(--text)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#fff',
+                color: 'var(--bg)',
                 fontWeight: 700,
                 fontSize: 16,
                 fontFamily: 'Geist, sans-serif',
@@ -85,7 +86,7 @@ export default function Nav() {
               style={{
                 fontWeight: 600,
                 fontSize: 16,
-                color: '#0f0f0e',
+                color: 'var(--text)',
                 letterSpacing: '-0.02em',
               }}
             >
@@ -104,9 +105,10 @@ export default function Nav() {
           >
             {[
               { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
+              { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
               { label: 'FAQ', href: '/faq' },
+              { label: 'Contact', href: '/contact' },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -116,16 +118,16 @@ export default function Nav() {
                   borderRadius: 6,
                   fontSize: 14,
                   fontWeight: 450,
-                  color: '#6b6b67',
+                  color: 'var(--text-muted)',
                   textDecoration: 'none',
                   transition: 'color 0.15s ease, background 0.15s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#0f0f0e'
-                  e.currentTarget.style.background = '#f0f0ee'
+                  e.currentTarget.style.color = 'var(--text)'
+                  e.currentTarget.style.background = 'var(--bg-elevated)'
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#6b6b67'
+                  e.currentTarget.style.color = 'var(--text-muted)'
                   e.currentTarget.style.background = 'transparent'
                 }}
               >
@@ -143,38 +145,40 @@ export default function Nav() {
             }}
             className="desktop-cta"
           >
+            <ThemeToggle />
             <a
               href="https://app.articlos.com/login"
               style={{
                 padding: '6px 14px',
                 fontSize: 14,
                 fontWeight: 450,
-                color: '#6b6b67',
+                color: 'var(--text-muted)',
                 textDecoration: 'none',
                 borderRadius: 6,
                 transition: 'color 0.15s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#0f0f0e' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#6b6b67' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
             >
               Log in
             </a>
             <a
-              href="https://app.articlos.com/register"
+              href="/contact"
               className="btn btn-primary btn-sm"
               style={{ fontSize: 14 }}
             >
-              Start free →
+              Contact us →
             </a>
           </div>
 
-          {/* Hamburger */}
+          {/* Mobile controls: theme toggle + hamburger */}
+          <div className="mobile-controls" style={{ display: 'none', alignItems: 'center', gap: 4 }}>
+            <ThemeToggle />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="hamburger-btn"
             aria-label="Toggle menu"
             style={{
-              display: 'none',
+              display: 'flex',
               flexDirection: 'column',
               gap: 5,
               padding: 8,
@@ -189,7 +193,7 @@ export default function Nav() {
                 display: 'block',
                 width: 20,
                 height: 1.5,
-                background: '#0f0f0e',
+                background: 'var(--text)',
                 borderRadius: 2,
                 transition: 'transform 0.2s ease, opacity 0.2s ease',
                 transform: menuOpen ? 'translateY(6.5px) rotate(45deg)' : 'none',
@@ -200,7 +204,7 @@ export default function Nav() {
                 display: 'block',
                 width: 20,
                 height: 1.5,
-                background: '#0f0f0e',
+                background: 'var(--text)',
                 borderRadius: 2,
                 opacity: menuOpen ? 0 : 1,
                 transition: 'opacity 0.2s ease',
@@ -211,13 +215,14 @@ export default function Nav() {
                 display: 'block',
                 width: 20,
                 height: 1.5,
-                background: '#0f0f0e',
+                background: 'var(--text)',
                 borderRadius: 2,
                 transition: 'transform 0.2s ease, opacity 0.2s ease',
                 transform: menuOpen ? 'translateY(-6.5px) rotate(-45deg)' : 'none',
               }}
             />
           </button>
+          </div>
         </div>
       </header>
 
@@ -228,7 +233,7 @@ export default function Nav() {
             position: 'fixed',
             inset: 0,
             zIndex: 99,
-            background: '#fafaf9',
+            background: 'var(--nav-bg)',
             display: 'flex',
             flexDirection: 'column',
             padding: '80px 24px 32px',
@@ -237,9 +242,10 @@ export default function Nav() {
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
               { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
+              { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
               { label: 'FAQ', href: '/faq' },
+              { label: 'Contact', href: '/contact' },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -249,9 +255,9 @@ export default function Nav() {
                   padding: '14px 0',
                   fontSize: 22,
                   fontWeight: 500,
-                  color: '#0f0f0e',
+                  color: 'var(--text)',
                   textDecoration: 'none',
-                  borderBottom: '1px solid #e8e8e6',
+                  borderBottom: '1px solid var(--border)',
                   letterSpacing: '-0.02em',
                 }}
               >
@@ -275,11 +281,11 @@ export default function Nav() {
               Log in
             </a>
             <a
-              href="https://app.articlos.com/register"
+              href="/contact"
               className="btn btn-primary"
               style={{ justifyContent: 'center', padding: '13px' }}
             >
-              Start free →
+              Contact us →
             </a>
           </div>
         </div>
@@ -289,7 +295,7 @@ export default function Nav() {
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .desktop-cta { display: none !important; }
-          .hamburger-btn { display: flex !important; }
+          .mobile-controls { display: flex !important; }
         }
       `}</style>
 

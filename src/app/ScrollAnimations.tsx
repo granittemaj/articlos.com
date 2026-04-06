@@ -15,7 +15,7 @@ export default function ScrollAnimations() {
       { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     )
 
-    const elements = document.querySelectorAll('.fade-up')
+    const elements = document.querySelectorAll('.fade-up, .scale-in')
     elements.forEach((el) => observer.observe(el))
 
     return () => observer.disconnect()

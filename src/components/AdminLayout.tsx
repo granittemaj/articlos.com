@@ -11,7 +11,7 @@ interface AdminLayoutProps {
 const navItems = [
   {
     label: 'Dashboard',
-    href: '/admin',
+    href: '/plogin-admin',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -23,7 +23,7 @@ const navItems = [
   },
   {
     label: 'Blog Posts',
-    href: '/admin/blog',
+    href: '/plogin-admin/blog',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -35,12 +35,69 @@ const navItems = [
     ),
   },
   {
+    label: 'Queue',
+    href: '/plogin-admin/queue',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <line x1="8" y1="6" x2="21" y2="6"/>
+        <line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/>
+        <line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+    ),
+  },
+  {
     label: 'Site Content',
-    href: '/admin/content',
+    href: '/plogin-admin/content',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Messages',
+    href: '/plogin-admin/messages',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Subscribers',
+    href: '/plogin-admin/subscribers',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Images',
+    href: '/plogin-admin/images',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Settings',
+    href: '/plogin-admin/settings',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     ),
   },
@@ -54,7 +111,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         {/* Logo */}
-        <div className="sidebar-logo">
+        <Link href="/plogin-admin" className="sidebar-logo" style={{ textDecoration: 'none', cursor: 'pointer' }}>
           <div
             style={{
               width: 28,
@@ -87,15 +144,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           >
             ADMIN
           </span>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="sidebar-nav">
           <div className="sidebar-section-label">Menu</div>
           {navItems.map((item) => {
             const isActive =
-              item.href === '/admin'
-                ? pathname === '/admin'
+              item.href === '/plogin-admin'
+                ? pathname === '/plogin-admin'
                 : pathname.startsWith(item.href)
             return (
               <Link
@@ -135,7 +192,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Bottom: Sign out */}
         <div className="sidebar-bottom">
           <button
-            onClick={() => signOut({ callbackUrl: '/admin/login' })}
+            onClick={() => signOut({ callbackUrl: '/plogin-admin/login' })}
             className="sidebar-nav-item"
             style={{ width: '100%', border: 'none', cursor: 'pointer' }}
           >
