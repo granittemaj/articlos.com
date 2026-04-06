@@ -169,13 +169,14 @@ export default function Nav() {
             </a>
           </div>
 
-          {/* Hamburger */}
+          {/* Mobile controls: theme toggle + hamburger */}
+          <div className="mobile-controls" style={{ display: 'none', alignItems: 'center', gap: 4 }}>
+            <ThemeToggle />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="hamburger-btn"
             aria-label="Toggle menu"
             style={{
-              display: 'none',
+              display: 'flex',
               flexDirection: 'column',
               gap: 5,
               padding: 8,
@@ -219,6 +220,7 @@ export default function Nav() {
               }}
             />
           </button>
+          </div>
         </div>
       </header>
 
@@ -268,9 +270,6 @@ export default function Nav() {
               gap: 10,
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
-              <ThemeToggle />
-            </div>
             <a
               href="https://app.articlos.com/login"
               className="btn btn-ghost"
@@ -293,7 +292,7 @@ export default function Nav() {
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .desktop-cta { display: none !important; }
-          .hamburger-btn { display: flex !important; }
+          .mobile-controls { display: flex !important; }
         }
       `}</style>
     </>
