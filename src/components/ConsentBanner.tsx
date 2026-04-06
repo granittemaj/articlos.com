@@ -16,10 +16,13 @@ export default function ConsentBanner() {
     }
   }, [])
 
-  function dismiss(accepted: boolean) {
-    localStorage.setItem('articlos_consent', accepted ? 'accepted' : 'declined')
-    if (accepted) {
-      window.dispatchEvent(new Event('articlos_consent_accepted'))
+  function dismiss(accepted: boolean | null) {
+    // null = "Leave" — close without storing, banner returns next visit
+    if (accepted !== null) {
+      localStorage.setItem('articlos_consent', accepted ? 'accepted' : 'declined')
+      if (accepted) {
+        window.dispatchEvent(new Event('articlos_consent_accepted'))
+      }
     }
     setLeaving(true)
     setTimeout(() => setVisible(false), 380)
@@ -29,6 +32,7 @@ export default function ConsentBanner() {
 
   return (
     <>
+      {/* Backdrop blocks page interaction while banner is open */}
       <div
         className={`consent-backdrop${leaving ? ' consent-leaving' : ''}`}
         aria-hidden="true"
@@ -50,9 +54,9 @@ export default function ConsentBanner() {
             <p className="consent-title">Your privacy, your choice</p>
             <p className="consent-text">
               We use cookies to keep you signed in, analyse usage, and improve articlos. By continuing you accept our{' '}
-              <Link href="/terms" className="consent-link">Terms</Link>
+              <Link href="/terms" className="consent-link" onClick={() => dismiss(false)}>Terms</Link>
               {' '}and{' '}
-              <Link href="/cookies" className="consent-link">Cookie Policy</Link>.
+              <Link href="/cookies" className="consent-link" onClick={() => dismiss(false)}>Cookie Policy</Link>.
             </p>
           </div>
         </div>
@@ -60,10 +64,16 @@ export default function ConsentBanner() {
         {/* Right: actions */}
         <div className="consent-actions">
           <button
+            onClick={() => dismiss(null)}
+            className="consent-leave"
+          >
+            Leave
+          </button>
+          <button
             onClick={() => dismiss(false)}
             className="consent-btn consent-btn-secondary"
           >
-            Decline
+            Accept only essential
           </button>
           <button
             onClick={() => dismiss(true)}
@@ -82,7 +92,6 @@ export default function ConsentBanner() {
           backdrop-filter: blur(2px);
           z-index: 999;
           animation: consent-fade-in 0.35s ease both;
-          pointer-events: none;
         }
         .consent-banner {
           position: fixed;
@@ -91,7 +100,7 @@ export default function ConsentBanner() {
           transform: translateX(-50%) translateY(0);
           z-index: 1000;
           width: calc(100% - 48px);
-          max-width: 760px;
+          max-width: 820px;
           background: var(--text);
           color: var(--bg);
           border-radius: 16px;
@@ -173,6 +182,24 @@ export default function ConsentBanner() {
           gap: 8px;
           flex-shrink: 0;
         }
+        .consent-leave {
+          padding: 9px 12px;
+          font-size: 13px;
+          font-weight: 500;
+          color: var(--bg);
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: opacity 0.15s ease;
+          white-space: nowrap;
+          letter-spacing: -0.01em;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+          opacity: 0.4;
+        }
+        .consent-leave:hover {
+          opacity: 0.7;
+        }
         .consent-btn {
           padding: 9px 18px;
           border-radius: 8px;
@@ -200,15 +227,22 @@ export default function ConsentBanner() {
         .consent-btn-primary:hover {
           opacity: 0.9;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 640px) {
           .consent-banner {
             flex-direction: column;
             bottom: 16px;
-            padding: 18px 18px;
+            padding: 18px;
             gap: 16px;
           }
           .consent-actions {
             width: 100%;
+            flex-wrap: wrap;
+          }
+          .consent-leave {
+            width: 100%;
+            text-align: center;
+            padding: 8px 0;
+            order: 3;
           }
           .consent-btn {
             flex: 1;

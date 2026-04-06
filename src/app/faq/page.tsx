@@ -98,20 +98,20 @@ const categories = [
     label: 'Pricing & Account',
     questions: [
       {
-        q: 'How does pricing work?',
-        a: 'We offer flexible plans tailored to content teams of different sizes. Contact us at hello@articlos.com to discuss pricing for your use case. We offer a free trial with no credit card required so you can evaluate the platform before committing.',
-      },
-      {
         q: 'Is there a free trial?',
-        a: 'Yes. You can start a free trial without a credit card. The trial includes access to all core features so you can evaluate articlos end-to-end before deciding on a plan.',
+        a: "Yes — all plans start with a 7-day free trial. No credit card required. You'll get full access to all features on your chosen plan.",
       },
       {
-        q: 'Can I cancel at any time?',
-        a: 'Yes. There are no long-term contracts. You can cancel your subscription at any time from your account settings. Cancellation takes effect at the end of your current billing period. We do not offer prorated refunds for unused time.',
+        q: 'Can I change plans at any time?',
+        a: 'Absolutely. Upgrade or downgrade any time from your account settings. Changes take effect on your next billing cycle.',
       },
       {
-        q: 'Do you offer discounts for agencies or annual billing?',
-        a: 'Yes, we offer discounts for annual billing and have agency-specific pricing for teams managing multiple client websites. Contact hello@articlos.com to discuss the best plan for your situation.',
+        q: 'What happens if I exceed my monthly article limit?',
+        a: 'You can purchase top-up packs or upgrade to a higher plan at any time. We will never cut off mid-month.',
+      },
+      {
+        q: 'Do you offer annual billing?',
+        a: 'Yes — annual plans are available at a 20% discount compared to monthly billing. You can switch to annual from your billing settings.',
       },
     ],
   },
@@ -131,13 +131,6 @@ export default function FAQPage() {
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          // handled by hero-grid class
-          backgroundSize: '28px 28px',
-          opacity: 0.4,
-          pointerEvents: 'none',
-        }} />
         <div style={{ maxWidth: 640, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div className="fade-up" style={{
             display: 'inline-block', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',

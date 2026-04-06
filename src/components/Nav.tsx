@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import BackToTop from './BackToTop'
 import ThemeToggle from './ThemeToggle'
 
 export default function Nav() {
@@ -106,6 +107,7 @@ export default function Nav() {
               { label: 'Features', href: '/#features' },
               { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
+              { label: 'FAQ', href: '/faq' },
               { label: 'Contact', href: '/contact' },
             ].map((item) => (
               <Link
@@ -242,6 +244,7 @@ export default function Nav() {
               { label: 'Features', href: '/#features' },
               { label: 'About', href: '/about' },
               { label: 'Blog', href: '/blog' },
+              { label: 'FAQ', href: '/faq' },
               { label: 'Contact', href: '/contact' },
             ].map((item) => (
               <Link
@@ -295,6 +298,8 @@ export default function Nav() {
           .mobile-controls { display: flex !important; }
         }
       `}</style>
+
+      <BackToTop />
     </>
   )
 }
