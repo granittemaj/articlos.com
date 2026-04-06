@@ -29,7 +29,7 @@ export default function Footer() {
           className="footer-grid"
         >
           {/* Col 1: Brand */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="footer-brand" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <Link
               href="/"
               style={{
@@ -96,9 +96,9 @@ export default function Footer() {
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 { label: 'Features', href: '/#features' },
-                { label: 'About', href: '/about' },
+                { label: 'Pricing', href: '/pricing' },
                 { label: 'Blog', href: '/blog' },
-                { label: 'Changelog', href: '/changelog' },
+                { label: 'About', href: '/about' },
               ].map((item) => (
                 <Link
                   key={item.label}
@@ -224,10 +224,8 @@ export default function Footer() {
             grid-template-columns: 1fr 1fr !important;
             gap: 32px !important;
           }
-        }
-        @media (max-width: 400px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
+          .footer-brand {
+            grid-column: 1 / -1 !important;
           }
         }
       `}</style>
