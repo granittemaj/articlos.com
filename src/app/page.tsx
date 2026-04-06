@@ -304,11 +304,11 @@ export default async function HomePage() {
               zIndex: 0,
             }} />
             {[
-              { n: '01', label: 'Discover', desc: 'Surfaces high-intent, low-competition keyword opportunities', col: '#2563eb', icon: '✦', bg: '#eff6ff', bd: '#bfdbfe' },
-              { n: '02', label: 'Plan', desc: 'Prioritizes topics by traffic potential and competition gaps', col: '#7c3aed', icon: '▦', bg: '#faf5ff', bd: '#ddd6fe' },
-              { n: '03', label: 'Generate', desc: 'Creates publish-ready SEO + AEO optimized articles at scale', col: '#0f0f0e', icon: '⟳', bg: '#f4f4f3', bd: '#e4e4e2' },
-              { n: '04', label: 'Measure', desc: 'Tracks rankings, organic traffic, and content ROI automatically', col: '#d97706', icon: '↗', bg: '#fffbeb', bd: '#fde68a' },
-              { n: '05', label: 'Improve', desc: 'Refreshes content to maintain and grow rankings continuously', col: '#16a34a', icon: '◈', bg: '#f0fdf4', bd: '#bbf7d0' },
+              { n: '01', label: 'Discover', desc: 'Surfaces high-intent, low-competition keyword opportunities', col: 'var(--text)', icon: '✦', bd: 'var(--border)' },
+              { n: '02', label: 'Plan', desc: 'Prioritizes topics by traffic potential and competition gaps', col: 'var(--text)', icon: '▦', bd: 'var(--border)' },
+              { n: '03', label: 'Generate', desc: 'Creates publish-ready SEO + AEO optimized articles at scale', col: 'var(--text)', icon: '⟳', bd: 'var(--border)' },
+              { n: '04', label: 'Measure', desc: 'Tracks rankings, organic traffic, and content ROI automatically', col: 'var(--text)', icon: '↗', bd: 'var(--border)' },
+              { n: '05', label: 'Improve', desc: 'Refreshes content to maintain and grow rankings continuously', col: 'var(--text)', icon: '◈', bd: 'var(--border)' },
             ].map((stage, i) => (
               <div
                 key={stage.n}
