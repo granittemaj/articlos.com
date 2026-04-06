@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import BackToTop from './BackToTop'
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -105,6 +106,7 @@ export default function Nav() {
               { label: 'Features', href: '/#features' },
               { label: 'Pricing', href: '/pricing' },
               { label: 'Blog', href: '/blog' },
+              { label: 'FAQ', href: '/faq' },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -237,6 +239,7 @@ export default function Nav() {
               { label: 'Features', href: '/#features' },
               { label: 'Pricing', href: '/pricing' },
               { label: 'Blog', href: '/blog' },
+              { label: 'FAQ', href: '/faq' },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -289,6 +292,8 @@ export default function Nav() {
           .hamburger-btn { display: flex !important; }
         }
       `}</style>
+
+      <BackToTop />
     </>
   )
 }
