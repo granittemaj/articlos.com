@@ -1,5 +1,10 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 async function getStats() {
   try {
@@ -38,6 +43,9 @@ async function getStats() {
 }
 
 export default async function AdminDashboard() {
+  const session = await getServerSession(authOptions)
+  if (!session) redirect('/plogin-admin/login')
+
   const { totalPosts, publishedPosts, draftPosts, scheduledPosts, subscribers, recentPosts } = await getStats()
 
   const statCards = [
