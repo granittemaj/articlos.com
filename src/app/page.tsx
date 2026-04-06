@@ -304,11 +304,11 @@ export default async function HomePage() {
               zIndex: 0,
             }} />
             {[
-              { n: '01', label: 'Discover', desc: 'Surfaces high-intent, low-competition keyword opportunities', col: 'var(--text)', icon: '✦', bd: 'var(--border)' },
-              { n: '02', label: 'Plan', desc: 'Prioritizes topics by traffic potential and competition gaps', col: 'var(--text)', icon: '▦', bd: 'var(--border)' },
-              { n: '03', label: 'Generate', desc: 'Creates publish-ready SEO + AEO optimized articles at scale', col: 'var(--text)', icon: '⟳', bd: 'var(--border)' },
-              { n: '04', label: 'Measure', desc: 'Tracks rankings, organic traffic, and content ROI automatically', col: 'var(--text)', icon: '↗', bd: 'var(--border)' },
-              { n: '05', label: 'Improve', desc: 'Refreshes content to maintain and grow rankings continuously', col: 'var(--text)', icon: '◈', bd: 'var(--border)' },
+              { n: '01', label: 'Discover', desc: 'Surfaces high-intent, low-competition keyword opportunities', icon: '✦' },
+              { n: '02', label: 'Plan', desc: 'Prioritizes topics by traffic potential and competition gaps', icon: '▦' },
+              { n: '03', label: 'Generate', desc: 'Creates publish-ready SEO + AEO optimized articles at scale', icon: '⟳' },
+              { n: '04', label: 'Measure', desc: 'Tracks rankings, organic traffic, and content ROI automatically', icon: '↗' },
+              { n: '05', label: 'Improve', desc: 'Refreshes content to maintain and grow rankings continuously', icon: '◈' },
             ].map((stage, i) => (
               <div
                 key={stage.n}
@@ -316,17 +316,16 @@ export default async function HomePage() {
                 style={{ textAlign: 'center', padding: '0 14px', position: 'relative', zIndex: 1 }}
               >
                 <div className="stage-circle" style={{
-                  width: 56, height: 56, borderRadius: '50%',
-                  background: 'var(--surface)', border: `2px solid ${stage.bd}`,
+                  width: 48, height: 48, borderRadius: 12,
+                  background: 'var(--accent)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 18px', fontSize: 18, color: stage.col,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                  margin: '0 auto 18px', fontSize: 18, color: 'var(--accent-fg)',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                 }}>
                   {stage.icon}
                 </div>
                 <div style={{
-                  fontSize: 11, fontWeight: 700, color: stage.col,
+                  fontSize: 11, fontWeight: 700, color: 'var(--text)',
                   textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8,
                 }}>
                   {stage.label}
