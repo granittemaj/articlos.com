@@ -10,9 +10,9 @@ export default async function AdminShellLayout({
 }) {
   const session = await getServerSession(authOptions)
 
-  // Middleware (middleware.ts) enforces authentication for all /admin/* routes
-  // except /admin/login. When this layout renders without a session, we are on
-  // the login page — render children as-is (the login page handles its own UI).
+  // Middleware enforces authentication for all /plogin-admin/* routes
+  // except /plogin-admin/login. When there's no session here, we're on
+  // the login page — render children as-is.
   if (!session) {
     return <>{children}</>
   }
