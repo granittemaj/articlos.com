@@ -11,10 +11,10 @@ function getClient() {
 }
 
 // POST /api/admin/ai
-// body: { action: 'topics', niche?: string }
+// body: { action: 'topics', niche?: string, topicStyle?: 'accessible' | 'technical' }
 //     | { action: 'suggest', niche?: string }
 //     | { action: 'keywords', niche?: string }
-//     | { action: 'generate', topic: string, keywords?: string }
+//     | { action: 'generate', topic: string, keywords?: string, writingStyle?: 'accessible' | 'technical' }
 //     | { action: 'relink', content: string, title: string }
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -22,14 +22,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string; content?: string; title?: string }
+  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string; content?: string; title?: string; topicStyle?: string; writingStyle?: string }
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { action, niche, topic, keywords, context, content, title } = body
+  const { action, niche, topic, keywords, context, content, title, topicStyle, writingStyle } = body
 
   try {
     const genAI = getClient()
@@ -63,6 +63,8 @@ export async function POST(req: NextRequest) {
 
       const today = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
+      const isTechnical = topicStyle === 'technical'
+
       const prompt = `You are a sharp, opinionated content strategist writing for ${niche ? `a "${niche}" audience` : 'a content marketing / SaaS audience'} in ${today}.
 
 Generate exactly 8 blog post topic ideas — one for each angle listed below. Use the angles in the order given.
@@ -71,6 +73,10 @@ ASSIGNED ANGLES (use each one, in order):
 ${selectedAngles.map((a, i) => `${i + 1}. ${a}`).join('\n')}
 
 CONTEXT: It is currently ${today}. Topics must feel relevant and timely for right now — not 2023 or 2024. Reference current tools, platforms, and trends that exist in 2026. Avoid anything that was already overdone in 2024 (e.g. generic ChatGPT hype, "AI will replace writers", basic SEO 101 content).
+
+AUDIENCE LEVEL: ${isTechnical
+  ? 'TECHNICAL — these topics are for experienced practitioners and experts. You may use industry jargon, acronyms, and assume deep prior knowledge. Titles should reflect advanced, specific, or niche problems that only someone deep in the field would care about.'
+  : 'ACCESSIBLE — these topics must be easy to understand for someone relatively new to the subject. Avoid jargon and acronyms. Write titles the way a real person would type a question into Google: plain language, conversational, and immediately clear about what they will learn.'}
 
 STRICT TITLE RULES:
 - No generic titles: "Ultimate Guide to X", "X Tips for Y", "Everything You Need to Know", "How to Get Started", "The Power of X", "Why X Matters"
@@ -164,6 +170,8 @@ Return ONLY valid JSON (no markdown, no code fences):
         },
       })
 
+      const isWritingTechnical = writingStyle === 'technical'
+
       const prompt = `You are an expert SEO content writer. Write a comprehensive, high-quality blog post about: "${topic}".
 
 ${keywordHint}
@@ -177,6 +185,18 @@ Requirements:
 - Write in a clear, engaging, authoritative tone
 - Optimize naturally for SEO — do not keyword-stuff
 - End with a strong conclusion
+
+WRITING STYLE: ${isWritingTechnical
+  ? 'TECHNICAL — write for experienced practitioners. Use precise terminology, industry jargon, and assume the reader has deep prior knowledge. You can reference specific tools, APIs, frameworks, and advanced concepts without explaining the basics. Be dense, specific, and opinionated.'
+  : 'ACCESSIBLE — write for a general audience that may be new to this topic. Explain concepts clearly without assuming prior knowledge. Avoid jargon; when a technical term is necessary, briefly explain it. Use simple, direct sentences.'}
+
+Humanization rules (critical — follow strictly):
+- Write like a real person, not a content robot. Use "you" to address the reader directly. Occasionally use "we" or "I" to add a human voice.
+- Vary sentence length. Mix short punchy sentences with longer ones. Avoid a rhythm that feels machine-generated.
+- Never use these overused AI phrases: "In today's fast-paced world", "It's important to note", "Dive into", "Delve into", "At the end of the day", "Game-changer", "Leverage", "Unlock", "Empower", "Navigate", "Landscape", "It goes without saying", "Needless to say", "In conclusion, it is clear that"
+- Avoid unnecessarily formal or academic language. Use contractions (don't, you'll, it's, here's) to sound natural.
+- Ground claims in reality — mention specific tools, real numbers, or concrete examples rather than vague generalities
+- The introduction should feel like something a knowledgeable friend would say, not a Wikipedia opening paragraph
 
 Linking requirements (critical for SEO):
 - Internal links (3-5 throughout the article): Naturally link to articlos.com pages where relevant. Use these exact HTML snippets where they fit contextually:

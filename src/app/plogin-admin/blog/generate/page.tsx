@@ -42,12 +42,12 @@ async function fetchPexelsImage(query: string): Promise<string> {
   }
 }
 
-async function generateAndSave(topic: Topic, publish: boolean = false): Promise<{ postId: string }> {
+async function generateAndSave(topic: Topic, publish: boolean = false, writingStyle: 'accessible' | 'technical' = 'accessible'): Promise<{ postId: string }> {
   // Generate content
   const genRes = await fetch('/api/admin/ai', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'generate', topic: topic.title, keywords: topic.keyword }),
+    body: JSON.stringify({ action: 'generate', topic: topic.title, keywords: topic.keyword, writingStyle }),
   })
   const genData = await genRes.json()
   if (!genRes.ok) throw new Error(genData.error || 'Generation failed')
@@ -109,6 +109,10 @@ export default function GeneratePage() {
   const [batchResults, setBatchResults] = useState<BatchResult[]>([])
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; title: string } | null>(null)
 
+  // Style preferences
+  const [topicStyle, setTopicStyle] = useState<'accessible' | 'technical'>('accessible')
+  const [writingStyle, setWritingStyle] = useState<'accessible' | 'technical'>('accessible')
+
   // Queue save state
   const [savingToQueue, setSavingToQueue] = useState(false)
   const [queueMessage, setQueueMessage] = useState('')
@@ -157,7 +161,7 @@ export default function GeneratePage() {
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'topics', niche }),
+        body: JSON.stringify({ action: 'topics', niche, topicStyle }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to fetch topics')
@@ -210,7 +214,7 @@ export default function GeneratePage() {
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'generate', topic: topicTitle, keywords }),
+        body: JSON.stringify({ action: 'generate', topic: topicTitle, keywords, writingStyle }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to generate post')
@@ -242,7 +246,7 @@ export default function GeneratePage() {
       const topic = selected[i]
       setBatchProgress({ current: i + 1, total: selected.length, title: topic.title })
       try {
-        const { postId } = await generateAndSave(topic, publishStatus === 'publish')
+        const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
         results.push({ topic, postId })
       } catch (e) {
         results.push({ topic, error: e instanceof Error ? e.message : 'Failed' })
@@ -388,6 +392,17 @@ export default function GeneratePage() {
                   onKeyDown={(e) => e.key === 'Enter' && handleFindTopics()}
                 />
                 <p className="form-hint">Leave blank for general content marketing topics.</p>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Topic complexity</label>
+                <select
+                  className="form-input"
+                  value={topicStyle}
+                  onChange={(e) => setTopicStyle(e.target.value as 'accessible' | 'technical')}
+                >
+                  <option value="accessible">Accessible — easy to understand, plain language</option>
+                  <option value="technical">Technical — expert-level, industry jargon OK</option>
+                </select>
               </div>
 
               {/* Keyword suggestions */}
@@ -713,7 +728,7 @@ export default function GeneratePage() {
               </div>
             </div>
 
-            {/* Publish status selector */}
+            {/* Writing style + publish status */}
             <div style={{
               background: '#ffffff', border: '1px solid #e8e8e6',
               borderRadius: 8, padding: '14px 16px',
@@ -721,6 +736,18 @@ export default function GeneratePage() {
               <p style={{ fontSize: 13, fontWeight: 600, color: '#0f0f0e', marginBottom: 10 }}>
                 After generating
               </p>
+              <div className="form-group" style={{ marginBottom: 14 }}>
+                <label className="form-label" style={{ fontSize: 12 }}>Writing style</label>
+                <select
+                  className="form-input"
+                  value={writingStyle}
+                  onChange={(e) => setWritingStyle(e.target.value as 'accessible' | 'technical')}
+                  style={{ fontSize: 13 }}
+                >
+                  <option value="accessible">Accessible — simple language, beginner-friendly</option>
+                  <option value="technical">Technical — expert tone, jargon allowed</option>
+                </select>
+              </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <label style={{
                   flex: 1, display: 'flex', alignItems: 'center', gap: 8,
