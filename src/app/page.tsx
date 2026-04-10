@@ -157,108 +157,132 @@ export default async function HomePage() {
                 display: 'flex', alignItems: 'center', paddingLeft: 10,
                 fontSize: 11, color: '#9b9b96', maxWidth: 260, margin: '0 auto',
               }}>
-                app.articlos.com
+                app.articlos.com/queue
               </div>
             </div>
 
             {/* App shell */}
-            <div style={{ display: 'flex', height: 380 }}>
-              {/* Sidebar */}
+            <div style={{ display: 'flex', height: 400 }}>
+
+              {/* ── Sidebar ── */}
               <div className="mockup-sidebar" style={{
-                width: 188, flexShrink: 0, background: '#ffffff',
-                borderRight: '1px solid #e4e4e2', padding: '14px 0',
+                width: 192, flexShrink: 0, background: '#ffffff',
+                borderRight: '1px solid #e4e4e2',
                 display: 'flex', flexDirection: 'column',
               }}>
-                <div style={{ padding: '0 14px 12px', borderBottom: '1px solid #f0f0ee', marginBottom: 6 }}>
+                {/* Logo */}
+                <div style={{ padding: '13px 14px 11px', borderBottom: '1px solid #f0f0ee' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                    <div style={{
-                      width: 24, height: 24, borderRadius: 6, background: '#0f0f0e',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#fff', fontWeight: 700, fontSize: 13,
-                    }}>a</div>
+                    <div style={{ width: 24, height: 24, borderRadius: 6, background: '#0f0f0e', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>a</div>
                     <span style={{ fontWeight: 600, fontSize: 13.5, letterSpacing: '-0.02em' }}>articlos</span>
                   </div>
                 </div>
-                {[
-                  { icon: '◻', label: 'Dashboard', active: false },
-                  { icon: '✦', label: 'Discover', active: false },
-                  { icon: '▦', label: 'Plan', active: false },
-                  { icon: '⟳', label: 'Generate', active: true },
-                  { icon: '↗', label: 'Measure', active: false },
-                  { icon: '◈', label: 'Improve', active: false },
-                ].map(item => (
-                  <div key={item.label} style={{
-                    display: 'flex', alignItems: 'center', gap: 9,
-                    padding: '7px 12px', margin: '1px 6px',
-                    borderRadius: 6, fontSize: 13,
-                    background: item.active ? '#f4f4f3' : 'transparent',
-                    color: item.active ? '#0f0f0e' : '#9b9b96',
-                    fontWeight: item.active ? 500 : 400,
-                    cursor: 'default',
-                  }}>
-                    <span style={{ fontSize: 10, width: 14, textAlign: 'center' }}>{item.icon}</span>
-                    {item.label}
+
+                <div style={{ padding: '8px 0', flex: 1 }}>
+                  {/* Dashboard */}
+                  <div style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
                   </div>
-                ))}
+
+                  {/* Discover section */}
+                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Discover</div>
+                  {[
+                    { label: 'Opportunities', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+                    { label: 'Competitors',   icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="9" cy="12" r="7"/><circle cx="15" cy="12" r="7"/></svg> },
+                  ].map(item => (
+                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
+                      {item.icon}{item.label}
+                    </div>
+                  ))}
+
+                  {/* Plan section */}
+                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Plan</div>
+                  {[
+                    { label: 'Content Map', active: false, icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="12" y1="9" x2="4.8" y2="7.2"/><line x1="12" y1="9" x2="19.2" y2="7.2"/><line x1="12" y1="15" x2="4.8" y2="16.8"/><line x1="12" y1="15" x2="19.2" y2="16.8"/></svg> },
+                    { label: 'Queue',       active: true,  icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
+                  ].map(item => (
+                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, background: item.active ? '#f4f4f3' : 'transparent', color: item.active ? '#0f0f0e' : '#9b9b96', fontWeight: item.active ? 500 : 400 }}>
+                      {item.icon}{item.label}
+                    </div>
+                  ))}
+
+                  {/* Create section */}
+                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Create</div>
+                  {[
+                    { label: 'Generator', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
+                    { label: 'Articles',  icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> },
+                  ].map(item => (
+                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
+                      {item.icon}{item.label}
+                    </div>
+                  ))}
+
+                  {/* Optimize section */}
+                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Optimize</div>
+                  {[
+                    { label: 'Analytics',       icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
+                    { label: 'Keyword Tracker', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
+                  ].map(item => (
+                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
+                      {item.icon}{item.label}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Main area */}
-              <div style={{ flex: 1, background: '#f9f9f8', padding: 18, overflow: 'hidden' }}>
-                <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14,
-                }}>
+              {/* ── Main content ── */}
+              <div style={{ flex: 1, background: '#f9f9f8', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+
+                {/* Page header */}
+                <div style={{ padding: '11px 16px', background: '#fff', borderBottom: '1px solid #e4e4e2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
                   <span style={{ fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.02em' }}>Content Queue</span>
-                  <span style={{
-                    background: '#0f0f0e', color: '#fff',
-                    padding: '4px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 500, cursor: 'default',
-                  }}>+ Generate</span>
+                  <span style={{ background: '#0f0f0e', color: '#fff', padding: '4px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 500 }}>+ Generate</span>
                 </div>
 
-                {/* Stats */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
-                  {[
-                    { v: '1,247', l: 'Generated', col: '#0f0f0e' },
-                    { v: '8', l: 'Today', col: '#16a34a' },
-                    { v: '94', l: 'Avg Score', col: '#2563eb' },
-                    { v: '+32%', l: 'Traffic', col: '#d97706' },
-                  ].map(s => (
-                    <div key={s.l} style={{
-                      background: '#fff', border: '1px solid #e4e4e2',
-                      borderRadius: 8, padding: '9px 10px',
-                    }}>
-                      <div style={{ fontSize: 17, fontWeight: 700, color: s.col, letterSpacing: '-0.03em' }}>{s.v}</div>
-                      <div style={{ fontSize: 10, color: '#9b9b96', marginTop: 2 }}>{s.l}</div>
-                    </div>
-                  ))}
-                </div>
+                <div style={{ padding: '14px 16px', flex: 1, overflow: 'hidden' }}>
+                  {/* Stats */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
+                    {[
+                      { v: '1,247', l: 'Generated', col: '#0f0f0e' },
+                      { v: '8',     l: 'Today',     col: '#16a34a' },
+                      { v: '94',    l: 'Avg Score',  col: '#2563eb' },
+                      { v: '+32%',  l: 'Traffic',   col: '#d97706' },
+                    ].map(s => (
+                      <div key={s.l} style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '9px 10px' }}>
+                        <div style={{ fontSize: 17, fontWeight: 700, color: s.col, letterSpacing: '-0.03em' }}>{s.v}</div>
+                        <div style={{ fontSize: 10, color: '#9b9b96', marginTop: 2 }}>{s.l}</div>
+                      </div>
+                    ))}
+                  </div>
 
-                {/* Article rows */}
-                <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, overflow: 'hidden' }}>
-                  {[
-                    { t: '10 Best SEO Tools for Startups in 2026', s: 'Published', sc: '#16a34a', bg: '#f0fdf4', score: 96 },
-                    { t: 'How to Build Backlinks Without Cold Outreach', s: 'Generating…', sc: '#d97706', bg: '#fffbeb', score: null },
-                    { t: 'Content Marketing ROI: A Complete Guide', s: 'Queued', sc: '#9b9b96', bg: '#f4f4f3', score: null },
-                    { t: 'Technical SEO Audit Checklist 2026', s: 'Scheduled', sc: '#2563eb', bg: '#eff6ff', score: null },
-                  ].map((row, i) => (
-                    <div key={i} style={{
-                      display: 'flex', alignItems: 'center',
-                      padding: '9px 12px', gap: 10,
-                      borderBottom: i < 3 ? '1px solid #f4f4f3' : 'none',
-                    }}>
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: row.sc, flexShrink: 0 }} />
-                      <div style={{ flex: 1, fontSize: 12, color: '#0f0f0e', fontWeight: 500, lineHeight: 1.35 }}>{row.t}</div>
-                      <div style={{
-                        fontSize: 10.5, fontWeight: 500, color: row.sc,
-                        background: row.bg, padding: '2px 8px', borderRadius: 100, flexShrink: 0,
-                      }}>{row.s}</div>
-                      {row.score && (
-                        <div style={{
-                          fontSize: 10.5, fontWeight: 700, color: '#16a34a',
-                          background: '#f0fdf4', padding: '2px 7px', borderRadius: 100,
-                        }}>{row.score}</div>
-                      )}
+                  {/* Queue table */}
+                  <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, overflow: 'hidden' }}>
+                    {/* Table header */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px 90px 44px', padding: '6px 12px', borderBottom: '1px solid #e4e4e2', background: '#f9f9f8' }}>
+                      {['Topic', 'Source', 'Status', 'Score'].map(h => (
+                        <div key={h} style={{ fontSize: 10, fontWeight: 600, color: '#b0b0aa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</div>
+                      ))}
                     </div>
-                  ))}
+                    {/* Rows */}
+                    {[
+                      { t: '10 Best SEO Tools for Startups in 2026',       src: 'Autopilot',     srcC: '#16a34a', srcBg: '#f0fdf4', status: 'Ready',      stC: '#16a34a', stBg: '#f0fdf4', score: '96' },
+                      { t: 'How to Build Backlinks Without Cold Outreach',  src: 'Keyword Gap',   srcC: '#2563eb', srcBg: '#eff6ff', status: 'Generating',  stC: '#2563eb', stBg: '#eff6ff', score: null },
+                      { t: 'Content Marketing ROI: A Complete Guide',       src: 'Topic Idea',    srcC: '#7c3aed', srcBg: '#f5f3ff', status: 'Queued',      stC: '#9b9b96', stBg: '#f4f4f3', score: null },
+                      { t: 'Technical SEO Audit Checklist 2026',            src: 'Content Decay', srcC: '#dc2626', srcBg: '#fef2f2', status: 'Queued',      stC: '#9b9b96', stBg: '#f4f4f3', score: null },
+                      { t: '15 Link Building Strategies That Still Work',   src: 'Opportunities', srcC: '#16a34a', srcBg: '#f0fdf4', status: 'Ready',       stC: '#16a34a', stBg: '#f0fdf4', score: '91' },
+                    ].map((row, i, arr) => (
+                      <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 110px 90px 44px', alignItems: 'center', padding: '8px 12px', borderBottom: i < arr.length - 1 ? '1px solid #f4f4f3' : 'none' }}>
+                        <div style={{ fontSize: 12, color: '#0f0f0e', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{row.t}</div>
+                        <div style={{ fontSize: 10.5, fontWeight: 500, color: row.srcC, background: row.srcBg, padding: '2px 7px', borderRadius: 100, display: 'inline-flex', width: 'fit-content' }}>{row.src}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <div style={{ width: 5, height: 5, borderRadius: '50%', background: row.stC, flexShrink: 0 }} />
+                          <span style={{ fontSize: 10.5, fontWeight: 500, color: row.stC }}>{row.status}</span>
+                        </div>
+                        <div style={{ fontSize: 10.5, fontWeight: 700, color: row.score ? '#16a34a' : 'transparent', background: row.score ? '#f0fdf4' : 'transparent', padding: '2px 7px', borderRadius: 100, width: 'fit-content' }}>{row.score || '—'}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
