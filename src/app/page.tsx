@@ -162,126 +162,161 @@ export default async function HomePage() {
             </div>
 
             {/* App shell */}
-            <div style={{ display: 'flex', height: 400 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: 490 }}>
 
-              {/* ── Sidebar ── */}
-              <div className="mockup-sidebar" style={{
-                width: 192, flexShrink: 0, background: '#ffffff',
-                borderRight: '1px solid #e4e4e2',
-                display: 'flex', flexDirection: 'column',
-              }}>
-                {/* Logo */}
-                <div style={{ padding: '13px 14px 11px', borderBottom: '1px solid #f0f0ee' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: 6, background: '#0f0f0e', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>a</div>
-                    <span style={{ fontWeight: 600, fontSize: 13.5, letterSpacing: '-0.02em' }}>articlos</span>
-                  </div>
+              {/* ── Topbar ── */}
+              <div style={{ height: 44, background: '#fff', borderBottom: '1px solid #e4e4e2', display: 'flex', alignItems: 'center', padding: '0 14px', gap: 8, flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1 }}>
+                  <div style={{ width: 26, height: 26, background: '#0f0f0e', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>a</div>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0f0f0e', letterSpacing: '-0.3px' }}>articlos</span>
+                  <span style={{ fontSize: 12, color: '#c0c0bc', margin: '0 1px' }}>/</span>
+                  <span style={{ fontSize: 13, color: '#6b6b67' }}>ContentHub</span>
                 </div>
-
-                <div style={{ padding: '8px 0', flex: 1 }}>
-                  {/* Dashboard */}
-                  <div style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                    Dashboard
-                  </div>
-
-                  {/* Discover section */}
-                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Discover</div>
-                  {[
-                    { label: 'Opportunities', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
-                    { label: 'Competitors',   icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="9" cy="12" r="7"/><circle cx="15" cy="12" r="7"/></svg> },
-                  ].map(item => (
-                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
-                      {item.icon}{item.label}
-                    </div>
-                  ))}
-
-                  {/* Plan section */}
-                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Plan</div>
-                  {[
-                    { label: 'Content Map', active: false, icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="12" y1="9" x2="4.8" y2="7.2"/><line x1="12" y1="9" x2="19.2" y2="7.2"/><line x1="12" y1="15" x2="4.8" y2="16.8"/><line x1="12" y1="15" x2="19.2" y2="16.8"/></svg> },
-                    { label: 'Queue',       active: true,  icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
-                  ].map(item => (
-                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, background: item.active ? '#f4f4f3' : 'transparent', color: item.active ? '#0f0f0e' : '#9b9b96', fontWeight: item.active ? 500 : 400 }}>
-                      {item.icon}{item.label}
-                    </div>
-                  ))}
-
-                  {/* Create section */}
-                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Create</div>
-                  {[
-                    { label: 'Generator', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
-                    { label: 'Articles',  icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> },
-                  ].map(item => (
-                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
-                      {item.icon}{item.label}
-                    </div>
-                  ))}
-
-                  {/* Optimize section */}
-                  <div style={{ padding: '8px 14px 3px', fontSize: 9.5, fontWeight: 600, color: '#c0c0bc', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Optimize</div>
-                  {[
-                    { label: 'Analytics',       icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
-                    { label: 'Keyword Tracker', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
-                  ].map(item => (
-                    <div key={item.label} style={{ margin: '1px 6px', padding: '6px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 8, color: '#9b9b96', fontSize: 12.5 }}>
-                      {item.icon}{item.label}
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#f4f4f3', border: '1px solid #e4e4e2', borderRadius: 6, padding: '0 8px', height: 28, minWidth: 140 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9b9b96" strokeWidth="1.7" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <span style={{ fontSize: 11.5, color: '#9b9b96', flex: 1 }}>Search…</span>
+                  <span style={{ fontSize: 10, color: '#b0b0aa', background: '#ebebea', border: '1px solid #e4e4e2', borderRadius: 4, padding: '1px 5px' }}>⌘K</span>
                 </div>
+                <div style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9b9b96' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                </div>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#2563eb', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>A</div>
               </div>
 
-              {/* ── Main content ── */}
-              <div style={{ flex: 1, background: '#f9f9f8', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              {/* ── Body ── */}
+              <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
-                {/* Page header */}
-                <div style={{ padding: '11px 16px', background: '#fff', borderBottom: '1px solid #e4e4e2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-                  <span style={{ fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.02em' }}>Content Queue</span>
-                  <span style={{ background: '#0f0f0e', color: '#fff', padding: '4px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 500 }}>+ Generate</span>
-                </div>
-
-                <div style={{ padding: '14px 16px', flex: 1, overflow: 'hidden' }}>
-                  {/* Stats */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
-                    {[
-                      { v: '1,247', l: 'Generated', col: '#0f0f0e' },
-                      { v: '8',     l: 'Today',     col: '#16a34a' },
-                      { v: '94',    l: 'Avg Score',  col: '#2563eb' },
-                      { v: '+32%',  l: 'Traffic',   col: '#d97706' },
-                    ].map(s => (
-                      <div key={s.l} style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '9px 10px' }}>
-                        <div style={{ fontSize: 17, fontWeight: 700, color: s.col, letterSpacing: '-0.03em' }}>{s.v}</div>
-                        <div style={{ fontSize: 10, color: '#9b9b96', marginTop: 2 }}>{s.l}</div>
-                      </div>
-                    ))}
+                {/* Sidebar */}
+                <div className="mockup-sidebar" style={{ width: 196, flexShrink: 0, background: '#fff', borderRight: '1px solid #e4e4e2', overflowY: 'auto', padding: '10px 8px' }}>
+                  {/* Dashboard active */}
+                  <div style={{ marginBottom: 18 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 6, background: '#f4f4f3', color: '#0f0f0e', fontWeight: 600, fontSize: 13, marginBottom: 1 }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                      Dashboard
+                    </div>
                   </div>
-
-                  {/* Queue table */}
-                  <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, overflow: 'hidden' }}>
-                    {/* Table header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px 90px 44px', padding: '6px 12px', borderBottom: '1px solid #e4e4e2', background: '#f9f9f8' }}>
-                      {['Topic', 'Source', 'Status', 'Score'].map(h => (
-                        <div key={h} style={{ fontSize: 10, fontWeight: 600, color: '#b0b0aa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</div>
+                  {[
+                    { section: 'Discover', items: [
+                      { label: 'Opportunities', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+                      { label: 'Competitors',   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="9" cy="12" r="7"/><circle cx="15" cy="12" r="7"/></svg> },
+                    ]},
+                    { section: 'Plan', items: [
+                      { label: 'Content Map', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="12" y1="9" x2="4.8" y2="7.2"/><line x1="12" y1="9" x2="19.2" y2="7.2"/><line x1="12" y1="15" x2="4.8" y2="16.8"/><line x1="12" y1="15" x2="19.2" y2="16.8"/></svg> },
+                      { label: 'Queue',       icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
+                    ]},
+                    { section: 'Create', items: [
+                      { label: 'Generator', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
+                      { label: 'Articles',  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> },
+                    ]},
+                    { section: 'Optimize', items: [
+                      { label: 'Analytics',        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
+                      { label: 'Internal Linking', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> },
+                      { label: 'Keyword Tracker',  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
+                    ]},
+                  ].map(({ section, items }) => (
+                    <div key={section} style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 10.5, fontWeight: 600, color: '#b0b0aa', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 10px 5px' }}>{section}</div>
+                      {items.map(item => (
+                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 6, cursor: 'default', fontSize: 13, fontWeight: 400, color: '#4b4b48', marginBottom: 1 }}>
+                          <span style={{ color: '#9b9b96', display: 'flex', flexShrink: 0 }}>{item.icon}</span>{item.label}
+                        </div>
                       ))}
                     </div>
-                    {/* Rows */}
-                    {[
-                      { t: '10 Best SEO Tools for Startups in 2026',       src: 'Autopilot',     srcC: '#16a34a', srcBg: '#f0fdf4', status: 'Ready',      stC: '#16a34a', stBg: '#f0fdf4', score: '96' },
-                      { t: 'How to Build Backlinks Without Cold Outreach',  src: 'Keyword Gap',   srcC: '#2563eb', srcBg: '#eff6ff', status: 'Generating',  stC: '#2563eb', stBg: '#eff6ff', score: null },
-                      { t: 'Content Marketing ROI: A Complete Guide',       src: 'Topic Idea',    srcC: '#7c3aed', srcBg: '#f5f3ff', status: 'Queued',      stC: '#9b9b96', stBg: '#f4f4f3', score: null },
-                      { t: 'Technical SEO Audit Checklist 2026',            src: 'Content Decay', srcC: '#dc2626', srcBg: '#fef2f2', status: 'Queued',      stC: '#9b9b96', stBg: '#f4f4f3', score: null },
-                      { t: '15 Link Building Strategies That Still Work',   src: 'Opportunities', srcC: '#16a34a', srcBg: '#f0fdf4', status: 'Ready',       stC: '#16a34a', stBg: '#f0fdf4', score: '91' },
-                    ].map((row, i, arr) => (
-                      <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 110px 90px 44px', alignItems: 'center', padding: '8px 12px', borderBottom: i < arr.length - 1 ? '1px solid #f4f4f3' : 'none' }}>
-                        <div style={{ fontSize: 12, color: '#0f0f0e', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{row.t}</div>
-                        <div style={{ fontSize: 10.5, fontWeight: 500, color: row.srcC, background: row.srcBg, padding: '2px 7px', borderRadius: 100, display: 'inline-flex', width: 'fit-content' }}>{row.src}</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <div style={{ width: 5, height: 5, borderRadius: '50%', background: row.stC, flexShrink: 0 }} />
-                          <span style={{ fontSize: 10.5, fontWeight: 500, color: row.stC }}>{row.status}</span>
-                        </div>
-                        <div style={{ fontSize: 10.5, fontWeight: 700, color: row.score ? '#16a34a' : 'transparent', background: row.score ? '#f0fdf4' : 'transparent', padding: '2px 7px', borderRadius: 100, width: 'fit-content' }}>{row.score || '—'}</div>
+                  ))}
+                </div>
+
+                {/* ── Main content ── */}
+                <div style={{ flex: 1, background: '#fafaf9', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                  <div style={{ padding: '16px 20px 0', background: '#fafaf9', flexShrink: 0 }}>
+                    {/* Greeting */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
+                      <div>
+                        <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-0.3px', color: '#0f0f0e', marginBottom: 2 }}>Good afternoon, Alex.</div>
+                        <div style={{ fontSize: 11, color: '#c0c0bc', marginBottom: 4 }}>Thursday 10 April</div>
+                        <div style={{ fontSize: 12, color: '#6b6b67', lineHeight: 1.5 }}>Organic clicks up 22% this month · 8 articles gaining traffic · 3 decaying.</div>
                       </div>
-                    ))}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#6b6b67', border: '1px solid #e4e4e2', borderRadius: 6, padding: '5px 10px', background: '#fff', flexShrink: 0 }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                        Refresh
+                      </div>
+                    </div>
+
+                    {/* KPI cards with real sparkline paths */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 12 }}>
+                      <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 7, color: '#9b9b96' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                          <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Organic clicks</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, marginBottom: 7 }}>
+                          <span style={{ fontSize: 22, fontWeight: 700, color: '#0f0f0e', letterSpacing: '-0.5px', lineHeight: 1 }}>2,847</span>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 1 }}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="18 15 12 9 6 15"/></svg>22%</span>
+                        </div>
+                        <svg width="100%" height="34" viewBox="0 0 100 38" preserveAspectRatio="none" style={{ display: 'block' }}>
+                          <path d="M 0,28.6 C 2.3,24.5 5.7,29.9 6.9,29.9 C 8,30.1 9.2,27.3 10.3,26 C 11.5,24.8 12.6,22.6 13.8,22.2 C 14.9,21.8 16.1,22.4 17.2,23.5 C 18.4,24.5 19.5,28.4 20.7,28.6 C 21.8,28.8 23,24.8 24.1,24.8 C 25.3,24.8 26.4,28 27.6,28.6 C 28.7,29.2 29.9,27.5 31,28.6 C 32.2,29.7 33.3,35.6 34.5,35 C 35.6,34.4 36.8,25.8 37.9,24.8 C 39.1,23.7 40.2,31.2 41.4,28.6 C 42.5,26 43.7,10.9 44.8,9.4 C 46,7.9 47.1,17.9 48.3,19.6 C 49.4,21.3 50.6,17.1 51.7,19.6 C 52.9,22.2 54,33.3 55.2,35 C 56.3,36.7 57.5,31.2 58.6,29.9 C 59.8,28.6 60.9,29 62.1,27.3 C 63.2,25.6 64.4,20.5 65.5,19.6 C 66.7,18.8 67.8,20.3 69,22.2 C 70.1,24.1 71.3,30.5 72.4,31.2 C 73.6,31.8 74.7,28.6 75.9,26 C 77,23.5 78.2,17.7 79.3,15.8 C 80.5,13.9 81.6,16.4 82.8,14.5 C 83.9,12.6 85.1,4.3 86.2,4.3 C 87.4,4.3 88.5,14.7 89.7,14.5 C 90.8,14.3 92,1.3 93.1,3 C 94.3,4.7 95.4,22.6 96.6,24.8 C 97.7,26.9 99.4,17.3 100,15.8" fill="none" stroke="#16a34a" strokeOpacity="0.7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>
+                        </svg>
+                      </div>
+                      <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 7, color: '#9b9b96' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                          <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Page-1 keywords</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, marginBottom: 7 }}>
+                          <span style={{ fontSize: 22, fontWeight: 700, color: '#0f0f0e', letterSpacing: '-0.5px', lineHeight: 1 }}>143</span>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 1 }}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="18 15 12 9 6 15"/></svg>18%</span>
+                        </div>
+                        <svg width="100%" height="34" viewBox="0 0 100 38" preserveAspectRatio="none" style={{ display: 'block' }}>
+                          <path d="M 0,30 C 5,28 10,25 15,23 C 20,21 25,22 30,19 C 35,17 40,18 45,15 C 50,13 55,14 60,11 C 65,9 70,10 75,8 C 80,6 85,7 90,5 C 93,4 97,3 100,2" fill="none" stroke="#16a34a" strokeOpacity="0.7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>
+                        </svg>
+                      </div>
+                      <div style={{ background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 7, color: '#9b9b96' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                          <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Avg position</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, marginBottom: 7 }}>
+                          <span style={{ fontSize: 22, fontWeight: 700, color: '#0f0f0e', letterSpacing: '-0.5px', lineHeight: 1 }}>#6.4</span>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 1 }}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="18 15 12 9 6 15"/></svg>8%</span>
+                        </div>
+                        <svg width="100%" height="34" viewBox="0 0 100 38" preserveAspectRatio="none" style={{ display: 'block' }}>
+                          <path d="M 0,8 C 5,10 10,12 15,14 C 20,16 25,15 30,17 C 35,19 40,18 45,20 C 50,22 55,21 60,23 C 65,25 70,24 75,26 C 80,27 85,26 90,28 C 93,29 97,30 100,31" fill="none" stroke="#16a34a" strokeOpacity="0.7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/>
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Critical alert */}
+                    <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 9.5, fontWeight: 700, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>Critical</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#0f0f0e', letterSpacing: '-0.2px', marginBottom: 1 }}>Refresh a decaying article</div>
+                        <div style={{ fontSize: 11.5, color: '#6b6b67' }}>WordPress SEO Plugin Comparison lost 38% of its clicks vs last period.</div>
+                      </div>
+                      <div style={{ background: '#0f0f0e', color: '#fff', borderRadius: 6, padding: '5px 11px', fontSize: 11.5, fontWeight: 500, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5 }}>
+                        Refresh now <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                      </div>
+                    </div>
+
+                    {/* Quick actions */}
+                    <div>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: '#b0b0aa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 7 }}>Quick actions</div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', overflow: 'hidden' }}>
+                        {[
+                          { label: 'New article',   icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
+                          { label: 'Open queue',    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
+                          { label: 'Opportunities', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+                          { label: 'Competitors',   icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><circle cx="9" cy="12" r="7"/><circle cx="15" cy="12" r="7"/></svg> },
+                          { label: 'Autopilot',     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M12 2v5"/><circle cx="8" cy="13" r="1"/><circle cx="16" cy="13" r="1"/><line x1="9" y1="17" x2="15" y2="17"/></svg> },
+                          { label: 'Analytics',     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
+                        ].map(a => (
+                          <div key={a.label} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 11px', background: '#fff', border: '1px solid #e4e4e2', borderRadius: 8, fontSize: 11.5, fontWeight: 500, color: '#4b4b48', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                            <span style={{ color: '#9b9b96', display: 'flex' }}>{a.icon}</span>{a.label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
