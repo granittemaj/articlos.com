@@ -196,31 +196,13 @@ export default async function HomePage() {
                     </div>
                   </div>
                   {[
-                    { section: 'Discover', items: [
-                      { label: 'Opportunities', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
-                      { label: 'Competitors',   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="9" cy="12" r="7"/><circle cx="15" cy="12" r="7"/></svg> },
-                    ]},
-                    { section: 'Plan', items: [
-                      { label: 'Content Map', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="12" y1="9" x2="4.8" y2="7.2"/><line x1="12" y1="9" x2="19.2" y2="7.2"/><line x1="12" y1="15" x2="4.8" y2="16.8"/><line x1="12" y1="15" x2="19.2" y2="16.8"/></svg> },
-                      { label: 'Queue',       icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
-                    ]},
-                    { section: 'Create', items: [
-                      { label: 'Generator', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
-                      { label: 'Articles',  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> },
-                    ]},
-                    { section: 'Optimize', items: [
-                      { label: 'Analytics',        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
-                      { label: 'Internal Linking', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> },
-                      { label: 'Keyword Tracker',  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
-                    ]},
-                  ].map(({ section, items }) => (
-                    <div key={section} style={{ marginBottom: 18 }}>
-                      <div style={{ fontSize: 10.5, fontWeight: 600, color: '#b0b0aa', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 10px 5px' }}>{section}</div>
-                      {items.map(item => (
-                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 6, cursor: 'default', fontSize: 13, fontWeight: 400, color: '#4b4b48', marginBottom: 1 }}>
-                          <span style={{ color: '#9b9b96', display: 'flex', flexShrink: 0 }}>{item.icon}</span>{item.label}
-                        </div>
-                      ))}
+                    { label: 'Discover',  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+                    { label: 'Plan',      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="12" y1="9" x2="4.8" y2="7.2"/><line x1="12" y1="9" x2="19.2" y2="7.2"/><line x1="12" y1="15" x2="4.8" y2="16.8"/><line x1="12" y1="15" x2="19.2" y2="16.8"/></svg> },
+                    { label: 'Create',   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> },
+                    { label: 'Optimize', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
+                  ].map(item => (
+                    <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 6, cursor: 'default', fontSize: 13, fontWeight: 400, color: '#4b4b48', marginBottom: 1 }}>
+                      <span style={{ color: '#9b9b96', display: 'flex', flexShrink: 0 }}>{item.icon}</span>{item.label}
                     </div>
                   ))}
                 </div>
