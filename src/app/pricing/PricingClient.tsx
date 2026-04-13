@@ -18,6 +18,7 @@ const plans = [
     cta: 'Get started',
     ctaStyle: 'ghost' as const,
     href: 'https://app.articlos.com/register?plan=lite',
+
     featured: false,
     badge: null,
     featuresLabel: "What's included",
@@ -46,7 +47,7 @@ const plans = [
     annual: 74,
     annualTotal: 890,
     annualSave: 178,
-    cta: 'Start free trial',
+    cta: 'Get started',
     ctaStyle: 'ghost' as const,
     href: 'https://app.articlos.com/register?plan=pro',
     featured: false,
@@ -78,7 +79,7 @@ const plans = [
     annual: 124,
     annualTotal: 1490,
     annualSave: 298,
-    cta: 'Start free trial',
+    cta: 'Get started',
     ctaStyle: 'primary' as const,
     href: 'https://app.articlos.com/register?plan=autopilot',
     featured: true,
@@ -194,7 +195,7 @@ function CellValue({ v }: { v: string }) {
 }
 
 export default function PricingClient() {
-  const [billing, setBilling] = useState<Billing>('monthly')
+  const [billing, setBilling] = useState<Billing>('annual')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
@@ -476,7 +477,7 @@ export default function PricingClient() {
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9' }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
                 >
-                  Start free trial →
+                  Get started →
                 </a>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -682,7 +683,7 @@ export default function PricingClient() {
                 onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9' }}
                 onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
               >
-                Start Autopilot free trial →
+                Get started with Autopilot →
               </a>
               <a href="/contact" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
