@@ -41,9 +41,63 @@ export default async function HomePage() {
   const [content, posts] = await Promise.all([getSiteContent(), getLatestPosts()])
   const c = (key: keyof typeof defaults) => content[key] || defaults[key]
 
+  const orgJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://articlos.com/#organization',
+        name: 'articlos',
+        url: 'https://articlos.com',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://articlos.com/favicon.svg',
+        },
+        sameAs: [],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': 'https://articlos.com/#website',
+        url: 'https://articlos.com',
+        name: 'articlos',
+        description: 'The content intelligence system that never stops.',
+        publisher: { '@id': 'https://articlos.com/#organization' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://articlos.com/blog?q={search_term_string}',
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'SoftwareApplication',
+        '@id': 'https://articlos.com/#software',
+        name: 'articlos',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        description: 'AI-powered content intelligence system that discovers topics, generates articles, and grows organic traffic automatically.',
+        url: 'https://articlos.com',
+        offers: {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'USD',
+          lowPrice: '24',
+          highPrice: '199',
+          offerCount: '3',
+        },
+        publisher: { '@id': 'https://articlos.com/#organization' },
+      },
+    ],
+  }
+
   return (
     <>
       <Nav />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
       <ScrollAnimations />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
