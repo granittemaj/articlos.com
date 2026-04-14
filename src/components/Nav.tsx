@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import BackToTop from './BackToTop'
 import ThemeToggle from './ThemeToggle'
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10)
@@ -104,37 +106,43 @@ export default function Nav() {
             className="desktop-nav"
           >
             {[
-              { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
-              { label: 'About', href: '/about' },
-              { label: 'Blog', href: '/blog' },
-              { label: 'FAQ', href: '/faq' },
-              { label: 'Contact', href: '/contact' },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 14,
-                  fontWeight: 450,
-                  color: 'var(--text-muted)',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s ease, background 0.15s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'var(--text)'
-                  e.currentTarget.style.background = 'var(--bg-elevated)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'var(--text-muted)'
-                  e.currentTarget.style.background = 'transparent'
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+              { label: 'Features', href: '/#features', match: '/' },
+              { label: 'Pricing', href: '/pricing', match: '/pricing' },
+              { label: 'About', href: '/about', match: '/about' },
+              { label: 'Blog', href: '/blog', match: '/blog' },
+              { label: 'FAQ', href: '/faq', match: '/faq' },
+              { label: 'Contact', href: '/contact', match: '/contact' },
+            ].map((item) => {
+              const isActive = item.match === '/'
+                ? pathname === '/'
+                : pathname.startsWith(item.match)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: 6,
+                    fontSize: 14,
+                    fontWeight: isActive ? 600 : 450,
+                    color: isActive ? 'var(--text)' : 'var(--text-muted)',
+                    textDecoration: 'none',
+                    transition: 'color 0.15s ease, background 0.15s ease',
+                    background: isActive ? 'var(--bg-elevated)' : 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--text)'
+                    e.currentTarget.style.background = 'var(--bg-elevated)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = isActive ? 'var(--text)' : 'var(--text-muted)'
+                    e.currentTarget.style.background = isActive ? 'var(--bg-elevated)' : 'transparent'
+                  }}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
 
           {/* Right CTAs */}
@@ -242,30 +250,35 @@ export default function Nav() {
         >
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
-              { label: 'Features', href: '/#features' },
-              { label: 'Pricing', href: '/pricing' },
-              { label: 'About', href: '/about' },
-              { label: 'Blog', href: '/blog' },
-              { label: 'FAQ', href: '/faq' },
-              { label: 'Contact', href: '/contact' },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  padding: '14px 0',
-                  fontSize: 22,
-                  fontWeight: 500,
-                  color: 'var(--text)',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid var(--border)',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
+              { label: 'Features', href: '/#features', match: '/' },
+              { label: 'Pricing', href: '/pricing', match: '/pricing' },
+              { label: 'About', href: '/about', match: '/about' },
+              { label: 'Blog', href: '/blog', match: '/blog' },
+              { label: 'FAQ', href: '/faq', match: '/faq' },
+              { label: 'Contact', href: '/contact', match: '/contact' },
+            ].map((item) => {
+              const isActive = item.match === '/'
+                ? pathname === '/'
+                : pathname.startsWith(item.match)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    padding: '14px 0',
+                    fontSize: 22,
+                    fontWeight: isActive ? 700 : 500,
+                    color: isActive ? 'var(--text)' : 'var(--text-muted)',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid var(--border)',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
           <div
             style={{
