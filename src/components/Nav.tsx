@@ -106,16 +106,14 @@ export default function Nav() {
             className="desktop-nav"
           >
             {[
-              { label: 'Features', href: '/#features', match: '/' },
+              { label: 'Features', href: '/#features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },
               { label: 'FAQ', href: '/faq', match: '/faq' },
               { label: 'Contact', href: '/contact', match: '/contact' },
             ].map((item) => {
-              const isActive = item.match === '/'
-                ? pathname === '/'
-                : pathname.startsWith(item.match)
+              const isActive = item.match !== null && pathname.startsWith(item.match)
               return (
                 <Link
                   key={item.href}
@@ -250,16 +248,14 @@ export default function Nav() {
         >
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
-              { label: 'Features', href: '/#features', match: '/' },
+              { label: 'Features', href: '/#features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },
               { label: 'FAQ', href: '/faq', match: '/faq' },
               { label: 'Contact', href: '/contact', match: '/contact' },
             ].map((item) => {
-              const isActive = item.match === '/'
-                ? pathname === '/'
-                : pathname.startsWith(item.match)
+              const isActive = item.match !== null && pathname.startsWith(item.match)
               return (
                 <Link
                   key={item.href}
