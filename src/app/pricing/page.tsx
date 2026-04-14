@@ -84,7 +84,7 @@ const faqs = [
   },
   {
     q: 'What AI models do you use?',
-    a: "articlos uses GPT-4o and Gemini 1.5 Pro to generate content. You can select your preferred model from the article settings.",
+    a: 'articlos uses GPT-4o (OpenAI) and Gemini 2.5 (Google) to generate content. Gemini 2.5 is the default for speed and quality; GPT-4o is available for technical or nuanced topics. You can select your preferred model from the article settings.',
   },
   {
     q: 'Do you support non-WordPress sites?',
