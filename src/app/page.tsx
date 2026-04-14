@@ -129,7 +129,7 @@ export default async function HomePage() {
         </div>
 
         {/* Dashboard mockup */}
-        <div className="hero-visual hero-mockup-wrap" style={{
+        <div className="hero-visual hero-mockup-wrap" aria-hidden="true" style={{
           width: '100%', maxWidth: 940,
           position: 'relative', zIndex: 1,
           animation: 'float 7s ease-in-out infinite',
@@ -416,7 +416,7 @@ export default async function HomePage() {
                 </p>
               </div>
               {/* Keyword table mockup */}
-              <div style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, overflow: 'hidden', flex: 1 }}>
+              <div aria-hidden="true" style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, overflow: 'hidden', flex: 1 }}>
                 <div style={{
                   display: 'grid', gridTemplateColumns: '1fr 64px 52px',
                   padding: '7px 12px', borderBottom: '1px solid #e4e4e2',
@@ -475,7 +475,7 @@ export default async function HomePage() {
                 </p>
               </div>
               {/* Generation progress */}
-              <div style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, padding: 16, flex: 1 }}>
+              <div aria-hidden="true" style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, padding: 16, flex: 1 }}>
                 <div style={{ fontSize: 12.5, fontWeight: 600, color: '#0f0f0e', marginBottom: 14, lineHeight: 1.4 }}>
                   &ldquo;10 Best SEO Tools for Startups in 2026&rdquo;
                 </div>
@@ -532,7 +532,7 @@ export default async function HomePage() {
                 </p>
               </div>
               {/* Calendar mockup */}
-              <div style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, overflow: 'hidden' }}>
+              <div aria-hidden="true" style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, overflow: 'hidden' }}>
                 <div style={{
                   display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
                   background: '#f4f4f3', borderBottom: '1px solid #e4e4e2',
@@ -587,7 +587,7 @@ export default async function HomePage() {
                 </p>
               </div>
               {/* Chart mockup */}
-              <div style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, padding: '14px 16px', flex: 1 }}>
+              <div aria-hidden="true" style={{ background: '#f9f9f8', border: '1px solid #e4e4e2', borderRadius: 10, padding: '14px 16px', flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                   <span style={{ fontSize: 12.5, fontWeight: 600, color: '#0f0f0e' }}>Organic Traffic</span>
                   <span style={{
@@ -652,7 +652,7 @@ export default async function HomePage() {
                     ].map(s => (
                       <div key={s.label}>
                         <div style={{ fontSize: 22, fontWeight: 700, color: '#fff', letterSpacing: '-0.03em' }}>{s.val}</div>
-                        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{s.label}</div>
+                        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>{s.label}</div>
                       </div>
                     ))}
                   </div>
@@ -661,7 +661,7 @@ export default async function HomePage() {
                 <div style={{
                   background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: 12, padding: 22, minWidth: 300, flexShrink: 0,
-                }} className="improve-card">
+                }} className="improve-card" aria-hidden="true">
                   <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 14 }}>
                     Auto-Optimization Running
                   </div>
