@@ -22,14 +22,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  let body: { action: string; niche?: string; topic?: string; keywords?: string; context?: string; content?: string; title?: string; topicStyle?: string; writingStyle?: string }
+  let body: { action: string; niche?: string; topic?: string; keywords?: string; selectedKeywords?: string[]; context?: string; content?: string; title?: string; topicStyle?: string; writingStyle?: string }
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { action, niche, topic, keywords, context, content, title, topicStyle, writingStyle } = body
+  const { action, niche, topic, keywords, selectedKeywords, context, content, title, topicStyle, writingStyle } = body
 
   try {
     const genAI = getClient()
@@ -65,10 +65,14 @@ export async function POST(req: NextRequest) {
 
       const isTechnical = topicStyle === 'technical'
 
+      const keywordContext = selectedKeywords && selectedKeywords.length > 0
+        ? `\nFOCUS KEYWORDS: The user has selected these specific keywords to target — every topic MUST be built around one of these keywords:\n${selectedKeywords.map(k => `- ${k}`).join('\n')}\nDistribute the 8 topics across these keywords as evenly as possible.`
+        : ''
+
       const prompt = `You are a sharp, opinionated content strategist writing for ${niche ? `a "${niche}" audience` : 'a content marketing / SaaS audience'} in ${today}.
 
 Generate exactly 8 blog post topic ideas — one for each angle listed below. Use the angles in the order given.
-
+${keywordContext}
 ASSIGNED ANGLES (use each one, in order):
 ${selectedAngles.map((a, i) => `${i + 1}. ${a}`).join('\n')}
 
@@ -106,17 +110,34 @@ Return ONLY valid JSON, no markdown, no code fences:
     }
 
     if (action === 'keywords') {
-      const prompt = `You are an SEO keyword researcher. Suggest 8-10 high-value SEO keywords or long-tail keyword phrases for ${niche ? `the "${niche}" niche` : 'a content marketing / SaaS audience'}. Focus on keywords with good search volume and reasonable competition.
+      const prompt = `You are an SEO keyword researcher. Given the seed topic "${niche || 'content marketing'}", suggest 4-5 keyword phrases per intent type below.
 
-Return ONLY a valid JSON array of strings, nothing else. Example: ["keyword 1", "keyword 2"]`
+Intent types to cover:
+- how-to: step-by-step guides, tutorials, processes (e.g. "how to do X", "X step by step")
+- informational: definitions, explanations, comparisons, research (e.g. "what is X", "X vs Y", "best X for Y")
+- commercial: tool evaluations, reviews, buyer intent (e.g. "best X tools", "X software for Y", "X alternatives")
+- navigational: branded or niche-specific queries someone would search to find a resource (e.g. "X checklist", "X template", "X examples")
+
+Rules:
+- All keywords must be closely related to "${niche || 'content marketing'}"
+- Use long-tail phrasing that real people actually search
+- No generic filler — be specific to the topic
+
+Return ONLY valid JSON, no markdown, no code fences:
+{
+  "groups": [
+    { "intent": "how-to", "keywords": ["...", "...", "...", "...", "..."] },
+    { "intent": "informational", "keywords": ["...", "...", "...", "...", "..."] },
+    { "intent": "commercial", "keywords": ["...", "...", "...", "...", "..."] },
+    { "intent": "navigational", "keywords": ["...", "...", "...", "...", "..."] }
+  ]
+}`
 
       const result = await model.generateContent(prompt)
       const text = result.response.text().trim()
       const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
-      const match = cleaned.match(/\[[\s\S]*\]/)
-      if (!match) return NextResponse.json({ error: 'Failed to parse keywords' }, { status: 500 })
-      const keywords = JSON.parse(match[0])
-      return NextResponse.json({ keywords })
+      const parsed = JSON.parse(cleaned)
+      return NextResponse.json(parsed)
     }
 
     if (action === 'suggest') {

@@ -98,8 +98,9 @@ export default function GeneratePage() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
-  // Keyword suggestions for step 1
-  const [suggestedKeywords, setSuggestedKeywords] = useState<string[]>([])
+  // Keyword suggestions for step 1 — grouped by intent
+  const [keywordGroups, setKeywordGroups] = useState<{ intent: string; keywords: string[] }[]>([])
+  const [selectedKeywords, setSelectedKeywords] = useState<Set<string>>(new Set())
   const [loadingKeywords, setLoadingKeywords] = useState(false)
 
   // Publish status (draft or publish) — chosen before generating
@@ -161,7 +162,12 @@ export default function GeneratePage() {
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'topics', niche, topicStyle }),
+        body: JSON.stringify({
+          action: 'topics',
+          niche,
+          topicStyle,
+          selectedKeywords: selectedKeywords.size > 0 ? Array.from(selectedKeywords) : undefined,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to fetch topics')
@@ -405,86 +411,128 @@ export default function GeneratePage() {
                 </select>
               </div>
 
-              {/* Keyword suggestions */}
+              {/* Keyword suggestions — grouped by intent */}
               <div style={{ marginTop: 12, marginBottom: 16 }}>
-                <button
-                  onClick={async () => {
-                    setLoadingKeywords(true)
-                    setSuggestedKeywords([])
-                    try {
-                      const res = await fetch('/api/admin/ai', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'keywords', niche }),
-                      })
-                      const data = await res.json()
-                      if (!res.ok) throw new Error(data.error || 'Failed')
-                      setSuggestedKeywords(data.keywords || [])
-                    } catch (e) {
-                      setError(e instanceof Error ? e.message : 'Failed to suggest keywords')
-                    } finally {
-                      setLoadingKeywords(false)
-                    }
-                  }}
-                  disabled={loadingKeywords || loading || suggesting}
-                  className="btn btn-ghost btn-sm"
-                  style={{ fontSize: 12, gap: 6, marginBottom: 8 }}
-                >
-                  {loadingKeywords ? (
-                    <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Suggesting keywords…</>
-                  ) : (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z" />
-                      </svg>
-                      Suggest keywords
-                    </>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <button
+                    onClick={async () => {
+                      setLoadingKeywords(true)
+                      setKeywordGroups([])
+                      setSelectedKeywords(new Set())
+                      try {
+                        const res = await fetch('/api/admin/ai', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ action: 'keywords', niche }),
+                        })
+                        const data = await res.json()
+                        if (!res.ok) throw new Error(data.error || 'Failed')
+                        setKeywordGroups(data.groups || [])
+                      } catch (e) {
+                        setError(e instanceof Error ? e.message : 'Failed to suggest keywords')
+                      } finally {
+                        setLoadingKeywords(false)
+                      }
+                    }}
+                    disabled={loadingKeywords || loading || suggesting}
+                    className="btn btn-ghost btn-sm"
+                    style={{ fontSize: 12, gap: 6 }}
+                  >
+                    {loadingKeywords ? (
+                      <><span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span> Suggesting keywords…</>
+                    ) : (
+                      <>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z" />
+                        </svg>
+                        Suggest keywords
+                      </>
+                    )}
+                  </button>
+                  {selectedKeywords.size > 0 && (
+                    <span style={{ fontSize: 12, color: '#6b6b67' }}>
+                      {selectedKeywords.size} selected — topics will focus on these
+                    </span>
                   )}
-                </button>
-                {suggestedKeywords.length > 0 && (
-                  <div>
-                    <p style={{ fontSize: 11, color: '#9b9b96', marginBottom: 6 }}>
-                      Click a keyword to use it as a custom topic:
-                    </p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {suggestedKeywords.map((kw) => (
-                        <button
-                          key={kw}
-                          onClick={() => {
-                            setCustomTopic(kw)
-                            setCustomKeywords(kw)
-                            setSelectedIndexes(new Set())
-                            setStep('generate')
-                          }}
-                          style={{
-                            display: 'inline-flex', alignItems: 'center',
-                            padding: '4px 12px', borderRadius: 20,
-                            fontSize: 12, fontWeight: 500,
-                            background: '#f4f4f3', color: '#0f0f0e',
-                            border: '1px solid #e8e8e6',
-                            cursor: 'pointer', fontFamily: 'Geist, sans-serif',
-                            transition: 'all 0.15s',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#0f0f0e'
-                            e.currentTarget.style.color = '#ffffff'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = '#f4f4f3'
-                            e.currentTarget.style.color = '#0f0f0e'
-                          }}
-                        >
-                          {kw}
-                        </button>
-                      ))}
-                    </div>
+                </div>
+
+                {loadingKeywords && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {[1, 2, 3].map((i) => (
+                      <div key={i}>
+                        <div className="skeleton" style={{ height: 14, width: 80, borderRadius: 4, marginBottom: 8 }} />
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          {[1, 2, 3, 4].map((j) => (
+                            <div key={j} className="skeleton" style={{ height: 26, width: 80 + j * 20, borderRadius: 14 }} />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
-                {loadingKeywords && (
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="skeleton" style={{ height: 26, width: 70 + i * 14, borderRadius: 14 }} />
-                    ))}
+
+                {keywordGroups.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {keywordGroups.map((group) => {
+                      const intentColors: Record<string, { bg: string; color: string; border: string }> = {
+                        'how-to':       { bg: '#f0fdf4', color: '#15803d', border: '#86efac' },
+                        'informational':{ bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe' },
+                        'commercial':   { bg: '#faf5ff', color: '#7c3aed', border: '#d8b4fe' },
+                        'navigational': { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa' },
+                      }
+                      const ic = intentColors[group.intent] || { bg: '#f4f4f3', color: '#6b6b67', border: '#e8e8e6' }
+                      return (
+                        <div key={group.intent}>
+                          <span style={{
+                            display: 'inline-block',
+                            fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+                            letterSpacing: '0.06em',
+                            color: ic.color,
+                            background: ic.bg,
+                            border: `1px solid ${ic.border}`,
+                            padding: '2px 8px', borderRadius: 4,
+                            marginBottom: 8,
+                          }}>
+                            {group.intent}
+                          </span>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                            {group.keywords.map((kw) => {
+                              const isSelected = selectedKeywords.has(kw)
+                              return (
+                                <button
+                                  key={kw}
+                                  onClick={() => {
+                                    setSelectedKeywords(prev => {
+                                      const next = new Set(prev)
+                                      if (next.has(kw)) next.delete(kw)
+                                      else next.add(kw)
+                                      return next
+                                    })
+                                  }}
+                                  style={{
+                                    display: 'inline-flex', alignItems: 'center',
+                                    padding: '4px 12px', borderRadius: 20,
+                                    fontSize: 12, fontWeight: isSelected ? 600 : 400,
+                                    background: isSelected ? '#0f0f0e' : '#f4f4f3',
+                                    color: isSelected ? '#ffffff' : '#0f0f0e',
+                                    border: `1px solid ${isSelected ? '#0f0f0e' : '#e8e8e6'}`,
+                                    cursor: 'pointer', fontFamily: 'Geist, sans-serif',
+                                    transition: 'all 0.15s',
+                                  }}
+                                >
+                                  {isSelected && (
+                                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ marginRight: 4 }}>
+                                      <polyline points="2 6 5 9 10 3" />
+                                    </svg>
+                                  )}
+                                  {kw}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
@@ -540,7 +588,7 @@ export default function GeneratePage() {
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
                       </svg>
-                      Discover 8 topics
+                      {selectedKeywords.size > 0 ? `Discover 8 topics for ${selectedKeywords.size} keyword${selectedKeywords.size === 1 ? '' : 's'}` : 'Discover 8 topics'}
                     </>
                   )}
                 </button>
