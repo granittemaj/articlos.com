@@ -8,16 +8,25 @@ import BlogSearch from '@/components/BlogSearch'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: 'Blog — SEO, Content & AI Insights',
-  description:
-    'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
-  alternates: { canonical: '/blog' },
-  openGraph: {
-    title: 'The articlos Blog',
-    description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
-    url: 'https://articlos.com/blog',
-  },
+interface PageProps {
+  searchParams: { page?: string; q?: string }
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const page = Math.max(1, parseInt(searchParams.page || '1', 10))
+  const canonical = page > 1 ? `/blog?page=${page}` : '/blog'
+
+  return {
+    title: page > 1 ? `Blog — Page ${page} | articlos` : 'Blog — SEO, Content & AI Insights',
+    description:
+      'Straight-signal content on SEO, AEO, AI writing, and what actually moves the needle in organic growth. No fluff — just what works.',
+    alternates: { canonical },
+    openGraph: {
+      title: 'The articlos Blog',
+      description: 'Straight-signal content on SEO, AEO, and AI-powered content marketing.',
+      url: `https://articlos.com${canonical}`,
+    },
+  }
 }
 
 const POSTS_PER_PAGE = 9
@@ -69,10 +78,6 @@ async function getBlogData(page: number, q?: string) {
   } catch {
     return { posts: [], total: 0, pages: 0 }
   }
-}
-
-interface PageProps {
-  searchParams: { page?: string; q?: string }
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
