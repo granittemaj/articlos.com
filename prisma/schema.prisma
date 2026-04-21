@@ -78,3 +78,16 @@ model TopicQueue {
   status     String   @default("queued")
   createdAt  DateTime @default(now())
 }
+
+model AiGenerationLog {
+  id           String   @id @default(cuid())
+  action       String
+  model        String
+  promptTokens Int?
+  outputTokens Int?
+  totalTokens  Int?
+  latencyMs    Int
+  success      Boolean
+  error        String?
+  createdAt    DateTime @default(now())
+}

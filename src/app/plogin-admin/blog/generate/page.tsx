@@ -98,6 +98,10 @@ export default function GeneratePage() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
+  // Streaming state for single-article generation
+  const [streaming, setStreaming] = useState(false)
+  const [streamingContent, setStreamingContent] = useState('')
+
   // Keyword suggestions for step 1 — grouped by intent
   const [keywordGroups, setKeywordGroups] = useState<{ intent: string; keywords: string[] }[]>([])
   const [selectedKeywords, setSelectedKeywords] = useState<Set<string>>(new Set())
@@ -106,9 +110,9 @@ export default function GeneratePage() {
   // Publish status (draft or publish) — chosen before generating
   const [publishStatus, setPublishStatus] = useState<'draft' | 'publish'>('draft')
 
-  // Batch state
+  // Batch state (current = completed count, for parallel progress)
   const [batchResults, setBatchResults] = useState<BatchResult[]>([])
-  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; title: string } | null>(null)
+  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number } | null>(null)
 
   // Style preferences
   const [topicStyle, setTopicStyle] = useState<'accessible' | 'technical'>('accessible')
@@ -201,12 +205,12 @@ export default function GeneratePage() {
     }
   }
 
-  // Single generate → review step
+  // Single generate → review step (streaming via SSE)
   async function handleGenerateSingle() {
     const topicTitle = selectedIndexes.size === 1
       ? topics[Array.from(selectedIndexes)[0]].title
       : customTopic
-    const keywords = selectedIndexes.size === 1
+    const kw = selectedIndexes.size === 1
       ? topics[Array.from(selectedIndexes)[0]].keyword
       : customKeywords
 
@@ -214,51 +218,101 @@ export default function GeneratePage() {
       setError('Please select or enter a topic.')
       return
     }
-    setLoading(true)
     setError('')
+    setStreamingContent('')
+    setGenerated({ title: '', excerpt: '', metaTitle: '', metaDescription: '', tags: '', content: '', featuredImage: '' })
+    setStreaming(true)
+    setStep('review')
+
+    // Start Pexels fetch in parallel with generation
+    const imagePromise = fetchPexelsImage(kw || topicTitle)
+
     try {
-      const res = await fetch('/api/admin/ai', {
+      const res = await fetch('/api/admin/ai/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'generate', topic: topicTitle, keywords, writingStyle }),
+        body: JSON.stringify({ topic: topicTitle, keywords: kw, writingStyle }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to generate post')
+      if (!res.ok || !res.body) throw new Error('Stream request failed')
 
-      // Fetch Pexels image
-      setFetchingImage(true)
-      const imgUrl = await fetchPexelsImage(keywords || topicTitle)
-      setFetchingImage(false)
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let accumulatedContent = ''
 
-      setGenerated({ ...data, featuredImage: imgUrl || data.featuredImage || '' })
-      setStep('review')
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue
+          try {
+            const event = JSON.parse(line.slice(6))
+
+            if (event.type === 'metadata') {
+              setGenerated(prev => prev ? {
+                ...prev,
+                title: event.title,
+                excerpt: event.excerpt,
+                metaTitle: event.metaTitle,
+                metaDescription: event.metaDescription,
+                tags: event.tags,
+              } : prev)
+            }
+
+            if (event.type === 'chunk') {
+              accumulatedContent += event.html
+              setStreamingContent(accumulatedContent)
+            }
+
+            if (event.type === 'done') {
+              const imgUrl = await imagePromise
+              setGenerated(prev => prev ? {
+                ...prev,
+                content: accumulatedContent,
+                featuredImage: imgUrl || '',
+              } : prev)
+              setStreaming(false)
+            }
+
+            if (event.type === 'error') {
+              throw new Error(event.message)
+            }
+          } catch { /* skip malformed SSE lines */ }
+        }
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
-      setFetchingImage(false)
-    } finally {
-      setLoading(false)
+      setStreaming(false)
+      setStep('generate')
     }
   }
 
-  // Batch generate → batch results step
+  // Batch generate → parallel execution (all at once, max 3 articles)
   async function handleGenerateBatch() {
     const selected = Array.from(selectedIndexes).map(i => topics[i])
-    setBatchResults([])
-    setBatchProgress({ current: 0, total: selected.length, title: '' })
+    // Init all as in-progress (no postId, no error)
+    setBatchResults(selected.map(topic => ({ topic })))
+    setBatchProgress({ current: 0, total: selected.length })
     setStep('batch')
 
-    const results: BatchResult[] = []
-    for (let i = 0; i < selected.length; i++) {
-      const topic = selected[i]
-      setBatchProgress({ current: i + 1, total: selected.length, title: topic.title })
-      try {
-        const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
-        results.push({ topic, postId })
-      } catch (e) {
-        results.push({ topic, error: e instanceof Error ? e.message : 'Failed' })
-      }
-      setBatchResults([...results])
-    }
+    await Promise.allSettled(
+      selected.map(async (topic) => {
+        try {
+          const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
+          setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, postId } : r))
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : 'Failed'
+          setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, error: msg } : r))
+        } finally {
+          setBatchProgress(prev => prev ? { ...prev, current: prev.current + 1 } : null)
+        }
+      })
+    )
+
     setBatchProgress(null)
   }
 
@@ -874,7 +928,7 @@ export default function GeneratePage() {
               </Link>
               <button
                 onClick={handleGenerate}
-                disabled={loading || !canGenerate}
+                disabled={loading || streaming || !canGenerate}
                 className="btn btn-primary"
                 style={{ flex: 1, justifyContent: 'center' }}
               >
@@ -908,12 +962,12 @@ export default function GeneratePage() {
           <div style={{ maxWidth: 640 }}>
             <div style={{ marginBottom: 20 }}>
               <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-                Generating {batchProgress ? `${batchProgress.current} of ${batchProgress.total}` : batchResults.length} articles
+                {batchProgress
+                  ? `Generating articles… ${batchProgress.current} of ${batchProgress.total} complete`
+                  : `${batchResults.length} article${batchResults.length === 1 ? '' : 's'} generated`}
               </h2>
               {batchProgress && (
-                <p style={{ fontSize: 14, color: '#6b6b67' }}>
-                  Writing: <span style={{ color: '#0f0f0e', fontWeight: 500 }}>{batchProgress.title}</span>
-                </p>
+                <p style={{ fontSize: 14, color: '#6b6b67' }}>Articles are generating in parallel.</p>
               )}
             </div>
 
@@ -925,71 +979,65 @@ export default function GeneratePage() {
               }}>
                 <div style={{
                   height: '100%', background: '#0f0f0e', borderRadius: 2,
-                  width: `${((batchProgress.current - 1 + batchResults.length / batchProgress.total) / batchProgress.total) * 100}%`,
+                  width: `${(batchProgress.current / batchProgress.total) * 100}%`,
                   transition: 'width 0.3s ease',
                 }} />
               </div>
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {batchResults.map((r, i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: r.error ? '#fef2f2' : '#f0fdf4',
-                    border: `1px solid ${r.error ? '#fca5a5' : '#86efac'}`,
-                    borderRadius: 8, padding: '14px 16px',
-                    display: 'flex', alignItems: 'center', gap: 12,
-                  }}
-                >
-                  {r.error ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
-                    </svg>
-                  ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                      <polyline points="22 4 12 14.01 9 11.01" />
-                    </svg>
-                  )}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: r.error ? '#dc2626' : '#15803d' }}>
-                      {r.topic.title}
+              {batchResults.map((r, i) => {
+                const isPending = !r.postId && !r.error
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      background: r.error ? '#fef2f2' : isPending ? '#ffffff' : '#f0fdf4',
+                      border: `1px solid ${r.error ? '#fca5a5' : isPending ? '#e8e8e6' : '#86efac'}`,
+                      borderRadius: 8, padding: '14px 16px',
+                      display: 'flex', alignItems: 'center', gap: 12,
+                    }}
+                  >
+                    {r.error ? (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
+                      </svg>
+                    ) : isPending ? (
+                      <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', fontSize: 16, color: '#9b9b96' }}>◌</span>
+                    ) : (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                      </svg>
+                    )}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: r.error ? '#dc2626' : isPending ? '#6b6b67' : '#15803d' }}>
+                        {r.topic.title}
+                      </div>
+                      {r.error && (
+                        <div style={{ fontSize: 12, color: '#dc2626', marginTop: 2 }}>{r.error}</div>
+                      )}
+                      {isPending && (
+                        <div style={{ fontSize: 12, color: '#9b9b96', marginTop: 2 }}>Writing with Gemini…</div>
+                      )}
                     </div>
-                    {r.error && (
-                      <div style={{ fontSize: 12, color: '#dc2626', marginTop: 2 }}>{r.error}</div>
+                    {r.postId && (
+                      <Link
+                        href={`/plogin-admin/blog/${r.postId}`}
+                        style={{
+                          fontSize: 13, fontWeight: 500, color: '#15803d',
+                          textDecoration: 'none', whiteSpace: 'nowrap',
+                          padding: '4px 10px', borderRadius: 6,
+                          border: '1px solid #86efac',
+                          background: '#fff',
+                        }}
+                      >
+                        {publishStatus === 'publish' ? 'View post →' : 'Edit draft →'}
+                      </Link>
                     )}
                   </div>
-                  {r.postId && (
-                    <Link
-                      href={`/plogin-admin/blog/${r.postId}`}
-                      style={{
-                        fontSize: 13, fontWeight: 500, color: '#15803d',
-                        textDecoration: 'none', whiteSpace: 'nowrap',
-                        padding: '4px 10px', borderRadius: 6,
-                        border: '1px solid #86efac',
-                        background: '#fff',
-                      }}
-                    >
-                      {publishStatus === 'publish' ? 'View post →' : 'Edit draft →'}
-                    </Link>
-                  )}
-                </div>
-              ))}
-
-              {/* Spinner for in-progress item */}
-              {batchProgress && (
-                <div style={{
-                  background: '#ffffff', border: '1px solid #e8e8e6',
-                  borderRadius: 8, padding: '14px 16px',
-                  display: 'flex', alignItems: 'center', gap: 12,
-                }}>
-                  <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', fontSize: 16, color: '#9b9b96' }}>◌</span>
-                  <div style={{ fontSize: 14, color: '#6b6b67' }}>
-                    Generating &amp; finding image for <span style={{ fontWeight: 500, color: '#0f0f0e' }}>{batchProgress.title}</span>…
-                  </div>
-                </div>
-              )}
+                )
+              })}
             </div>
 
             {!batchProgress && (
@@ -1013,16 +1061,21 @@ export default function GeneratePage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 24, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{
-                background: '#f0fdf4', border: '1px solid #86efac',
+                background: streaming ? '#fffbeb' : '#f0fdf4',
+                border: `1px solid ${streaming ? '#fcd34d' : '#86efac'}`,
                 borderRadius: 8, padding: '12px 16px',
                 display: 'flex', alignItems: 'center', gap: 10,
               }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-                <span style={{ fontSize: 14, color: '#15803d', fontWeight: 500 }}>
-                  Article generated successfully. Review and edit before saving.
+                {streaming ? (
+                  <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', fontSize: 16, color: '#d97706' }}>◌</span>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                )}
+                <span style={{ fontSize: 14, color: streaming ? '#92400e' : '#15803d', fontWeight: 500 }}>
+                  {streaming ? 'Writing article with Gemini… metadata ready, content streaming in.' : 'Article generated successfully. Review and edit before saving.'}
                 </span>
               </div>
 
@@ -1076,15 +1129,22 @@ export default function GeneratePage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <label className="form-label" style={{ margin: 0 }}>Content</label>
                   <span style={{ fontSize: 12, color: '#9b9b96' }}>
-                    ~{Math.round(generated.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length)} words
+                    {streaming ? (
+                      <span style={{ color: '#d97706' }}>
+                        ~{streamingContent.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length} words…
+                      </span>
+                    ) : (
+                      `~${Math.round(generated.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length)} words`
+                    )}
                   </span>
                 </div>
                 <textarea
                   className="form-textarea"
-                  value={generated.content}
-                  onChange={(e) => setGenerated({ ...generated, content: e.target.value })}
+                  value={streaming ? streamingContent : generated.content}
+                  onChange={(e) => !streaming && setGenerated({ ...generated, content: e.target.value })}
+                  readOnly={streaming}
                   rows={20}
-                  style={{ fontFamily: 'monospace', fontSize: 13 }}
+                  style={{ fontFamily: 'monospace', fontSize: 13, opacity: streaming ? 0.8 : 1 }}
                 />
                 <p className="form-hint">HTML content — will be rendered as rich text in the editor.</p>
               </div>
@@ -1102,19 +1162,19 @@ export default function GeneratePage() {
                 )}
                 <button
                   onClick={() => handleSave(true)}
-                  disabled={saving}
+                  disabled={saving || streaming}
                   className="btn btn-primary"
                   style={{ width: '100%', justifyContent: 'center', marginBottom: 8 }}
                 >
-                  {saving ? 'Saving...' : 'Save & Publish'}
+                  {saving ? 'Saving...' : streaming ? 'Writing…' : 'Save & Publish'}
                 </button>
                 <button
                   onClick={() => handleSave(false)}
-                  disabled={saving}
+                  disabled={saving || streaming}
                   className="btn btn-ghost"
                   style={{ width: '100%', justifyContent: 'center' }}
                 >
-                  Save as draft
+                  {streaming ? 'Writing…' : 'Save as draft'}
                 </button>
               </div>
 

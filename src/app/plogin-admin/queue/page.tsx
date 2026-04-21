@@ -79,6 +79,29 @@ async function updateQueueStatus(id: string, status: string) {
   })
 }
 
+// Run tasks with a concurrency cap — fires `limit` tasks at a time
+async function runWithConcurrency(
+  tasks: (() => Promise<void>)[],
+  limit: number
+): Promise<void> {
+  const queue = [...tasks]
+  const running = new Set<Promise<void>>()
+
+  async function runNext(): Promise<void> {
+    if (queue.length === 0) return
+    const task = queue.shift()!
+    const p: Promise<void> = task().finally(() => {
+      running.delete(p)
+      return runNext()
+    })
+    running.add(p)
+  }
+
+  // Seed initial batch
+  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, runNext))
+  await Promise.all(running)
+}
+
 export default function QueuePage() {
   const [items, setItems] = useState<QueueItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -88,7 +111,7 @@ export default function QueuePage() {
   const [page, setPage] = useState(1)
   const [publishStatus, setPublishStatus] = useState<'draft' | 'publish'>('draft')
   const [generating, setGenerating] = useState(false)
-  const [progress, setProgress] = useState<{ current: number; total: number; title: string } | null>(null)
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null)
   const [error, setError] = useState('')
   const [deleting, setDeleting] = useState(false)
 
@@ -162,15 +185,16 @@ export default function QueuePage() {
     setGenerating(true)
     setError('')
     const publish = publishStatus === 'publish'
+    let completed = 0
 
-    for (let i = 0; i < selected.length; i++) {
-      const item = selected[i]
-      setProgress({ current: i + 1, total: selected.length, title: item.title })
+    // Mark all selected as 'generating' upfront
+    await Promise.all(selected.map(item => updateQueueStatus(item.id, 'generating')))
+    setItems((prev) => prev.map((t) =>
+      selectedIds.has(t.id) && t.status === 'queued' ? { ...t, status: 'generating' } : t
+    ))
+    setProgress({ current: 0, total: selected.length })
 
-      // Mark as generating
-      await updateQueueStatus(item.id, 'generating')
-      setItems((prev) => prev.map((t) => (t.id === item.id ? { ...t, status: 'generating' } : t)))
-
+    const tasks = selected.map((item) => async () => {
       try {
         const { postId } = await generateAndSave(
           { title: item.title, keyword: item.keyword },
@@ -179,11 +203,16 @@ export default function QueuePage() {
         await updateQueueStatus(item.id, 'done')
         setItems((prev) => prev.map((t) => (t.id === item.id ? { ...t, status: 'done' } : t)))
         setPostIdMap((prev) => ({ ...prev, [item.id]: postId }))
-      } catch (e) {
+      } catch {
         await updateQueueStatus(item.id, 'failed')
         setItems((prev) => prev.map((t) => (t.id === item.id ? { ...t, status: 'failed' } : t)))
+      } finally {
+        completed++
+        setProgress({ current: completed, total: selected.length })
       }
-    }
+    })
+
+    await runWithConcurrency(tasks, 2)
 
     setProgress(null)
     setGenerating(false)
@@ -385,7 +414,7 @@ export default function QueuePage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
               <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', fontSize: 14 }}>&#9676;</span>
               <span style={{ fontSize: 13, color: '#92400e' }}>
-                Generating {progress.current} of {progress.total}: <strong>{progress.title}</strong>
+                Generating in parallel — {progress.current} of {progress.total} complete
               </span>
             </div>
             <div style={{ height: 4, background: '#fef3c7', borderRadius: 2, overflow: 'hidden' }}>
