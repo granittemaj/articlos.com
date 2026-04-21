@@ -107,7 +107,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname()
 
   return (
-    <div className="admin-shell">
+    <div className="admin-shell admin-light-scope">
       {/* Sidebar */}
       <aside className="admin-sidebar">
         {/* Logo */}

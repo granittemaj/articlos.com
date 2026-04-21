@@ -569,6 +569,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
+   ADMIN — FORCE LIGHT MODE
+   Overrides CSS variables so dark mode never applies in admin.
+   ============================================================ */
+
+.admin-light-scope {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --border: #e8e8e6;
+  --text: #0f0f0e;
+  --text-muted: #6b6b67;
+  --accent: #0f0f0e;
+  --accent-hover: #2a2a28;
+  --accent-fg: #ffffff;
+  --bg-elevated: #f0f0ee;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+  color-scheme: light;
+}
+
+/* ============================================================
    ADMIN SIDEBAR
    ============================================================ */
 
