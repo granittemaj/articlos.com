@@ -38,6 +38,7 @@ export default function AdminLoginPage() {
 
   return (
     <div
+      className="admin-light-scope"
       style={{
         minHeight: '100vh',
         background: '#fafaf9',
