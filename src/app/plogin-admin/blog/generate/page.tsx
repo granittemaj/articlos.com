@@ -485,7 +485,7 @@ export default function GeneratePage() {
                 Find blog topic ideas
               </h2>
               <p style={{ fontSize: 14, color: '#6b6b67', marginBottom: 20, lineHeight: 1.6 }}>
-                Gemini will research and suggest high-value, SEO-ready blog topics tailored to your niche.
+                AI will research and suggest high-value, SEO-ready blog topics tailored to your niche.
               </p>
               <div className="form-group">
                 <label className="form-label">Your niche or website topic (optional)</label>
@@ -981,7 +981,7 @@ export default function GeneratePage() {
                 {loading ? (
                   <>
                     <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span>
-                    {fetchingImage ? 'Fetching image…' : 'Writing article with Gemini…'}
+                    {fetchingImage ? 'Fetching image…' : 'Writing article…'}
                   </>
                 ) : isMulti ? (
                   <>
@@ -1142,7 +1142,7 @@ export default function GeneratePage() {
                   </svg>
                 )}
                 <span style={{ fontSize: 14, color: streaming ? '#92400e' : '#15803d', fontWeight: 500 }}>
-                  {streaming ? 'Writing article with Gemini… metadata ready, content streaming in.' : 'Article generated successfully. Review and edit before saving.'}
+                  {streaming ? 'Writing article… metadata ready, content streaming in.' : 'Article generated successfully. Review and edit before saving.'}
                 </span>
               </div>
 
