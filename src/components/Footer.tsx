@@ -2,6 +2,99 @@
 
 import Link from 'next/link'
 
+type FooterLink = {
+  label: string
+  href: string
+  external?: boolean
+  icon?: 'linkedin'
+}
+
+const productLinks: FooterLink[] = [
+  { label: 'Features', href: '/features' },
+  { label: 'Pricing', href: '/pricing' },
+]
+
+const resourceLinks: FooterLink[] = [
+  { label: 'Blog', href: '/blog' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'llms.txt', href: '/llms.txt' },
+]
+
+const compareLinks: FooterLink[] = [
+  { label: 'vs Frase', href: '/compare/vs-frase' },
+  { label: 'vs Surfer SEO', href: '/compare/vs-surfer' },
+  { label: 'vs Clearscope', href: '/compare/vs-clearscope' },
+  { label: 'vs MarketMuse', href: '/compare/vs-marketmuse' },
+  { label: 'vs Jasper', href: '/compare/vs-jasper' },
+  { label: 'vs ChatGPT, Claude & Gemini', href: '/compare/vs-llms' },
+  { label: 'All comparisons', href: '/compare' },
+]
+
+const companyLinks: FooterLink[] = [
+  { label: 'About', href: '/about' },
+  { label: 'Careers', href: '/careers' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Security', href: '/security' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/articlos/', external: true, icon: 'linkedin' },
+]
+
+const linkStyle = {
+  fontSize: 14,
+  color: 'var(--text-muted)',
+  textDecoration: 'none',
+  transition: 'color 0.15s ease',
+} as const
+
+function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) {
+  return (
+    <div>
+      <p
+        style={{
+          fontSize: 12,
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+          color: 'var(--text-muted)',
+          marginBottom: 16,
+        }}
+      >
+        {title}
+      </p>
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {links.map((item) => {
+          const content = item.icon === 'linkedin' ? (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 7 }}>
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+              {item.label}
+            </>
+          ) : item.label
+
+          const commonProps = {
+            style: { ...linkStyle, ...(item.icon ? { display: 'inline-flex', alignItems: 'center' } : {}) },
+            onMouseEnter: (e: React.MouseEvent<HTMLElement>) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' },
+            onMouseLeave: (e: React.MouseEvent<HTMLElement>) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' },
+          }
+
+          if (item.external) {
+            return (
+              <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" {...commonProps}>
+                {content}
+              </a>
+            )
+          }
+          return (
+            <Link key={item.label} href={item.href} {...commonProps}>
+              {content}
+            </Link>
+          )
+        })}
+      </nav>
+    </div>
+  )
+}
+
 export default function Footer() {
   return (
     <footer
@@ -18,17 +111,17 @@ export default function Footer() {
           padding: '0 24px',
         }}
       >
-        {/* 4-column grid */}
+        {/* 5-column grid — Brand wider than the four nav columns */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: '1.4fr repeat(4, 1fr)',
             gap: 48,
             marginBottom: 56,
           }}
           className="footer-grid"
         >
-          {/* Col 1: Brand */}
+          {/* Brand */}
           <div className="footer-brand" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <Link
               href="/"
@@ -72,154 +165,17 @@ export default function Footer() {
                 fontSize: 13,
                 color: 'var(--text-muted)',
                 lineHeight: 1.6,
-                maxWidth: 200,
+                maxWidth: 240,
               }}
             >
-              AI-powered article generation for content teams that want to rank.
+              The closed-loop content intelligence system. Researches, generates, publishes, and rewrites — so your content ranks on Google and gets cited by AI.
             </p>
           </div>
 
-          {/* Col 2: Product */}
-          <div>
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                color: 'var(--text-muted)',
-                marginBottom: 16,
-              }}
-            >
-              Product
-            </p>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {[
-                { label: 'Features', href: '/features' },
-                { label: 'Pricing', href: '/pricing' },
-                { label: 'Blog', href: '/blog' },
-                { label: 'About', href: '/about' },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  style={{
-                    fontSize: 14,
-                    color: 'var(--text-muted)',
-                    textDecoration: 'none',
-                    transition: 'color 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Col 3: Compare */}
-          <div>
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                color: 'var(--text-muted)',
-                marginBottom: 16,
-              }}
-            >
-              Compare
-            </p>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {[
-                { label: 'vs Frase', href: '/compare/vs-frase' },
-                { label: 'vs Surfer SEO', href: '/compare/vs-surfer' },
-                { label: 'vs Clearscope', href: '/compare/vs-clearscope' },
-                { label: 'vs MarketMuse', href: '/compare/vs-marketmuse' },
-                { label: 'vs Jasper', href: '/compare/vs-jasper' },
-                { label: 'vs ChatGPT, Claude & Gemini', href: '/compare/vs-llms' },
-                { label: 'All comparisons →', href: '/compare' },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  style={{
-                    fontSize: 14,
-                    color: 'var(--text-muted)',
-                    textDecoration: 'none',
-                    transition: 'color 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Col 4: Company */}
-          <div>
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                color: 'var(--text-muted)',
-                marginBottom: 16,
-              }}
-            >
-              Company
-            </p>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {[
-                { label: 'About', href: '/about' },
-                { label: 'Careers', href: '/careers' },
-                { label: 'FAQ', href: '/faq' },
-                { label: 'Security', href: '/security' },
-                { label: 'Contact', href: '/contact' },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  style={{
-                    fontSize: 14,
-                    color: 'var(--text-muted)',
-                    textDecoration: 'none',
-                    transition: 'color 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <a
-                href="https://www.linkedin.com/company/articlos/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: 14,
-                  color: 'var(--text-muted)',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 7,
-                  transition: 'color 0.15s ease',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-                LinkedIn
-              </a>
-            </nav>
-          </div>
+          <FooterColumn title="Product" links={productLinks} />
+          <FooterColumn title="Resources" links={resourceLinks} />
+          <FooterColumn title="Compare" links={compareLinks} />
+          <FooterColumn title="Company" links={companyLinks} />
         </div>
 
         {/* Bottom bar */}
@@ -234,7 +190,7 @@ export default function Footer() {
           }}
         >
           <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-            Built with ❤️ for content creators · © 2026 PAPINGU L.L.C.
+            © 2026 PAPINGU L.L.C.
           </p>
           <nav style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
             {[
@@ -262,7 +218,7 @@ export default function Footer() {
       </div>
 
       <style>{`
-        @media (max-width: 640px) {
+        @media (max-width: 900px) {
           .footer-grid {
             grid-template-columns: 1fr 1fr !important;
             gap: 32px !important;
