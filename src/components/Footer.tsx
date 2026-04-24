@@ -22,7 +22,7 @@ export default function Footer() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 48,
             marginBottom: 56,
           }}
@@ -118,7 +118,49 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Col 3: Company */}
+          {/* Col 3: Compare */}
+          <div>
+            <p
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                color: 'var(--text-muted)',
+                marginBottom: 16,
+              }}
+            >
+              Compare
+            </p>
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                { label: 'vs Frase', href: '/compare/vs-frase' },
+                { label: 'vs Surfer SEO', href: '/compare/vs-surfer' },
+                { label: 'vs Clearscope', href: '/compare/vs-clearscope' },
+                { label: 'vs MarketMuse', href: '/compare/vs-marketmuse' },
+                { label: 'vs Jasper', href: '/compare/vs-jasper' },
+                { label: 'vs ChatGPT', href: '/compare/vs-chatgpt' },
+                { label: 'All comparisons →', href: '/compare' },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  style={{
+                    fontSize: 14,
+                    color: 'var(--text-muted)',
+                    textDecoration: 'none',
+                    transition: 'color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text)' }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Col 4: Company */}
           <div>
             <p
               style={{
