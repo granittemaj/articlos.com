@@ -11,10 +11,19 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const tag = decodeURIComponent(params.tag)
+  const title = `Articles tagged "${tag}" — articlos blog`
+  const description = `Browse every articlos blog post tagged "${tag}". SEO, AEO, content automation, and the closed-loop content operation.`
+  const canonical = `/blog/tag/${encodeURIComponent(tag.toLowerCase())}`
   return {
-    title: `Articles tagged "${tag}"`,
-    description: `Browse all articlos blog posts tagged with "${tag}".`,
-    alternates: { canonical: `/blog/tag/${encodeURIComponent(tag.toLowerCase())}` },
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: `https://articlos.com${canonical}`,
+      type: 'website',
+    },
   }
 }
 

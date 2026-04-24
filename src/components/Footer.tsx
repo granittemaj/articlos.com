@@ -16,6 +16,7 @@ const productLinks: FooterLink[] = [
 
 const resourceLinks: FooterLink[] = [
   { label: 'Blog', href: '/blog' },
+  { label: 'Changelog', href: '/changelog' },
   { label: 'FAQ', href: '/faq' },
   { label: 'llms.txt', href: '/llms.txt' },
 ]

@@ -1,9 +1,22 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
 import ScrollAnimations from './ScrollAnimations'
 import NewsletterSection from '@/components/NewsletterSection'
+
+export const metadata: Metadata = {
+  title: 'articlos — The Closed-Loop Content Intelligence System',
+  description: 'articlos discovers what to write from your Search Console data, generates SEO + AEO-optimized articles in your brand voice, publishes to WordPress, tracks rankings, and rewrites decaying content — automatically.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'articlos — The closed-loop content intelligence system',
+    description: 'Discover, generate, publish, measure, improve. One system that runs the full SEO content operation.',
+    url: 'https://articlos.com',
+    type: 'website',
+  },
+}
 
 export const dynamic = 'force-dynamic'
 
