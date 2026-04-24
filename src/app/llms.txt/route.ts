@@ -17,8 +17,6 @@ articlos runs the full content operation end-to-end: keyword opportunity discove
 
 articlos uses GPT, Claude, and Gemini under the hood, picking the best model per article and falling back when one provider has an outage. Every article is generated in your brand voice (trained from samples of your existing content), includes auto-generated metadata, JSON-LD structured data, internal link suggestions validated against your post URLs, and a featured image from Pexels. The Autopilot plan runs the entire pipeline on a weekly cron — topic → draft → published post with zero manual steps.
 
-Over 2,400 content teams and 50,000+ articles generated.
-
 ## Docs
 
 - [Features](${baseUrl}/features): Every feature grouped by the six-stage loop — Discover, Plan, Generate, Publish, Measure, Improve

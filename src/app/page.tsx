@@ -3,7 +3,6 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import BlogCard from '@/components/BlogCard'
 import ScrollAnimations from './ScrollAnimations'
-import CountUp from '@/components/CountUp'
 import NewsletterSection from '@/components/NewsletterSection'
 
 export const dynamic = 'force-dynamic'
@@ -32,10 +31,8 @@ const defaults = {
   hero_title: 'The content intelligence\nsystem that never stops.',
   hero_subtitle: 'articlos discovers what to write, plans what matters, generates high-quality articles, measures performance, and continuously improves content — automatically.',
   cta_title: 'Start generating content today',
-  cta_subtitle: 'Join 2,400+ websites already using articlos to build organic traffic on autopilot.',
+  cta_subtitle: 'Give articlos your Search Console and it will do the rest — discover, plan, generate, publish, measure, improve.',
 }
-
-const logoNames = ['TechCrunch', 'ContentOps', 'GrowthLab', 'DigitalMint', 'SeedRound', 'Blogaroo', 'RankFast', 'ContentHive']
 
 export default async function HomePage() {
   const [content, posts] = await Promise.all([getSiteContent(), getLatestPosts()])
@@ -852,43 +849,6 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── STATS ─────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px', background: 'var(--cta-bg)' }}>
-        <div style={{
-          maxWidth: 960, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0,
-        }} className="stats-grid">
-          {[
-            { target: 50000, suffix: '+', label: 'Articles generated', sub: 'and still counting' },
-            { target: 2400, suffix: '+', label: 'Websites connected', sub: 'across every niche' },
-            { target: 94, suffix: '%', label: 'Average SEO score', sub: 'vs 67% industry average' },
-          ].map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`fade-up fade-up-delay-${i + 1}`}
-              style={{
-                textAlign: 'center', padding: '32px 40px',
-                borderRight: i < 2 ? '1px solid var(--cta-border)' : 'none',
-              }}
-            >
-              <div style={{
-                fontSize: 'clamp(40px, 6vw, 68px)',
-                fontWeight: 700, letterSpacing: '-0.05em',
-                color: 'var(--cta-text)', lineHeight: 1, marginBottom: 10,
-              }}>
-                <CountUp target={stat.target} suffix={stat.suffix} />
-              </div>
-              <div style={{ fontSize: 15, color: 'var(--cta-text-muted)', fontWeight: 500, marginBottom: 5 }}>
-                {stat.label}
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--cta-text-muted)', opacity: 0.6 }}>
-                {stat.sub}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
