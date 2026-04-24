@@ -112,14 +112,14 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
-        {/* Why Articlos */}
+        {/* Why articlos */}
         <section style={{ padding: '72px 24px' }}>
           <div style={{ maxWidth: 960, margin: '0 auto' }}>
             <h2 className="fade-up" style={{ fontSize: 'clamp(26px, 3vw, 36px)', fontWeight: 700, marginBottom: 14, letterSpacing: '-0.02em', color: 'var(--text)' }}>
-              Why content teams pick Articlos over {c.competitor}
+              Why content teams pick articlos over {c.competitor}
             </h2>
             <p className="fade-up fade-up-delay-1" style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 32, maxWidth: 640 }}>
-              Articlos is the only tool that closes the loop from Search Console opportunity to published WordPress post to decay-triggered rewrite.
+              articlos is the only tool that closes the loop from Search Console opportunity to published WordPress post to decay-triggered rewrite.
             </p>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
               {c.whyArticlos.map((item, i) => (
@@ -159,7 +159,7 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
                     <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Feature</th>
-                    <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Articlos</th>
+                    <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>articlos</th>
                     <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{c.competitor}</th>
                   </tr>
                 </thead>
@@ -216,7 +216,7 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
               <div className="fade-up fade-up-delay-1" style={{ border: '1.5px solid var(--text)', borderRadius: 12, padding: 24, background: 'var(--bg)' }}>
-                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#16a34a', marginBottom: 12 }}>Pick Articlos if</p>
+                <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#16a34a', marginBottom: 12 }}>Pick articlos if</p>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {c.pickArticlos.map((item, i) => (
                     <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, lineHeight: 1.5, color: 'var(--text)' }}>

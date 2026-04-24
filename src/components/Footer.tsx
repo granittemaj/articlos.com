@@ -139,7 +139,7 @@ export default function Footer() {
                 { label: 'vs Clearscope', href: '/compare/vs-clearscope' },
                 { label: 'vs MarketMuse', href: '/compare/vs-marketmuse' },
                 { label: 'vs Jasper', href: '/compare/vs-jasper' },
-                { label: 'vs ChatGPT', href: '/compare/vs-chatgpt' },
+                { label: 'vs ChatGPT, Claude & Gemini', href: '/compare/vs-llms' },
                 { label: 'All comparisons →', href: '/compare' },
               ].map((item) => (
                 <Link
