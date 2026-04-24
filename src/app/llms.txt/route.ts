@@ -21,7 +21,7 @@ Over 2,400 content teams and 50,000+ articles generated. 7-day free trial, no cr
 
 ## Docs
 
-- [How articlos works](${baseUrl}/#features): The five-stage loop — Discover, Plan, Generate, Measure, Improve
+- [Features](${baseUrl}/features): Every feature grouped by the six-stage loop — Discover, Plan, Generate, Publish, Measure, Improve
 - [FAQ](${baseUrl}/faq): Product, AI models, SEO rankings, integrations, pricing, security, team
 - [About](${baseUrl}/about): Company mission and the closed-loop content intelligence thesis
 
