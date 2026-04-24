@@ -29,7 +29,7 @@ We automatically collect information about how you use the Service, including pa
 We process the websites you connect, keywords you submit, articles we generate on your behalf, and settings you configure. This data is necessary to provide the Service.
 
 **Payment Data**
-Payment card details are processed by Paysera and are not stored on our servers. We receive transaction confirmation and billing history only. See paysera.com for their privacy practices.
+All billing is handled by bank transfer (SEPA or SWIFT). We do not collect, process, or store card numbers, CVV codes, or other payment card details at any point. We retain invoice records, transaction references, and billing contact information as required for accounting and tax compliance.
 
 **Communications**
 If you contact us via email or in-app support, we retain records of those communications to respond to you and improve our support quality.`,
@@ -85,7 +85,7 @@ We do not use your submitted content to train shared AI models without your expl
 
 **Infrastructure & Hosting:** Cloud hosting providers process and store your data. All providers are contractually bound to data protection standards.
 
-**Payment Processing:** Paysera processes payments. See paysera.com for their privacy practices.
+**Payment Processing:** We do not use a third-party payment processor. All invoices are paid by direct bank transfer (SEPA or SWIFT).
 
 **Analytics:** We use privacy-respecting analytics to understand product usage. Data is aggregated and anonymised where possible.
 
@@ -189,7 +189,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-            Last updated: April 10, 2026 &middot; Effective: April 10, 2026
+            Last updated: April 24, 2026 &middot; Effective: April 24, 2026
           </p>
         </div>
       </section>

@@ -66,11 +66,11 @@ const pillars: Pillar[] = [
   },
   {
     title: 'Payments',
-    summary: 'Handled by Paysera. Your card data never touches our servers.',
+    summary: 'All billing is handled by bank transfer. We never collect or store card data.',
     details: [
-      'All payment processing goes through Paysera, a regulated European payment provider.',
-      'We receive only transaction confirmations and billing history — never card numbers, CVVs, or bank details.',
-      'See paysera.com for their security and compliance posture.',
+      'Invoices are paid by SEPA or SWIFT bank transfer directly to our business account.',
+      'We do not collect, process, or store card numbers, CVVs, or any payment card details at any point.',
+      'Transaction and invoice records are retained for 7 years as required by accounting law.',
     ],
   },
   {
@@ -102,7 +102,6 @@ const pillars: Pillar[] = [
     summary: 'The short, honest list of who touches your data and why.',
     details: [
       'Cloud infrastructure for hosting, databases, and storage.',
-      'Paysera for payment processing.',
       'OpenAI, Google (Gemini), and Anthropic (Claude) for AI model inference.',
       'An email service provider for transactional and marketing emails.',
       'Vercel Analytics for aggregate, anonymized usage metrics.',
@@ -158,40 +157,8 @@ export default function SecurityPage() {
               Your content operation is yours.<br />We protect it accordingly.
             </h1>
             <p className="fade-up fade-up-delay-2" style={{ fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.65, maxWidth: 700, margin: '0 auto' }}>
-              Straight facts about how articlos handles your data. We don&apos;t claim certifications we haven&apos;t earned, and we don&apos;t hide the tradeoffs. Here is what we actually do today.
+              Straight facts about how articlos handles your data — encryption, credentials, Google OAuth, payments, and your rights.
             </p>
-          </div>
-        </section>
-
-        {/* Honest disclosure */}
-        <section style={{ padding: '32px 24px', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-          <div style={{ maxWidth: 820, margin: '0 auto' }}>
-            <div
-              className="fade-up"
-              style={{
-                border: '1px solid var(--border)',
-                borderRadius: 12,
-                padding: '20px 24px',
-                background: 'var(--bg)',
-                display: 'flex',
-                gap: 14,
-                alignItems: 'flex-start',
-              }}
-            >
-              <span style={{ color: 'var(--text-muted)', fontSize: 18, flexShrink: 0, marginTop: 1 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-              </span>
-              <div>
-                <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
-                  We don&apos;t carry SOC 2 or ISO 27001 attestation today.
-                </p>
-                <p style={{ fontSize: 13.5, color: 'var(--text-muted)', lineHeight: 1.6, margin: '6px 0 0' }}>
-                  These take 6–18 months of external audit. If you need one for procurement, tell us at <a href="mailto:hello@articlos.com" style={{ color: 'var(--text)', textDecoration: 'underline' }}>hello@articlos.com</a> — demand signal helps us prioritize. In the meantime, this page is the full picture of what we actually do.
-                </p>
-              </div>
-            </div>
           </div>
         </section>
 
