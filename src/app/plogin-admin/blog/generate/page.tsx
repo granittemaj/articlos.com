@@ -113,6 +113,10 @@ export default function GeneratePage() {
   // Batch state (current = completed count, for parallel progress)
   const [batchResults, setBatchResults] = useState<BatchResult[]>([])
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number } | null>(null)
+  const [retrying, setRetrying] = useState<Set<string>>(new Set())
+
+  // Last single-generate request, kept so we can retry after a failure
+  const [lastSingleAttempt, setLastSingleAttempt] = useState<{ topicTitle: string; kw: string } | null>(null)
 
   // Style preferences
   const [topicStyle, setTopicStyle] = useState<'accessible' | 'technical'>('accessible')
@@ -218,6 +222,11 @@ export default function GeneratePage() {
       setError('Please select or enter a topic.')
       return
     }
+    setLastSingleAttempt({ topicTitle, kw })
+    return runSingleGenerate(topicTitle, kw)
+  }
+
+  async function runSingleGenerate(topicTitle: string, kw: string) {
     setError('')
     setStreamingContent('')
     setGenerated({ title: '', excerpt: '', metaTitle: '', metaDescription: '', tags: '', content: '', featuredImage: '' })
@@ -291,6 +300,16 @@ export default function GeneratePage() {
     }
   }
 
+  async function runBatchItem(topic: Topic) {
+    try {
+      const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
+      setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, postId } : r))
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed'
+      setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, error: msg } : r))
+    }
+  }
+
   // Batch generate → parallel execution (all at once, max 3 articles)
   async function handleGenerateBatch() {
     const selected = Array.from(selectedIndexes).map(i => topics[i])
@@ -301,19 +320,27 @@ export default function GeneratePage() {
 
     await Promise.allSettled(
       selected.map(async (topic) => {
-        try {
-          const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
-          setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, postId } : r))
-        } catch (e) {
-          const msg = e instanceof Error ? e.message : 'Failed'
-          setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, error: msg } : r))
-        } finally {
-          setBatchProgress(prev => prev ? { ...prev, current: prev.current + 1 } : null)
-        }
+        await runBatchItem(topic)
+        setBatchProgress(prev => prev ? { ...prev, current: prev.current + 1 } : null)
       })
     )
 
     setBatchProgress(null)
+  }
+
+  async function retryBatchItem(topic: Topic) {
+    setRetrying(prev => new Set(prev).add(topic.title))
+    // Reset the row to pending (drop previous error)
+    setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { topic } : r))
+    try {
+      await runBatchItem(topic)
+    } finally {
+      setRetrying(prev => {
+        const next = new Set(prev)
+        next.delete(topic.title)
+        return next
+      })
+    }
   }
 
   function handleGenerate() {
@@ -423,8 +450,27 @@ export default function GeneratePage() {
           <div style={{
             background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 8,
             padding: '12px 16px', marginBottom: 20, fontSize: 14, color: '#dc2626',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
           }}>
-            {error}
+            <span>{error}</span>
+            {lastSingleAttempt && !streaming && (
+              <button
+                onClick={() => runSingleGenerate(lastSingleAttempt.topicTitle, lastSingleAttempt.kw)}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '6px 12px', borderRadius: 6,
+                  background: '#dc2626', color: '#ffffff',
+                  border: 'none', fontSize: 13, fontWeight: 500,
+                  cursor: 'pointer', fontFamily: 'Geist, sans-serif',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+                Retry
+              </button>
+            )}
           </div>
         )}
 
@@ -439,7 +485,7 @@ export default function GeneratePage() {
                 Find blog topic ideas
               </h2>
               <p style={{ fontSize: 14, color: '#6b6b67', marginBottom: 20, lineHeight: 1.6 }}>
-                Gemini will research and suggest high-value, SEO-ready blog topics tailored to your niche.
+                AI will research and suggest high-value, SEO-ready blog topics tailored to your niche.
               </p>
               <div className="form-group">
                 <label className="form-label">Your niche or website topic (optional)</label>
@@ -935,7 +981,7 @@ export default function GeneratePage() {
                 {loading ? (
                   <>
                     <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>◌</span>
-                    {fetchingImage ? 'Fetching image…' : 'Writing article with Gemini…'}
+                    {fetchingImage ? 'Fetching image…' : 'Writing article…'}
                   </>
                 ) : isMulti ? (
                   <>
@@ -1018,9 +1064,30 @@ export default function GeneratePage() {
                         <div style={{ fontSize: 12, color: '#dc2626', marginTop: 2 }}>{r.error}</div>
                       )}
                       {isPending && (
-                        <div style={{ fontSize: 12, color: '#9b9b96', marginTop: 2 }}>Writing with Gemini…</div>
+                        <div style={{ fontSize: 12, color: '#9b9b96', marginTop: 2 }}>
+                          {retrying.has(r.topic.title) ? 'Retrying…' : 'Writing…'}
+                        </div>
                       )}
                     </div>
+                    {r.error && !retrying.has(r.topic.title) && (
+                      <button
+                        onClick={() => retryBatchItem(r.topic)}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          fontSize: 13, fontWeight: 500, color: '#dc2626',
+                          whiteSpace: 'nowrap',
+                          padding: '4px 10px', borderRadius: 6,
+                          border: '1px solid #fca5a5',
+                          background: '#fff',
+                          cursor: 'pointer', fontFamily: 'Geist, sans-serif',
+                        }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                        </svg>
+                        Retry
+                      </button>
+                    )}
                     {r.postId && (
                       <Link
                         href={`/plogin-admin/blog/${r.postId}`}
@@ -1075,7 +1142,7 @@ export default function GeneratePage() {
                   </svg>
                 )}
                 <span style={{ fontSize: 14, color: streaming ? '#92400e' : '#15803d', fontWeight: 500 }}>
-                  {streaming ? 'Writing article with Gemini… metadata ready, content streaming in.' : 'Article generated successfully. Review and edit before saving.'}
+                  {streaming ? 'Writing article… metadata ready, content streaming in.' : 'Article generated successfully. Review and edit before saving.'}
                 </span>
               </div>
 

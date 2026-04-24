@@ -46,7 +46,10 @@ export async function POST(req: NextRequest) {
         const metaResult = await withRetry(() =>
           client.chat.completions.create({
             model: MODELS.small,
-            messages: [{ role: 'user', content: buildMetadataPrompt(topic, keywords, writingStyle) }],
+            messages: [
+              { role: 'system', content: 'Respond with a single valid JSON object matching the schema described in the user prompt. No prose, no code fences.' },
+              { role: 'user', content: buildMetadataPrompt(topic, keywords, writingStyle) },
+            ],
             response_format: { type: 'json_object' },
           })
         )
