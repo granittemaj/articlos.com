@@ -47,7 +47,10 @@ async function runJson(
 ): Promise<{ completion: OpenAI.Chat.Completions.ChatCompletion; parsed: unknown }> {
   const completion = await client.chat.completions.create({
     model,
-    messages: [{ role: 'user', content: prompt }],
+    messages: [
+      { role: 'system', content: 'Respond with a single valid JSON object matching the schema described in the user prompt. No prose, no code fences.' },
+      { role: 'user', content: prompt },
+    ],
     response_format: { type: 'json_object' },
   })
   const text = completion.choices[0]?.message?.content ?? ''
