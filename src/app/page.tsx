@@ -525,7 +525,7 @@ export default async function HomePage() {
                   Publish-ready in seconds
                 </h3>
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  GPT-4o and Gemini 1.5 Pro generate full articles — structured, fact-checked, and optimized for both Google and AI overviews.
+                  GPT-4o, Claude, and Gemini 2.5 generate full articles — structured, fact-checked, and optimized for both Google and AI overviews.
                 </p>
               </div>
               {/* Generation progress */}
@@ -757,6 +757,29 @@ export default async function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* See all features CTA */}
+          <div className="fade-up" style={{ textAlign: 'center', marginTop: 40 }}>
+            <a
+              href="/features"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                fontSize: 14,
+                fontWeight: 600,
+                color: 'var(--text)',
+                textDecoration: 'none',
+                padding: '12px 20px',
+                borderRadius: 100,
+                border: '1px solid var(--border)',
+                background: 'var(--surface)',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              See every feature →
+            </a>
           </div>
         </div>
       </section>

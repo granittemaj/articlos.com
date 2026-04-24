@@ -106,7 +106,7 @@ export default function Nav() {
             className="desktop-nav"
           >
             {[
-              { label: 'Features', href: '/#features', match: null },
+              { label: 'Features', href: '/features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },
@@ -248,7 +248,7 @@ export default function Nav() {
         >
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
-              { label: 'Features', href: '/#features', match: null },
+              { label: 'Features', href: '/features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },

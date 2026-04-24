@@ -107,7 +107,7 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
             </p>
             <div className="fade-up fade-up-delay-3" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
               <Link href="/pricing" className="btn btn-primary btn-lg">Start free trial</Link>
-              <Link href="/#features" className="btn btn-ghost btn-lg">See how it works</Link>
+              <Link href="/features" className="btn btn-ghost btn-lg">See all features</Link>
             </div>
           </div>
         </section>
