@@ -102,7 +102,6 @@ const pillars: Pillar[] = [
     summary: 'The short, honest list of who touches your data and why.',
     details: [
       'Cloud infrastructure for hosting, databases, and storage.',
-      'Paysera for payment processing.',
       'OpenAI, Google (Gemini), and Anthropic (Claude) for AI model inference.',
       'An email service provider for transactional and marketing emails.',
       'Vercel Analytics for aggregate, anonymized usage metrics.',

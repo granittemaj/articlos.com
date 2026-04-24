@@ -70,9 +70,9 @@ We make no guarantees regarding the accuracy, completeness, originality, or suit
   {
     id: 'payment',
     title: '8. Payment and Billing',
-    body: `Paid plans are billed in advance on a monthly or annual basis. By subscribing, you authorise us to charge your payment method on a recurring basis via Paysera. Subscriptions automatically renew unless cancelled before the renewal date.
+    body: `Paid plans are billed in advance on a monthly or annual basis. We invoice you at the start of each billing period and payment is due by direct bank transfer (SEPA or SWIFT) to the account specified on the invoice. Subscriptions automatically renew unless cancelled before the renewal date.
 
-All fees are non-refundable except as required by applicable law. If payment fails, we may suspend your access until payment is resolved. Prices may change with 30 days' notice; continued use after a price change constitutes acceptance.
+All fees are non-refundable except as required by applicable law. If payment is not received by the due date shown on the invoice, we may suspend your access until payment is resolved. Prices may change with 30 days' notice; continued use after a price change constitutes acceptance.
 
 You may cancel your subscription at any time. Cancellation takes effect at the end of the current billing period. We do not provide prorated refunds for unused periods.`,
   },
@@ -137,7 +137,7 @@ export default function TermsPage() {
             Terms of Service
           </h1>
           <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-            Last updated: April 10, 2026 &middot; Effective: April 10, 2026
+            Last updated: April 24, 2026 &middot; Effective: April 24, 2026
           </p>
         </div>
       </section>
