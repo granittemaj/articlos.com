@@ -1,9 +1,8 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { SchemaType } from '@google/generative-ai'
 import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getGeminiClient, MODELS } from '@/lib/llm/client'
+import { getOpenAIClient, MODELS } from '@/lib/llm/client'
 import { withRetry } from '@/lib/llm/retry'
 import { buildMetadataPrompt, buildContentPrompt } from '@/lib/llm/prompts'
 
@@ -38,44 +37,29 @@ export async function POST(req: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const genAI = getGeminiClient()
+      const client = getOpenAIClient()
 
-      // ── Phase 1: Metadata (Flash Lite, fast JSON, ~1-2s) ─────────────────
-      const metadataModel = genAI.getGenerativeModel({
-        model: MODELS.flashLite,
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: SchemaType.OBJECT,
-            properties: {
-              title: { type: SchemaType.STRING },
-              excerpt: { type: SchemaType.STRING },
-              metaTitle: { type: SchemaType.STRING },
-              metaDescription: { type: SchemaType.STRING },
-              tags: { type: SchemaType.STRING },
-            },
-            required: ['title', 'excerpt', 'metaTitle', 'metaDescription', 'tags'],
-          },
-        },
-      })
-
+      // ── Phase 1: Metadata (gpt-4o-mini JSON, ~1-2s) ─────────────────────
       let metadata: { title: string; excerpt: string; metaTitle: string; metaDescription: string; tags: string }
       const t0 = Date.now()
       try {
         const metaResult = await withRetry(() =>
-          metadataModel.generateContent(buildMetadataPrompt(topic, keywords, writingStyle))
+          client.chat.completions.create({
+            model: MODELS.small,
+            messages: [{ role: 'user', content: buildMetadataPrompt(topic, keywords, writingStyle) }],
+            response_format: { type: 'json_object' },
+          })
         )
-        metadata = JSON.parse(metaResult.response.text())
+        metadata = JSON.parse(metaResult.choices[0]?.message?.content ?? '')
         controller.enqueue(encode({ type: 'metadata', ...metadata }))
 
-        // Log metadata call
         prisma.aiGenerationLog.create({
           data: {
             action: 'generate:metadata',
-            model: MODELS.flashLite,
-            promptTokens: metaResult.response.usageMetadata?.promptTokenCount ?? null,
-            outputTokens: metaResult.response.usageMetadata?.candidatesTokenCount ?? null,
-            totalTokens: metaResult.response.usageMetadata?.totalTokenCount ?? null,
+            model: MODELS.small,
+            promptTokens: metaResult.usage?.prompt_tokens ?? null,
+            outputTokens: metaResult.usage?.completion_tokens ?? null,
+            totalTokens: metaResult.usage?.total_tokens ?? null,
             latencyMs: Date.now() - t0,
             success: true,
           },
@@ -87,7 +71,7 @@ export async function POST(req: NextRequest) {
         prisma.aiGenerationLog.create({
           data: {
             action: 'generate:metadata',
-            model: MODELS.flashLite,
+            model: MODELS.small,
             promptTokens: null,
             outputTokens: null,
             totalTokens: null,
@@ -99,8 +83,7 @@ export async function POST(req: NextRequest) {
         return
       }
 
-      // ── Phase 2: Content (Flash, streaming HTML, ~8-12s) ─────────────────
-      // Fetch published posts for cross-linking
+      // ── Phase 2: Content (gpt-4o streaming HTML) ────────────────────────
       let publishedPosts: { title: string; slug: string }[] = []
       try {
         publishedPosts = await prisma.post.findMany({
@@ -111,7 +94,6 @@ export async function POST(req: NextRequest) {
         })
       } catch { /* proceed without cross-links */ }
 
-      const contentModel = genAI.getGenerativeModel({ model: MODELS.flash })
       const contentPrompt = buildContentPrompt(topic, metadata.title, keywords, writingStyle, publishedPosts)
 
       const t1 = Date.now()
@@ -120,18 +102,25 @@ export async function POST(req: NextRequest) {
       let contentError: unknown = null
 
       try {
-        const contentStream = await withRetry(() => contentModel.generateContentStream(contentPrompt))
+        const contentStream = await withRetry(() =>
+          client.chat.completions.create({
+            model: MODELS.large,
+            messages: [{ role: 'user', content: contentPrompt }],
+            stream: true,
+            stream_options: { include_usage: true },
+          })
+        )
 
-        for await (const chunk of contentStream.stream) {
-          const text = chunk.text()
+        for await (const chunk of contentStream) {
+          const text = chunk.choices[0]?.delta?.content
           if (text) {
             controller.enqueue(encode({ type: 'chunk', html: text }))
           }
+          if (chunk.usage) {
+            promptTokens = chunk.usage.prompt_tokens ?? null
+            outputTokens = chunk.usage.completion_tokens ?? null
+          }
         }
-
-        const response = await contentStream.response
-        promptTokens = response.usageMetadata?.promptTokenCount ?? null
-        outputTokens = response.usageMetadata?.candidatesTokenCount ?? null
 
         controller.enqueue(encode({ type: 'done', promptTokens, outputTokens }))
       } catch (err) {
@@ -141,7 +130,7 @@ export async function POST(req: NextRequest) {
         prisma.aiGenerationLog.create({
           data: {
             action: 'generate:content',
-            model: MODELS.flash,
+            model: MODELS.large,
             promptTokens,
             outputTokens,
             totalTokens: promptTokens != null && outputTokens != null ? promptTokens + outputTokens : null,
