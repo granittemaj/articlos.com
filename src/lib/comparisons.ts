@@ -15,13 +15,13 @@ export interface Comparison {
   metaDescription: string
   /** 1–2 sentences shown in the hero under the title. */
   heroIntro: string
-  /** Short "why choose Articlos" list — 4–6 bullets, frame by outcome. */
+  /** Short "why choose articlos" list — 4–6 bullets, frame by outcome. */
   whyArticlos: string[]
   /** Where the competitor is genuinely stronger — honesty section. */
   competitorStrengths: string[]
   /** Feature table — keep to 10–14 rows. */
   features: FeatureRow[]
-  /** "Who should pick Articlos vs [competitor]" decision helper. */
+  /** "Who should pick articlos vs [competitor]" decision helper. */
   pickArticlos: string[]
   pickCompetitor: string[]
   /** Shown on hub card. */
@@ -45,10 +45,10 @@ export const comparisons: Comparison[] = [
     slug: 'frase',
     competitor: 'Frase',
     tier: 'content-platform',
-    tagline: 'Articlos vs Frase',
-    metaTitle: 'Articlos vs Frase — Compare Content Platforms',
-    metaDescription: 'Frase helps you optimize a draft. Articlos runs the full loop — discover topics from GSC, generate, publish to WordPress, and rewrite decaying content automatically. Compare side-by-side.',
-    heroIntro: 'Frase is a research and optimization assistant. Articlos is a content operations system — it doesn\'t just help you write, it finds topics, publishes them, and rewrites them when rankings slip.',
+    tagline: 'articlos vs Frase',
+    metaTitle: 'articlos vs Frase — Compare Content Platforms',
+    metaDescription: 'Frase helps you optimize a draft. articlos runs the full loop — discover topics from GSC, generate, publish to WordPress, and rewrite decaying content automatically. Compare side-by-side.',
+    heroIntro: 'Frase is a research and optimization assistant. articlos is a content operations system — it doesn\'t just help you write, it finds topics, publishes them, and rewrites them when rankings slip.',
     hubBlurb: 'Full content loop vs research assistant',
     whyArticlos: [
       'Weekly autopilot generates, schedules, and publishes articles without touching a dashboard',
@@ -86,10 +86,10 @@ export const comparisons: Comparison[] = [
     slug: 'surfer',
     competitor: 'Surfer SEO',
     tier: 'content-platform',
-    tagline: 'Articlos vs Surfer SEO',
-    metaTitle: 'Articlos vs Surfer SEO — Compare Content Tools',
-    metaDescription: 'Surfer scores a draft against SERP competitors. Articlos closes the loop — discover, generate, publish to WordPress, and rewrite decaying posts. See how the two compare.',
-    heroIntro: 'Surfer is a SERP-driven optimizer you bring a draft to. Articlos is an end-to-end content loop — it runs from topic discovery to publishing and back through performance-based rewrites.',
+    tagline: 'articlos vs Surfer SEO',
+    metaTitle: 'articlos vs Surfer SEO — Compare Content Tools',
+    metaDescription: 'Surfer scores a draft against SERP competitors. articlos closes the loop — discover, generate, publish to WordPress, and rewrite decaying posts. See how the two compare.',
+    heroIntro: 'Surfer is a SERP-driven optimizer you bring a draft to. articlos is an end-to-end content loop — it runs from topic discovery to publishing and back through performance-based rewrites.',
     hubBlurb: 'End-to-end loop vs on-page optimizer',
     whyArticlos: [
       'Autopilot publishes on a weekly cadence — Surfer never touches your CMS',
@@ -127,10 +127,10 @@ export const comparisons: Comparison[] = [
     slug: 'clearscope',
     competitor: 'Clearscope',
     tier: 'content-platform',
-    tagline: 'Articlos vs Clearscope',
-    metaTitle: 'Articlos vs Clearscope — Compare Content Platforms',
-    metaDescription: 'Clearscope grades drafts for semantic coverage. Articlos runs the whole content operation — discover, generate, publish, and rewrite. Compare pricing and capabilities.',
-    heroIntro: 'Clearscope is a premium content grader for teams who write and optimize manually. Articlos runs the operation end-to-end, from GSC opportunity to published post to decay rewrite.',
+    tagline: 'articlos vs Clearscope',
+    metaTitle: 'articlos vs Clearscope — Compare Content Platforms',
+    metaDescription: 'Clearscope grades drafts for semantic coverage. articlos runs the whole content operation — discover, generate, publish, and rewrite. Compare pricing and capabilities.',
+    heroIntro: 'Clearscope is a premium content grader for teams who write and optimize manually. articlos runs the operation end-to-end, from GSC opportunity to published post to decay rewrite.',
     hubBlurb: 'Whole operation vs premium grader',
     whyArticlos: [
       'Generate, optimize, and publish in one workflow — no second tool needed',
@@ -168,10 +168,10 @@ export const comparisons: Comparison[] = [
     slug: 'marketmuse',
     competitor: 'MarketMuse',
     tier: 'content-platform',
-    tagline: 'Articlos vs MarketMuse',
-    metaTitle: 'Articlos vs MarketMuse — Content Strategy Platforms Compared',
-    metaDescription: 'MarketMuse plans the strategy. Articlos plans and executes — discover, generate, publish, and rewrite decaying content. See the feature comparison.',
-    heroIntro: 'MarketMuse is a strategy and topic-modeling platform. Articlos is a strategy platform that also generates and ships the articles it plans.',
+    tagline: 'articlos vs MarketMuse',
+    metaTitle: 'articlos vs MarketMuse — Content Strategy Platforms Compared',
+    metaDescription: 'MarketMuse plans the strategy. articlos plans and executes — discover, generate, publish, and rewrite decaying content. See the feature comparison.',
+    heroIntro: 'MarketMuse is a strategy and topic-modeling platform. articlos is a strategy platform that also generates and ships the articles it plans.',
     hubBlurb: 'Plan and ship vs plan only',
     whyArticlos: [
       'Topic planning plus actual article generation and publishing in one system',
@@ -209,10 +209,10 @@ export const comparisons: Comparison[] = [
     slug: 'writesonic',
     competitor: 'Writesonic',
     tier: 'content-platform',
-    tagline: 'Articlos vs Writesonic',
-    metaTitle: 'Articlos vs Writesonic — AI Content Platform Comparison',
-    metaDescription: 'Writesonic generates drafts fast. Articlos closes the loop with GSC-driven topic discovery, WordPress publishing, and automatic rewrites for decaying content.',
-    heroIntro: 'Writesonic is a fast, multi-format AI writer. Articlos is a focused long-form content loop — finding the right SEO topics, publishing them to WordPress, and rewriting them when traffic drops.',
+    tagline: 'articlos vs Writesonic',
+    metaTitle: 'articlos vs Writesonic — AI Content Platform Comparison',
+    metaDescription: 'Writesonic generates drafts fast. articlos closes the loop with GSC-driven topic discovery, WordPress publishing, and automatic rewrites for decaying content.',
+    heroIntro: 'Writesonic is a fast, multi-format AI writer. articlos is a focused long-form content loop — finding the right SEO topics, publishing them to WordPress, and rewriting them when traffic drops.',
     hubBlurb: 'Focused SEO loop vs general AI writer',
     whyArticlos: [
       'Built specifically for SEO long-form content, not ad copy or social posts',
@@ -251,10 +251,10 @@ export const comparisons: Comparison[] = [
     slug: 'jasper',
     competitor: 'Jasper',
     tier: 'ai-writer',
-    tagline: 'Articlos vs Jasper',
-    metaTitle: 'Articlos vs Jasper — Content Operations vs AI Writer',
-    metaDescription: 'Jasper is an AI writing assistant with templates. Articlos is a content operations system that discovers, generates, publishes, and rewrites. See how they compare.',
-    heroIntro: 'Jasper gives you a chat window and templates. Articlos gives you a content pipeline — keyword opportunities, scheduled publishing, and automatic rewrites when rankings drop.',
+    tagline: 'articlos vs Jasper',
+    metaTitle: 'articlos vs Jasper — Content Operations vs AI Writer',
+    metaDescription: 'Jasper is an AI writing assistant with templates. articlos is a content operations system that discovers, generates, publishes, and rewrites. See how they compare.',
+    heroIntro: 'Jasper gives you a chat window and templates. articlos gives you a content pipeline — keyword opportunities, scheduled publishing, and automatic rewrites when rankings drop.',
     hubBlurb: 'Content pipeline vs AI assistant',
     whyArticlos: [
       'End-to-end pipeline: discover → plan → generate → publish → track → rewrite',
@@ -292,10 +292,10 @@ export const comparisons: Comparison[] = [
     slug: 'copy-ai',
     competitor: 'Copy.ai',
     tier: 'ai-writer',
-    tagline: 'Articlos vs Copy.ai',
-    metaTitle: 'Articlos vs Copy.ai — SEO Content Operations Compared',
-    metaDescription: 'Copy.ai is an AI assistant for marketing copy. Articlos is a content operations system that mines GSC opportunities, publishes to WordPress, and rewrites decaying posts.',
-    heroIntro: 'Copy.ai is a workflow-builder for marketing output across many formats. Articlos is a focused SEO content system — it finds topics, writes long-form, publishes, and rewrites.',
+    tagline: 'articlos vs Copy.ai',
+    metaTitle: 'articlos vs Copy.ai — SEO Content Operations Compared',
+    metaDescription: 'Copy.ai is an AI assistant for marketing copy. articlos is a content operations system that mines GSC opportunities, publishes to WordPress, and rewrites decaying posts.',
+    heroIntro: 'Copy.ai is a workflow-builder for marketing output across many formats. articlos is a focused SEO content system — it finds topics, writes long-form, publishes, and rewrites.',
     hubBlurb: 'SEO content system vs marketing copy toolkit',
     whyArticlos: [
       'Purpose-built for SEO long-form, not short marketing copy',
@@ -333,10 +333,10 @@ export const comparisons: Comparison[] = [
     slug: 'rytr',
     competitor: 'Rytr',
     tier: 'ai-writer',
-    tagline: 'Articlos vs Rytr',
-    metaTitle: 'Articlos vs Rytr — Content Platform vs AI Writing Assistant',
-    metaDescription: 'Rytr is a low-cost AI writing assistant for short-form output. Articlos is a content operations system that discovers, generates, publishes, and rewrites. Compare capabilities.',
-    heroIntro: 'Rytr is a fast, cheap AI writing assistant for short-form content. Articlos is a full SEO content pipeline — it researches, generates long-form, publishes to WordPress, and rewrites posts when traffic drops.',
+    tagline: 'articlos vs Rytr',
+    metaTitle: 'articlos vs Rytr — Content Platform vs AI Writing Assistant',
+    metaDescription: 'Rytr is a low-cost AI writing assistant for short-form output. articlos is a content operations system that discovers, generates, publishes, and rewrites. Compare capabilities.',
+    heroIntro: 'Rytr is a fast, cheap AI writing assistant for short-form content. articlos is a full SEO content pipeline — it researches, generates long-form, publishes to WordPress, and rewrites posts when traffic drops.',
     hubBlurb: 'SEO content pipeline vs short-form writer',
     whyArticlos: [
       'Long-form SEO focus — Rytr is built for short marketing copy',
@@ -372,13 +372,13 @@ export const comparisons: Comparison[] = [
   },
   // ─────────────────────────────── Raw LLMs ───────────────────────────────
   {
-    slug: 'chatgpt',
+    slug: 'llms',
     competitor: 'ChatGPT, Claude & Gemini',
     tier: 'llm',
-    tagline: 'Articlos vs ChatGPT, Claude & Gemini',
-    metaTitle: 'Articlos vs ChatGPT, Claude & Gemini — Raw LLMs vs Content System',
-    metaDescription: 'Raw LLMs generate text. Articlos orchestrates them inside a full content system — GSC opportunity mining, brand voice, WordPress publishing, rank tracking, and decay rewrites.',
-    heroIntro: 'ChatGPT, Claude, and Gemini are general-purpose language models. Articlos is the content system built on top of them — opportunity discovery, brand voice, publishing, ranking, and rewrites. You do not choose between Articlos and an LLM; Articlos uses all three.',
+    tagline: 'articlos vs ChatGPT, Claude & Gemini',
+    metaTitle: 'articlos vs ChatGPT, Claude & Gemini — Raw LLMs vs Content System',
+    metaDescription: 'Raw LLMs generate text. articlos orchestrates them inside a full content system — GSC opportunity mining, brand voice, WordPress publishing, rank tracking, and decay rewrites.',
+    heroIntro: 'ChatGPT, Claude, and Gemini are general-purpose language models. articlos is the content system built on top of them — opportunity discovery, brand voice, publishing, ranking, and rewrites. You do not choose between articlos and an LLM; articlos uses all three.',
     hubBlurb: 'Raw LLMs vs content operations system',
     whyArticlos: [
       'Uses Claude, GPT, and Gemini — pick the best model per article, fall back when one is down',

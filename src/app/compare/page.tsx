@@ -6,12 +6,12 @@ import ScrollAnimations from '@/app/ScrollAnimations'
 import { groupedComparisons, Comparison } from '@/lib/comparisons'
 
 export const metadata: Metadata = {
-  title: 'Compare Articlos — Honest Comparisons vs Every Content Tool',
-  description: 'See how Articlos compares to Frase, Surfer SEO, Clearscope, MarketMuse, Writesonic, Jasper, Copy.ai, Rytr, ChatGPT, Claude, and Gemini. Side-by-side feature tables and who-should-pick-what.',
+  title: 'Compare articlos — Honest Comparisons vs Every Content Tool',
+  description: 'See how articlos compares to Frase, Surfer SEO, Clearscope, MarketMuse, Writesonic, Jasper, Copy.ai, Rytr, ChatGPT, Claude, and Gemini. Side-by-side feature tables and who-should-pick-what.',
   alternates: { canonical: '/compare' },
   openGraph: {
-    title: 'Compare Articlos vs every content tool',
-    description: 'Honest side-by-side comparisons. See how Articlos stacks up against SEO platforms, AI writers, and raw LLMs.',
+    title: 'Compare articlos vs every content tool',
+    description: 'Honest side-by-side comparisons. See how articlos stacks up against SEO platforms, AI writers, and raw LLMs.',
     url: 'https://articlos.com/compare',
   },
 }
@@ -83,7 +83,7 @@ export default function ComparePage() {
                 color: 'var(--text)',
               }}
             >
-              See how Articlos compares.
+              See how articlos compares.
             </h1>
             <p className="fade-up fade-up-delay-1" style={{ fontSize: 18, color: 'var(--text-muted)', lineHeight: 1.6 }}>
               Honest, side-by-side comparisons with every content tool we get asked about — SEO platforms, AI writers, and raw LLMs. We show where we win and where the other side is stronger.
