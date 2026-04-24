@@ -457,7 +457,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 lineHeight: 1.6,
               }}
             >
-              Join thousands of content teams using articlos to grow their organic traffic.
+              Let articlos run your content loop — from Search Console opportunity to published article.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <a

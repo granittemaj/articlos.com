@@ -60,13 +60,13 @@ const CONTENT_FIELDS = [
   {
     key: 'social_proof_label',
     label: 'Social Proof Label',
-    description: 'The small label above the logos carousel (e.g. "Trusted by 2,400+ content teams").',
+    description: 'The small label above the logos carousel.',
     rows: 1,
   },
 ]
 
 const DEFAULTS: Record<string, string> = {
-  hero_badge: 'Now with GPT-4o & Gemini 1.5 Pro',
+  hero_badge: 'Now with GPT-4o, Claude & Gemini 2.5',
   hero_title: 'AI articles that rank,\nautomatically.',
   hero_subtitle:
     'articlos generates SEO-optimised articles, manages your content calendar, and publishes to WordPress — all on autopilot.',
@@ -75,11 +75,11 @@ const DEFAULTS: Record<string, string> = {
     'From keyword research to auto-publishing, articlos handles the full content pipeline.',
   cta_title: 'Start generating content today',
   cta_subtitle:
-    'Join 2,400+ websites already using articlos to build their organic traffic on autopilot.',
+    'Give articlos your Search Console and it will do the rest — discover, plan, generate, publish, measure, improve.',
   newsletter_title: 'Stay ahead of the content curve',
   newsletter_subtitle:
     'Weekly insights on SEO, AI content, and what\'s actually working in content marketing — straight to your inbox. No fluff.',
-  social_proof_label: 'Trusted by 2,400+ content teams',
+  social_proof_label: '',
 }
 
 interface FieldState {

@@ -668,7 +668,7 @@ export default function PricingClient() {
               Ready to put your content on autopilot?
             </h2>
             <p style={{ fontSize: 16, color: 'var(--cta-text-secondary)', marginBottom: 32, lineHeight: 1.6 }}>
-              Start your free trial today. No credit card required.
+              Get in touch and we&apos;ll walk you through the closed loop on your own site.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <a

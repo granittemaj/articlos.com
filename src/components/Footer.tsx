@@ -179,6 +179,7 @@ export default function Footer() {
                 { label: 'About', href: '/about' },
                 { label: 'Careers', href: '/careers' },
                 { label: 'FAQ', href: '/faq' },
+                { label: 'Security', href: '/security' },
                 { label: 'Contact', href: '/contact' },
               ].map((item) => (
                 <Link
