@@ -125,7 +125,7 @@ Shared article library, multi-user queue, up to 5 seats on Autopilot plan. Per-u
 
 ## Pricing
 
-7-day free trial with no credit card on all plans. 20% annual discount.
+20% annual discount on all plans.
 
 ### Lite — $29/mo or $24/mo annual
 For solo creators getting started with AI content.

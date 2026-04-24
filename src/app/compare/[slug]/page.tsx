@@ -106,7 +106,7 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
               {c.heroIntro}
             </p>
             <div className="fade-up fade-up-delay-3" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
-              <Link href="/pricing" className="btn btn-primary btn-lg">Start free trial</Link>
+              <Link href="/contact" className="btn btn-primary btn-lg">Contact us</Link>
               <Link href="/features" className="btn btn-ghost btn-lg">See all features</Link>
             </div>
           </div>
@@ -227,8 +227,8 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
                     </li>
                   ))}
                 </ul>
-                <Link href="/pricing" className="btn btn-primary" style={{ marginTop: 20, width: '100%', justifyContent: 'center' }}>
-                  Start free trial
+                <Link href="/contact" className="btn btn-primary" style={{ marginTop: 20, width: '100%', justifyContent: 'center' }}>
+                  Contact us
                 </Link>
               </div>
               <div className="fade-up fade-up-delay-2" style={{ border: '1px solid var(--border)', borderRadius: 12, padding: 24, background: 'var(--surface)' }}>
@@ -253,10 +253,10 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
               See the loop in action
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 28, lineHeight: 1.6 }}>
-              Start the 7-day free trial. No credit card. Cancel anytime.
+              Get in touch and we&apos;ll walk you through the closed loop on your own site.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/pricing" className="btn btn-primary btn-lg">Start free trial</Link>
+              <Link href="/contact" className="btn btn-primary btn-lg">Contact us</Link>
               <Link href="/compare" className="btn btn-ghost btn-lg">Compare other tools</Link>
             </div>
           </div>

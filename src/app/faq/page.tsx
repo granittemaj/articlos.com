@@ -144,7 +144,7 @@ const categories = [
     questions: [
       {
         q: 'Is there a free trial?',
-        a: 'Yes — all plans start with a 7-day free trial. No credit card required. You get full access to every feature on your chosen plan during the trial so you can see exactly what articlos can do before committing.',
+        a: 'Not at the moment. We run paid walkthroughs on your own site so you can see exactly how articlos performs on your content before committing to a longer plan. Contact us at hello@articlos.com to set one up.',
       },
       {
         q: 'Can I change plans at any time?',

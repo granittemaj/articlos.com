@@ -453,10 +453,10 @@ export default function FeaturesPage() {
               See the full loop in action
             </h2>
             <p style={{ fontSize: 16, color: 'var(--text-muted)', marginBottom: 28, lineHeight: 1.6 }}>
-              Start the 7-day free trial. No credit card. Every feature on the Autopilot plan unlocked during the trial.
+              Get in touch and we&apos;ll walk you through the closed loop on your own site.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/pricing" className="btn btn-primary btn-lg">Start free trial</Link>
+              <Link href="/contact" className="btn btn-primary btn-lg">Contact us</Link>
               <Link href="/compare" className="btn btn-ghost btn-lg">Compare alternatives</Link>
             </div>
           </div>

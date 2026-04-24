@@ -17,7 +17,7 @@ articlos runs the full content operation end-to-end: keyword opportunity discove
 
 articlos uses GPT, Claude, and Gemini under the hood, picking the best model per article and falling back when one provider has an outage. Every article is generated in your brand voice (trained from samples of your existing content), includes auto-generated metadata, JSON-LD structured data, internal link suggestions validated against your post URLs, and a featured image from Pexels. The Autopilot plan runs the entire pipeline on a weekly cron — topic → draft → published post with zero manual steps.
 
-Over 2,400 content teams and 50,000+ articles generated. 7-day free trial, no credit card required.
+Over 2,400 content teams and 50,000+ articles generated.
 
 ## Docs
 
@@ -41,7 +41,7 @@ Over 2,400 content teams and 50,000+ articles generated. 7-day free trial, no cr
 
 ## Pricing
 
-- [Pricing](${baseUrl}/pricing): Three tiers, 20% annual discount, 7-day free trial with no credit card
+- [Pricing](${baseUrl}/pricing): Three tiers with 20% annual discount
   - **Lite** — $29/mo ($24/mo annual): 20 articles, 20 tracked keywords, 2 competitor domains, WordPress publishing
   - **Pro** — $89/mo ($74/mo annual): 100 articles, 100 keywords, 20 competitors, scheduling, full brand voice, decay alerts
   - **Autopilot** — $149/mo ($124/mo annual): 300 articles, 300 keywords, 50 competitors, automated weekly publishing, Content Map, team members
