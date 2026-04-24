@@ -108,6 +108,7 @@ export default function Nav() {
             {[
               { label: 'Features', href: '/features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
+              { label: 'Compare', href: '/compare', match: '/compare' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },
               { label: 'FAQ', href: '/faq', match: '/faq' },
@@ -250,6 +251,7 @@ export default function Nav() {
             {[
               { label: 'Features', href: '/features', match: null },
               { label: 'Pricing', href: '/pricing', match: '/pricing' },
+              { label: 'Compare', href: '/compare', match: '/compare' },
               { label: 'About', href: '/about', match: '/about' },
               { label: 'Blog', href: '/blog', match: '/blog' },
               { label: 'FAQ', href: '/faq', match: '/faq' },
