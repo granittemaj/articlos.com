@@ -1,9 +1,9 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { SchemaType } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
+import type OpenAI from 'openai'
 import { prisma } from '@/lib/prisma'
-import { getGeminiClient, MODELS } from '@/lib/llm/client'
+import { getOpenAIClient, MODELS } from '@/lib/llm/client'
 import { withRetry } from '@/lib/llm/retry'
 import {
   shuffle,
@@ -18,27 +18,41 @@ import {
 async function logGeneration(params: {
   action: string
   model: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  result: any | null
+  result: OpenAI.Chat.Completions.ChatCompletion | null
   latencyMs: number
   success: boolean
   error?: string
 }) {
   try {
-    const usage = params.result?.response?.usageMetadata
+    const usage = params.result?.usage
     await prisma.aiGenerationLog.create({
       data: {
         action: params.action,
         model: params.model,
-        promptTokens: usage?.promptTokenCount ?? null,
-        outputTokens: usage?.candidatesTokenCount ?? null,
-        totalTokens: usage?.totalTokenCount ?? null,
+        promptTokens: usage?.prompt_tokens ?? null,
+        outputTokens: usage?.completion_tokens ?? null,
+        totalTokens: usage?.total_tokens ?? null,
         latencyMs: params.latencyMs,
         success: params.success,
         error: params.error ?? null,
       },
     })
   } catch { /* logging must never break the main flow */ }
+}
+
+async function runJson(
+  client: OpenAI,
+  model: string,
+  prompt: string,
+): Promise<{ completion: OpenAI.Chat.Completions.ChatCompletion; parsed: unknown }> {
+  const completion = await client.chat.completions.create({
+    model,
+    messages: [{ role: 'user', content: prompt }],
+    response_format: { type: 'json_object' },
+  })
+  const text = completion.choices[0]?.message?.content ?? ''
+  const parsed = JSON.parse(text)
+  return { completion, parsed }
 }
 
 export async function POST(req: NextRequest) {
@@ -68,7 +82,7 @@ export async function POST(req: NextRequest) {
   const { action, niche, topic, keywords, selectedKeywords, context, content, title, topicStyle, writingStyle } = body
 
   try {
-    const genAI = getGeminiClient()
+    const client = getOpenAIClient()
 
     // ------------------------------------------------------------------ topics
     if (action === 'topics') {
@@ -80,18 +94,15 @@ export async function POST(req: NextRequest) {
         : ''
 
       const prompt = buildTopicsPrompt(niche, today, angles, isTechnical, keywordContext)
-      const model = genAI.getGenerativeModel({ model: MODELS.flashLite })
       const t0 = Date.now()
-      let result: Awaited<ReturnType<typeof model.generateContent>> | null = null
+      let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
       try {
-        result = await withRetry(() => model.generateContent(prompt))
-        const text = result.response.text().trim()
-        const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
-        const parsed = JSON.parse(cleaned)
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: true })
-        return NextResponse.json(parsed)
+        const res = await withRetry(() => runJson(client, MODELS.small, prompt))
+        completion = res.completion
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: true })
+        return NextResponse.json(res.parsed)
       } catch (err) {
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: false, error: String(err) })
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: false, error: String(err) })
         throw err
       }
     }
@@ -99,18 +110,15 @@ export async function POST(req: NextRequest) {
     // ---------------------------------------------------------------- keywords
     if (action === 'keywords') {
       const prompt = buildKeywordsPrompt(niche)
-      const model = genAI.getGenerativeModel({ model: MODELS.flashLite })
       const t0 = Date.now()
-      let result: Awaited<ReturnType<typeof model.generateContent>> | null = null
+      let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
       try {
-        result = await withRetry(() => model.generateContent(prompt))
-        const text = result.response.text().trim()
-        const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
-        const parsed = JSON.parse(cleaned)
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: true })
-        return NextResponse.json(parsed)
+        const res = await withRetry(() => runJson(client, MODELS.small, prompt))
+        completion = res.completion
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: true })
+        return NextResponse.json(res.parsed)
       } catch (err) {
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: false, error: String(err) })
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: false, error: String(err) })
         throw err
       }
     }
@@ -118,18 +126,15 @@ export async function POST(req: NextRequest) {
     // ----------------------------------------------------------------- suggest
     if (action === 'suggest') {
       const prompt = buildSuggestPrompt(niche, context)
-      const model = genAI.getGenerativeModel({ model: MODELS.flashLite })
       const t0 = Date.now()
-      let result: Awaited<ReturnType<typeof model.generateContent>> | null = null
+      let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
       try {
-        result = await withRetry(() => model.generateContent(prompt))
-        const text = result.response.text().trim()
-        const cleaned = text.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '')
-        const parsed = JSON.parse(cleaned)
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: true })
-        return NextResponse.json(parsed)
+        const res = await withRetry(() => runJson(client, MODELS.small, prompt))
+        completion = res.completion
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: true })
+        return NextResponse.json(res.parsed)
       } catch (err) {
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: false, error: String(err) })
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: false, error: String(err) })
         throw err
       }
     }
@@ -140,7 +145,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'topic is required' }, { status: 400 })
       }
 
-      // Fetch published posts for cross-linking (same as relink action)
       let publishedPosts: { title: string; slug: string }[] = []
       try {
         publishedPosts = await prisma.post.findMany({
@@ -153,35 +157,15 @@ export async function POST(req: NextRequest) {
 
       const prompt = buildGeneratePrompt(topic, keywords, writingStyle, publishedPosts)
 
-      // Use Flash (better model) for the actual article content
-      const generateModel = genAI.getGenerativeModel({
-        model: MODELS.flash,
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: SchemaType.OBJECT,
-            properties: {
-              title: { type: SchemaType.STRING },
-              excerpt: { type: SchemaType.STRING },
-              metaTitle: { type: SchemaType.STRING },
-              metaDescription: { type: SchemaType.STRING },
-              tags: { type: SchemaType.STRING },
-              content: { type: SchemaType.STRING },
-            },
-            required: ['title', 'excerpt', 'metaTitle', 'metaDescription', 'tags', 'content'],
-          },
-        },
-      })
-
       const t0 = Date.now()
-      let result: Awaited<ReturnType<typeof generateModel.generateContent>> | null = null
+      let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
       try {
-        result = await withRetry(() => generateModel.generateContent(prompt))
-        const parsed = JSON.parse(result.response.text())
-        await logGeneration({ action, model: MODELS.flash, result, latencyMs: Date.now() - t0, success: true })
-        return NextResponse.json(parsed)
+        const res = await withRetry(() => runJson(client, MODELS.large, prompt))
+        completion = res.completion
+        await logGeneration({ action, model: MODELS.large, result: completion, latencyMs: Date.now() - t0, success: true })
+        return NextResponse.json(res.parsed)
       } catch (err) {
-        await logGeneration({ action, model: MODELS.flash, result, latencyMs: Date.now() - t0, success: false, error: String(err) })
+        await logGeneration({ action, model: MODELS.large, result: completion, latencyMs: Date.now() - t0, success: false, error: String(err) })
         throw err
       }
     }
@@ -201,28 +185,15 @@ export async function POST(req: NextRequest) {
       } catch { /* DB unavailable */ }
 
       const prompt = buildRelinkPrompt(title, content, otherPosts)
-
-      const relinkModel = genAI.getGenerativeModel({
-        model: MODELS.flashLite,
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: SchemaType.OBJECT,
-            properties: { content: { type: SchemaType.STRING } },
-            required: ['content'],
-          },
-        },
-      })
-
       const t0 = Date.now()
-      let result: Awaited<ReturnType<typeof relinkModel.generateContent>> | null = null
+      let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
       try {
-        result = await withRetry(() => relinkModel.generateContent(prompt))
-        const parsed = JSON.parse(result.response.text())
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: true })
-        return NextResponse.json(parsed)
+        const res = await withRetry(() => runJson(client, MODELS.small, prompt))
+        completion = res.completion
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: true })
+        return NextResponse.json(res.parsed)
       } catch (err) {
-        await logGeneration({ action, model: MODELS.flashLite, result, latencyMs: Date.now() - t0, success: false, error: String(err) })
+        await logGeneration({ action, model: MODELS.small, result: completion, latencyMs: Date.now() - t0, success: false, error: String(err) })
         throw err
       }
     }

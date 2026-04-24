@@ -1,19 +1,19 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import OpenAI from 'openai'
 
 export const MODELS = {
-  // Used for generate (long-form article content)
-  flash: 'gemini-2.5-flash',
-  // Used for topics, keywords, suggest, relink, metadata (fast, cheap)
-  flashLite: 'gemini-2.5-flash-lite',
+  // Long-form article content
+  large: 'gpt-4o',
+  // Topics, keywords, suggest, relink, metadata (fast, cheap)
+  small: 'gpt-4o-mini',
 } as const
 
-let _client: GoogleGenerativeAI | null = null
+let _client: OpenAI | null = null
 
-export function getGeminiClient(): GoogleGenerativeAI {
+export function getOpenAIClient(): OpenAI {
   if (!_client) {
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey) throw new Error('GEMINI_API_KEY is not set')
-    _client = new GoogleGenerativeAI(apiKey)
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) throw new Error('OPENAI_API_KEY is not set')
+    _client = new OpenAI({ apiKey })
   }
   return _client
 }

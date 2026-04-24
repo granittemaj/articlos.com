@@ -1,14 +1,17 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
-import { getGeminiClient, MODELS } from '@/lib/llm/client'
+import { getOpenAIClient, MODELS } from '@/lib/llm/client'
 import { buildPexelsQueryPrompt } from '@/lib/llm/prompts'
 
 async function getVisualSearchTerm(topic: string): Promise<string> {
   try {
-    const model = getGeminiClient().getGenerativeModel({ model: MODELS.flashLite })
-    const result = await model.generateContent(buildPexelsQueryPrompt(topic))
-    const term = result.response.text().trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
+    const completion = await getOpenAIClient().chat.completions.create({
+      model: MODELS.small,
+      messages: [{ role: 'user', content: buildPexelsQueryPrompt(topic) }],
+    })
+    const raw = completion.choices[0]?.message?.content ?? ''
+    const term = raw.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
     return term || topic.split(' ').slice(0, 2).join(' ')
   } catch {
     return topic.split(' ').slice(0, 2).join(' ')
