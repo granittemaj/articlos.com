@@ -398,22 +398,23 @@ export default async function HomePage() {
           </div>
 
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)',
+            display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)',
             gap: 0, position: 'relative',
           }} className="stages-grid">
             <div className="stages-line" style={{
               position: 'absolute', top: 28,
-              left: '10%', right: '10%',
+              left: '8%', right: '8%',
               height: 1,
               background: 'linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent)',
               zIndex: 0,
             }} />
             {[
-              { n: '01', label: 'Discover', desc: 'Surfaces high-intent, low-competition keyword opportunities', col: 'var(--text)', icon: '✦', bd: 'var(--border)' },
-              { n: '02', label: 'Plan', desc: 'Prioritizes topics by traffic potential and competition gaps', col: 'var(--text)', icon: '▦', bd: 'var(--border)' },
-              { n: '03', label: 'Generate', desc: 'Creates publish-ready SEO + AEO optimized articles at scale', col: 'var(--text)', icon: '⟳', bd: 'var(--border)' },
-              { n: '04', label: 'Measure', desc: 'Tracks rankings, organic traffic, and content ROI automatically', col: 'var(--text)', icon: '↗', bd: 'var(--border)' },
-              { n: '05', label: 'Improve', desc: 'Refreshes content to maintain and grow rankings continuously', col: 'var(--text)', icon: '◈', bd: 'var(--border)' },
+              { n: '01', label: 'Discover', desc: 'Mines your Search Console for untapped keywords',                  icon: '✦', col: '#2563eb', bg: '#eff6ff', bd: '#bfdbfe' },
+              { n: '02', label: 'Plan',     desc: 'Builds topic clusters and queues weeks of articles',                icon: '▦', col: '#16a34a', bg: '#f0fdf4', bd: '#bbf7d0' },
+              { n: '03', label: 'Generate', desc: 'Writes SEO + AEO-optimized articles in your voice',                 icon: '⟳', col: '#7c3aed', bg: '#faf5ff', bd: '#ddd6fe' },
+              { n: '04', label: 'Publish',  desc: 'Ships directly to WordPress with auto internal links',              icon: '⇡', col: '#0891b2', bg: '#ecfeff', bd: '#a5f3fc' },
+              { n: '05', label: 'Measure',  desc: 'Tracks rankings, traffic, and decay across every post',             icon: '↗', col: '#d97706', bg: '#fffbeb', bd: '#fde68a' },
+              { n: '06', label: 'Improve',  desc: 'Rewrites decaying articles before they lose more traffic',          icon: '◈', col: '#16a34a', bg: '#f0fdf4', bd: '#bbf7d0' },
             ].map((stage, i) => (
               <div
                 key={stage.n}
@@ -422,7 +423,7 @@ export default async function HomePage() {
               >
                 <div className="stage-circle" style={{
                   width: 56, height: 56, borderRadius: '50%',
-                  background: 'var(--surface)', border: `2px solid ${stage.bd}`,
+                  background: stage.bg, border: `2px solid ${stage.bd}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 18px', fontSize: 18, color: stage.col,
                   boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
@@ -476,7 +477,7 @@ export default async function HomePage() {
                   Find your next 100 articles
                 </h3>
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  AI scans your niche to surface high-intent, low-competition keywords your competitors haven&apos;t touched yet.
+                  The Opportunity Map mines your own Search Console data for high-intent, low-competition keywords your site can actually rank for.
                 </p>
               </div>
               {/* Keyword table mockup */}
@@ -535,7 +536,7 @@ export default async function HomePage() {
                   Publish-ready in seconds
                 </h3>
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  GPT-4o, Claude, and Gemini 2.5 generate full articles — structured, fact-checked, and optimized for both Google and AI overviews.
+                  Frontier AI models generate full articles in your brand voice — structured, fact-checked, and optimized for both Google and AI overviews.
                 </p>
               </div>
               {/* Generation progress */}
@@ -579,20 +580,20 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* PLAN — left bottom */}
+            {/* PUBLISH — left bottom */}
             <div className="card scale-in" style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 18 }}>
               <div>
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: '#f0fdf4', border: '1px solid #bbf7d0',
+                  background: '#ecfeff', border: '1px solid #a5f3fc',
                   borderRadius: 100, padding: '3px 10px',
-                  fontSize: 11, fontWeight: 600, color: '#16a34a', marginBottom: 14,
-                }}>▦ Plan</div>
+                  fontSize: 11, fontWeight: 600, color: '#0891b2', marginBottom: 14,
+                }}>⇡ Publish</div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8 }}>
-                  Your content calendar, automated
+                  Direct to WordPress, on schedule
                 </h3>
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  articlos schedules weeks of content in minutes. Set publishing cadence and let the AI fill the calendar intelligently.
+                  Articles ship directly to WordPress with auto internal links and featured images. Schedule weeks of cadence in one click.
                 </p>
               </div>
               {/* Calendar mockup */}
