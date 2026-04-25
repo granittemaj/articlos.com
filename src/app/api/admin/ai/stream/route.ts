@@ -4,7 +4,8 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getOpenAIClient, MODELS } from '@/lib/llm/client'
 import { withRetry } from '@/lib/llm/retry'
-import { buildMetadataPrompt, buildContentPrompt } from '@/lib/llm/prompts'
+import { buildMetadataPrompt, buildContentPrompt, buildComparisonContext } from '@/lib/llm/prompts'
+import { comparisons } from '@/lib/comparisons'
 
 // POST /api/admin/ai/stream
 // Streams article generation as SSE events:
@@ -18,14 +19,14 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
   }
 
-  let body: { topic?: string; keywords?: string; writingStyle?: string }
+  let body: { topic?: string; keywords?: string; writingStyle?: string; compareWith?: string[] }
   try {
     body = await req.json()
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 })
   }
 
-  const { topic, keywords, writingStyle } = body
+  const { topic, keywords, writingStyle, compareWith } = body
   if (!topic) {
     return new Response(JSON.stringify({ error: 'topic is required' }), { status: 400 })
   }
@@ -97,7 +98,12 @@ export async function POST(req: NextRequest) {
         })
       } catch { /* proceed without cross-links */ }
 
-      const contentPrompt = buildContentPrompt(topic, metadata.title, keywords, writingStyle, publishedPosts)
+      const selectedComparisons = compareWith && compareWith.length > 0
+        ? comparisons.filter((c) => compareWith.includes(c.slug))
+        : []
+      const comparisonContext = buildComparisonContext(selectedComparisons)
+
+      const contentPrompt = buildContentPrompt(topic, metadata.title, keywords, writingStyle, publishedPosts, comparisonContext)
 
       const t1 = Date.now()
       let promptTokens: number | null = null

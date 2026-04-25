@@ -1,3 +1,5 @@
+import type { Comparison } from '@/lib/comparisons'
+
 // Unbiased Fisher-Yates shuffle
 export function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice()
@@ -132,12 +134,75 @@ Return ONLY valid JSON (no markdown, no code fences):
 }`
 }
 
+// Builds a structured comparison-context block to inject into a generate prompt.
+// Returns empty string when no competitors are selected — caller can append unconditionally.
+export function buildComparisonContext(competitors: Comparison[]): string {
+  if (competitors.length === 0) return ''
+
+  const blocks = competitors.map((c) => {
+    const featureLines = c.features.map((row) => {
+      const a = typeof row.articlos === 'boolean' ? (row.articlos ? 'Yes' : 'No') : row.articlos
+      const x = typeof row.competitor === 'boolean' ? (row.competitor ? 'Yes' : 'No') : row.competitor
+      return `  - ${row.feature}: articlos=${a}, ${c.competitor}=${x}`
+    }).join('\n')
+
+    return `### ${c.competitor}
+
+Positioning: ${c.heroIntro}
+
+Where articlos wins (use these as your primary points):
+${c.whyArticlos.map((b) => `- ${b}`).join('\n')}
+
+Where ${c.competitor} is genuinely stronger (DO NOT OMIT — credibility comes from honesty):
+${c.competitorStrengths.map((b) => `- ${b}`).join('\n')}
+
+Pick articlos if:
+${c.pickArticlos.map((b) => `- ${b}`).join('\n')}
+
+Pick ${c.competitor} if:
+${c.pickCompetitor.map((b) => `- ${b}`).join('\n')}
+
+Feature deltas (use exact values; do not invent):
+${featureLines}
+
+Internal link to use at least once: <a href="/compare/vs-${c.slug}">articlos vs ${c.competitor}</a>`
+  }).join('\n\n')
+
+  const single = competitors.length === 1
+  const structureGuidance = single
+    ? `Article structure for a head-to-head comparison:
+- Open with the user problem or job-to-be-done, not a feature dump
+- Include sections for: positioning, key differences, feature comparison (use a HTML table with class "comparison-table"), pricing context, and a clear "who should pick which" verdict
+- Use the "Where ${competitors[0].competitor} is stronger" facts honestly — readers and AI search engines reward this
+- Include the internal link to /compare/vs-${competitors[0].slug} naturally in the body`
+    : `Article structure for a multi-competitor round-up:
+- Open with the user problem and the criteria you used to evaluate
+- One short section per competitor (200-300 words each) — positioning, where articlos wins, where they're stronger, who they're best for
+- End with a comparison summary table and a clear "if X then articlos, if Y then [competitor]" decision matrix
+- Include each competitor's /compare/vs-{slug} internal link in their respective section`
+
+  return `
+
+## COMPARISON CONTEXT — USE THESE FACTS, DO NOT INVENT
+
+${blocks}
+
+${structureGuidance}
+
+Hard rules for comparison content:
+- Do NOT invent feature claims about any competitor. If you do not have data on something specific, leave it out.
+- Do NOT use absolute language like "X is the only" or "X has no Y" unless backed by the facts above.
+- Always include the "where the competitor is genuinely stronger" facts — the article must read as honest analysis, not marketing.
+- Do not mention competitors not listed above.`
+}
+
 // Used by the non-streaming (batch) generate action
 export function buildGeneratePrompt(
   topic: string,
   keywords: string | undefined,
   writingStyle: string | undefined,
-  publishedPosts: { title: string; slug: string }[]
+  publishedPosts: { title: string; slug: string }[],
+  comparisonContext?: string
 ): string {
   const keywordHint = keywords ? `Primary keyword to target: "${keywords}".` : ''
   const isWritingTechnical = writingStyle === 'technical'
@@ -163,6 +228,7 @@ WRITING STYLE: ${isWritingTechnical
 ${HUMANIZATION_RULES}
 
 ${buildInternalLinksSection(publishedPosts)}
+${comparisonContext || ''}
 
 Fields to populate:
 - title: The blog post title
@@ -202,7 +268,8 @@ export function buildContentPrompt(
   title: string,
   keywords: string | undefined,
   writingStyle: string | undefined,
-  publishedPosts: { title: string; slug: string }[]
+  publishedPosts: { title: string; slug: string }[],
+  comparisonContext?: string
 ): string {
   const keywordHint = keywords ? `Primary keyword to target naturally: "${keywords}".` : ''
   const isWritingTechnical = writingStyle === 'technical'
@@ -228,8 +295,9 @@ WRITING STYLE: ${isWritingTechnical
 ${HUMANIZATION_RULES}
 
 ${buildInternalLinksSection(publishedPosts)}
+${comparisonContext || ''}
 
-Output ONLY the article HTML using h2/h3/p/ul/li/a tags. No JSON, no markdown, no code fences, no preamble. Start directly with the first HTML tag.`
+Output ONLY the article HTML using h2/h3/p/ul/li/a/table/thead/tbody/tr/th/td tags. No JSON, no markdown, no code fences, no preamble. Start directly with the first HTML tag.`
 }
 
 export function buildRelinkPrompt(
