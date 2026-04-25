@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { groupedComparisons } from '@/lib/comparisons'
 
 interface Topic {
   title: string
@@ -42,12 +43,12 @@ async function fetchPexelsImage(query: string): Promise<string> {
   }
 }
 
-async function generateAndSave(topic: Topic, publish: boolean = false, writingStyle: 'accessible' | 'technical' = 'accessible'): Promise<{ postId: string }> {
+async function generateAndSave(topic: Topic, publish: boolean = false, writingStyle: 'accessible' | 'technical' = 'accessible', compareWith: string[] = []): Promise<{ postId: string }> {
   // Generate content
   const genRes = await fetch('/api/admin/ai', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'generate', topic: topic.title, keywords: topic.keyword, writingStyle }),
+    body: JSON.stringify({ action: 'generate', topic: topic.title, keywords: topic.keyword, writingStyle, compareWith }),
   })
   const genData = await genRes.json()
   if (!genRes.ok) throw new Error(genData.error || 'Generation failed')
@@ -121,6 +122,9 @@ export default function GeneratePage() {
   // Style preferences
   const [topicStyle, setTopicStyle] = useState<'accessible' | 'technical'>('accessible')
   const [writingStyle, setWritingStyle] = useState<'accessible' | 'technical'>('accessible')
+
+  // Compare-with: selected competitor slugs from comparisons.ts
+  const [compareWith, setCompareWith] = useState<Set<string>>(new Set())
 
   // Queue save state
   const [savingToQueue, setSavingToQueue] = useState(false)
@@ -240,7 +244,7 @@ export default function GeneratePage() {
       const res = await fetch('/api/admin/ai/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: topicTitle, keywords: kw, writingStyle }),
+        body: JSON.stringify({ topic: topicTitle, keywords: kw, writingStyle, compareWith: Array.from(compareWith) }),
       })
       if (!res.ok || !res.body) throw new Error('Stream request failed')
 
@@ -302,7 +306,7 @@ export default function GeneratePage() {
 
   async function runBatchItem(topic: Topic) {
     try {
-      const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle)
+      const { postId } = await generateAndSave(topic, publishStatus === 'publish', writingStyle, Array.from(compareWith))
       setBatchResults(prev => prev.map(r => r.topic.title === topic.title ? { ...r, postId } : r))
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Failed'
@@ -637,7 +641,133 @@ export default function GeneratePage() {
                 )}
               </div>
 
+              {/* Compare with — pick competitors to write a comparison post */}
+              {(() => {
+                const groups = groupedComparisons()
+                const tierLabels: Record<string, { label: string; bg: string; color: string; border: string }> = {
+                  contentPlatforms: { label: 'Content platforms', bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe' },
+                  aiWriters:        { label: 'AI writers',        bg: '#faf5ff', color: '#7c3aed', border: '#ddd6fe' },
+                  llms:             { label: 'Raw LLMs',          bg: '#fef2f2', color: '#b91c1c', border: '#fecaca' },
+                }
+                const tiers: { key: 'contentPlatforms' | 'aiWriters' | 'llms'; items: typeof groups.contentPlatforms }[] = [
+                  { key: 'contentPlatforms', items: groups.contentPlatforms },
+                  { key: 'aiWriters',        items: groups.aiWriters },
+                  { key: 'llms',             items: groups.llms },
+                ]
+                return (
+                  <div style={{ marginTop: 8, marginBottom: 16, padding: '14px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: '#92400e', marginBottom: 2 }}>
+                          Compare articlos with… <span style={{ fontWeight: 400 }}>(optional)</span>
+                        </div>
+                        <div style={{ fontSize: 12, color: '#92400e' }}>
+                          Pick one for a head-to-head post · pick multiple for an alternatives roundup
+                        </div>
+                      </div>
+                      {compareWith.size > 0 && (
+                        <button
+                          onClick={() => setCompareWith(new Set())}
+                          style={{
+                            fontSize: 11, fontWeight: 600, color: '#92400e',
+                            background: 'transparent', border: 'none', cursor: 'pointer',
+                            textDecoration: 'underline', padding: 0,
+                          }}
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {tiers.map(({ key, items }) => {
+                        const ic = tierLabels[key]
+                        return (
+                          <div key={key}>
+                            <span style={{
+                              display: 'inline-block',
+                              fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
+                              letterSpacing: '0.06em', color: ic.color,
+                              background: ic.bg, border: `1px solid ${ic.border}`,
+                              padding: '2px 7px', borderRadius: 4, marginBottom: 6,
+                            }}>
+                              {ic.label}
+                            </span>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                              {items.map((c) => {
+                                const isSelected = compareWith.has(c.slug)
+                                return (
+                                  <button
+                                    key={c.slug}
+                                    onClick={() => {
+                                      setCompareWith((prev) => {
+                                        const next = new Set(prev)
+                                        if (next.has(c.slug)) next.delete(c.slug)
+                                        else next.add(c.slug)
+                                        return next
+                                      })
+                                    }}
+                                    style={{
+                                      display: 'inline-flex', alignItems: 'center',
+                                      padding: '4px 12px', borderRadius: 20,
+                                      fontSize: 12, fontWeight: isSelected ? 600 : 400,
+                                      background: isSelected ? '#0f0f0e' : '#ffffff',
+                                      color: isSelected ? '#ffffff' : '#0f0f0e',
+                                      border: `1px solid ${isSelected ? '#0f0f0e' : '#e8e8e6'}`,
+                                      cursor: 'pointer', fontFamily: 'Geist, sans-serif',
+                                      transition: 'all 0.15s',
+                                    }}
+                                  >
+                                    {isSelected && (
+                                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ marginRight: 4 }}>
+                                        <polyline points="2 6 5 9 10 3" />
+                                      </svg>
+                                    )}
+                                    {c.competitor}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })()}
+
               <div style={{ display: 'flex', gap: 8 }}>
+                {compareWith.size > 0 ? (
+                  <button
+                    onClick={() => {
+                      const slugs = Array.from(compareWith)
+                      const groups = groupedComparisons()
+                      const allByCompetitorBySlug = new Map(
+                        [...groups.contentPlatforms, ...groups.aiWriters, ...groups.llms].map((c) => [c.slug, c.competitor])
+                      )
+                      const names = slugs.map((s) => allByCompetitorBySlug.get(s) || s)
+
+                      if (slugs.length === 1) {
+                        const competitor = names[0]
+                        setCustomTopic(`articlos vs ${competitor}: Which is right for your content team in 2026?`)
+                        setCustomKeywords(`articlos vs ${slugs[0]}`)
+                      } else {
+                        const first = names[0]
+                        setCustomTopic(`${slugs.length} best ${first} alternatives for SEO content teams in 2026`)
+                        setCustomKeywords(`${slugs[0]} alternatives`)
+                      }
+                      setSelectedIndexes(new Set())
+                      setStep('generate')
+                    }}
+                    disabled={suggesting || loading}
+                    className="btn btn-primary"
+                    style={{ justifyContent: 'center', flex: 1, gap: 6 }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    Write {compareWith.size === 1 ? 'comparison' : 'alternatives'} article →
+                  </button>
+                ) : null}
                 <button
                   onClick={async () => {
                     setSuggesting(true)

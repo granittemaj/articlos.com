@@ -13,7 +13,9 @@ import {
   buildSuggestPrompt,
   buildGeneratePrompt,
   buildRelinkPrompt,
+  buildComparisonContext,
 } from '@/lib/llm/prompts'
+import { comparisons } from '@/lib/comparisons'
 
 async function logGeneration(params: {
   action: string
@@ -75,6 +77,7 @@ export async function POST(req: NextRequest) {
     title?: string
     topicStyle?: string
     writingStyle?: string
+    compareWith?: string[]
   }
   try {
     body = await req.json()
@@ -82,7 +85,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { action, niche, topic, keywords, selectedKeywords, context, content, title, topicStyle, writingStyle } = body
+  const { action, niche, topic, keywords, selectedKeywords, context, content, title, topicStyle, writingStyle, compareWith } = body
 
   try {
     const client = getOpenAIClient()
@@ -158,7 +161,12 @@ export async function POST(req: NextRequest) {
         })
       } catch { /* DB unavailable — proceed without cross-links */ }
 
-      const prompt = buildGeneratePrompt(topic, keywords, writingStyle, publishedPosts)
+      const selectedComparisons = compareWith && compareWith.length > 0
+        ? comparisons.filter((c) => compareWith.includes(c.slug))
+        : []
+      const comparisonContext = buildComparisonContext(selectedComparisons)
+
+      const prompt = buildGeneratePrompt(topic, keywords, writingStyle, publishedPosts, comparisonContext)
 
       const t0 = Date.now()
       let completion: OpenAI.Chat.Completions.ChatCompletion | null = null
